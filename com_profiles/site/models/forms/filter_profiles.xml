@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field name="search" type="text" hint="JSEARCH_FILTER"/>
+		<field name="region" type="regions"
+			   label="JGLOBAL_FIELD_REGIONS_LABEL"
+			   description="JGLOBAL_FIELD_REGIONS_DESC"
+			   layout="joomla.form.field.regions.current"/>
+		<field name="tags" type="advtags"
+			   label="JTAG"
+			   description="JTAG_DESC"
+			   multiple="true"/>
+	</fields>
+</form>

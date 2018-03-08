@@ -15,6 +15,7 @@
 		<language tag="ru-RU">ru-RU/ru-RU.pkg_profiles.sys.ini</language>
 	</languages>
 	<files>
+		<folder type="component" id="com_profiles">com_profiles</folder>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="PKG_PROFILES">

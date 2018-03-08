@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_PROFILES_VIEW_PROFILE" option="COM_PROFILES_VIEW_PROFILE_DEFAULT_OPTION">
+		<message>
+			<![CDATA[COM_PROFILES_VIEW_PROFILE_DESCRIPTION]]>
+		</message>
+	</layout>
+
+	<fields name="request" addfieldpath="/administrator/components/com_profiles/models/fields">
+		<fieldset name="request">
+			<field name="id" type="sql"
+				   label="COM_PROFILES_PROFILE"
+				   query="SELECT id, name FROM #__profile"
+				   key_field="id"
+				   value_field="name"
+				   required="true">
+				<option value="">JNONE</option>
+			</field>
+		</fieldset>
+	</fields>
+
+	<fields name="params">
+	</fields>
+</metadata>

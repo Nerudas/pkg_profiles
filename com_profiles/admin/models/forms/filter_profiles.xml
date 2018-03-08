@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field name="search" type="text" hint="JSEARCH_FILTER"/>
+		<field name="avatar" type="list"
+			   label="COM_PROFILES_PROFILE_AVATAR"
+			   onchange="this.form.submit();">
+			<option value="">COM_PROFILES_PROFILE_AVATAR_SELECT</option>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="social" type="list"
+			   label="COM_PROFILES_SOCIALS"
+			   onchange="this.form.submit();">
+			<option value="">COM_PROFILES_SOCIALS_SELECT</option>
+			<option value="vk">COM_PROFILES_SOCIALS_VK</option>
+			<option value="facebook">COM_PROFILES_SOCIALS_FACEBOOK</option>
+			<option value="instagram">COM_PROFILES_SOCIALS_INSTAGRAM</option>
+			<option value="odnoklassniki">COM_PROFILES_SOCIALS_ODNOKLASSNIKI</option>
+		</field>
+		<field name="region" type="regions"
+			   label="JGLOBAL_FIELD_REGIONS_LABEL"
+			   description="JGLOBAL_FIELD_REGIONS_DESC"
+			   show_null="true"
+			   onchange="this.form.submit();"/>
+		<field name="usergroup"
+			   type="usergrouplist"
+			   label="COM_PROFILES_USERGROUP"
+			   onchange="this.form.submit();">
+			<option value="">COM_PROFILES_USERGROUP_SELECT</option>
+		</field>
+		<field name="tags" type="advtags"
+			   label="JTAG"
+			   description="JTAG_DESC"
+			   layout="joomla.form.field.advtags.select"
+			   multiple="true"
+			   class="multipleTags"
+			   onchange="this.form.submit();"/>
+	</fields>
+
+	<fields name="list">
+		<field name="fullordering" type="list"
+			   label="COM_CONTENT_LIST_FULL_ORDERING"
+			   description="COM_CONTENT_LIST_FULL_ORDERING_DESC"
+			   onchange="this.form.submit();"
+			   default="i.created DESC">
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="p.name ASC">COM_PROFILES_PROFILE_NAME_ASC</option>
+			<option value="p.name DESC">COM_PROFILES_PROFILE_NAME_DESC</option>
+			<option value="p.id ASC">JGRID_HEADING_ID_ASC</option>
+			<option value="p.id DESC">JGRID_HEADING_ID_DESC</option>
+			<option value="region_name ASC">JGRID_HEADING_REGION_ASC</option>
+			<option value="region_name DESC">JGRID_HEADING_REGION_DESC</option>
+			<option value="p.hits ASC">JGLOBAL_HITS_ASC</option>
+			<option value="p.hits DESC">JGLOBAL_HITS_DESC</option>
+			<option value="p.created ASC">JDATE_ASC</option>
+			<option value="p.created DESC">JDATE_DESC</option>
+		</field>
+
+		<field name="limit" type="limitbox"
+			   class="inputbox input-mini"
+			   default="25"
+			   label="COM_CONTENT_LIST_LIMIT"
+			   description="COM_CONTENT_LIST_LIMIT_DESC"
+			   onchange="this.form.submit();"/>
+	</fields>
+</form>

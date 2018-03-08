@@ -11,3 +11,5 @@ Thank you for your understanding.
 
 
 ## Package Contents
+* **Profiles Component**  
+User Profiles component

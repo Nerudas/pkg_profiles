@@ -1,0 +1,23 @@
+/*
+ * @package    Profiles Package
+ * @version    1.0.0
+ * @author     Nerudas  - nerudas.ru
+ * @copyright  Copyright (c) 2013 - 2018 Nerudas. All rights reserved.
+ * @license    GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
+ * @link       https://nerudas.ru
+ */
+
+[data-user-social-add],
+[data-user-social-delete] {
+	display: inline-block;
+	cursor: pointer;
+}
+
+[data-user-social-add] svg,
+[data-user-social-delete] svg {
+	width: 48px;
+	height: 48px;
+}
+[data-user-social-add].not-active svg {
+	opacity: 0.5;
+}

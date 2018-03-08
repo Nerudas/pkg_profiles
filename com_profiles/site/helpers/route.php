@@ -1,0 +1,51 @@
+<?php
+/**
+ * @package    Profiles Package
+ * @version    1.0.0
+ * @author     Nerudas  - nerudas.ru
+ * @copyright  Copyright (c) 2013 - 2018 Nerudas. All rights reserved.
+ * @license    GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
+ * @link       https://nerudas.ru
+ */
+
+defined('_JEXEC') or die;
+
+use Joomla\CMS\Helper\RouteHelper;
+
+class ProfilesHelperRoute extends RouteHelper
+{
+	/**
+	 * Fetches the list route
+	 *
+	 * @return  string
+	 *
+	 * @since 1.0.0
+	 *
+	 * @throws  \InvalidArgumentException
+	 */
+	public static function getProfilesRoute()
+	{
+		return 'index.php?option=com_profiles&view=profiles&key=1';
+	}
+
+
+	/**
+	 * Fetches the profile route
+	 *
+	 * @param   int $id Category ID
+	 *
+	 * @return  string
+	 *
+	 * @since 1.0.0
+	 *
+	 * @throws  \InvalidArgumentException
+	 */
+	public static function getProfileRoute($id = null)
+	{
+		return 'index.php?option=com_profiles&view=profile&key=1&id=' . $id;
+	}
+
+
+
+
+}

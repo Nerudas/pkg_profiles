@@ -1,0 +1,73 @@
+/*
+ * @package    Profiles Package
+ * @version    1.0.0
+ * @author     Nerudas  - nerudas.ru
+ * @copyright  Copyright (c) 2013 - 2018 Nerudas. All rights reserved.
+ * @license    GNU/GPL license: http://www.gnu.org/copyleft/gpl.html
+ * @link       https://nerudas.ru
+ */
+
+#about-field > .control-label,
+#tags-field > .control-label,
+#attrib-tags > .control-group > .control-label {
+	display: none;
+}
+
+#about-field > .controls,
+#tags-field  > .controls,
+#attrib-tags > .control-group > .controls {
+	margin-left: 0;
+}
+
+#groups > .control-group {
+	margin-bottom: 0;
+}
+
+#groups > .control-group > .controls {
+	margin-left: 15px;
+}
+
+#jform_avatar {
+	width: 270px;
+	margin-bottom: 0;
+}
+#jform_avatar img {
+	max-width: inherit;
+	min-height: 100%;
+}
+
+#jform_avatar .form {
+	width: 270px;
+	height: 270px;
+	padding: 0;
+	overflow: hidden;
+	position: static;
+	margin-bottom: 52px;
+}
+
+#jform_avatar .form label {
+	margin-bottom: 0;
+}
+
+#jform_avatar .form label a {
+	right: 0;
+	left: 0;
+	bottom: -43px;
+}
+
+#jform_header {
+	width: 100%;
+}
+#jform_header .form {
+	width: 100%;
+	max-height: 300px;
+	padding: 0;
+	overflow: hidden;
+	position: static;
+	margin-bottom: 52px;
+}
+#jform_header .form label a {
+	right: 0;
+	left: 0;
+	bottom: -43px;
+}
