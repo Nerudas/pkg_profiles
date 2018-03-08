@@ -19,3 +19,6 @@ Single profile output module
 
 * **Authentication - Profiles Plugin**  
 Plugin for authorization by email, phone number and social networks
+
+* **System - Profiles Plugin**  
+Plugin for integration com_users with com_profiles
