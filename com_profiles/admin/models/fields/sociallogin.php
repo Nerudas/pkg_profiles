@@ -52,7 +52,7 @@ class JFormFieldSocialLogin extends FormField
 	 * @return  boolean  True on success.
 	 *
 	 * @see     JFormField::setup()
-	 * @since 1.0.0
+	 * @since   1.0.0
 	 */
 	public function setup(SimpleXMLElement $element, $value, $group = null)
 	{

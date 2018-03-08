@@ -14,7 +14,7 @@
 }
 
 #about-field > .controls,
-#tags-field  > .controls,
+#tags-field > .controls,
 #attrib-tags > .control-group > .controls {
 	margin-left: 0;
 }
@@ -31,6 +31,7 @@
 	width: 270px;
 	margin-bottom: 0;
 }
+
 #jform_avatar img {
 	max-width: inherit;
 	min-height: 100%;
@@ -58,6 +59,7 @@
 #jform_header {
 	width: 100%;
 }
+
 #jform_header .form {
 	width: 100%;
 	max-height: 300px;
@@ -66,6 +68,7 @@
 	position: static;
 	margin-bottom: 52px;
 }
+
 #jform_header .form label a {
 	right: 0;
 	left: 0;

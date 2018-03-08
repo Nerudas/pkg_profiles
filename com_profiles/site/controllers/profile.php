@@ -59,8 +59,8 @@ class ProfilesControllerProfile extends FormController
 	 */
 	public function checkAlias()
 	{
-		$app   = Factory::getApplication();
-		$data  = $this->input->post->get('jform', array(), 'array');
+		$app  = Factory::getApplication();
+		$data = $this->input->post->get('jform', array(), 'array');
 
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models', 'ProfilesModel');
 		$model = BaseDatabaseModel::getInstance('Profile', 'ProfilesModel', array('ignore_request' => false));

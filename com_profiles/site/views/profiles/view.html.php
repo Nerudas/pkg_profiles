@@ -102,7 +102,6 @@ class ProfilesViewProfiles extends HtmlView
 	public $pageclass_sfx;
 
 
-
 	/**
 	 * Display the view
 	 *
@@ -116,7 +115,7 @@ class ProfilesViewProfiles extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$app        = Factory::getApplication();
+		$app = Factory::getApplication();
 
 		$this->state         = $this->get('State');
 		$this->link          = Route::_(ProfilesHelperRoute::getProfilesRoute());

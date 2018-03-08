@@ -104,8 +104,8 @@ class ProfilesViewProfiles extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$user = Factory::getUser();
-		$canDo     = ProfilesHelper::getActions('com_users');
+		$user  = Factory::getUser();
+		$canDo = ProfilesHelper::getActions('com_users');
 
 		JToolBarHelper::title(Text::_('COM_PROFILES'), 'list');
 

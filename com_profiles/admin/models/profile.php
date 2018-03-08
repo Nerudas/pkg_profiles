@@ -39,7 +39,7 @@ class ProfilesModelProfile extends AdminModel
 	 *
 	 * @see     AdminModel
 	 *
-	 * @since 1.0.0
+	 * @since   1.0.0
 	 */
 	public function __construct(array $config = array())
 	{
@@ -196,10 +196,10 @@ class ProfilesModelProfile extends AdminModel
 	 */
 	public function save($data)
 	{
-		$app        = Factory::getApplication();
-		$pk         = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
-		$filter     = InputFilter::getInstance();
-		$table      = $this->getTable();
+		$app    = Factory::getApplication();
+		$pk     = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
+		$filter = InputFilter::getInstance();
+		$table  = $this->getTable();
 
 		// Include the plugins for the save events.
 		PluginHelper::importPlugin($this->events_map['save']);
