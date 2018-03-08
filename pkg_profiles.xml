@@ -16,7 +16,8 @@
 	</languages>
 	<files>
 		<folder type="component" id="com_profiles">com_profiles</folder>
-		<folder type="module" id="mod_profiles_profile" client="site/administrator">mod_profiles_profile</folder>
+		<folder type="module" id="mod_profiles_profile" client="site">mod_profiles_profile</folder>
+		<folder type="plugin" id="profiles" group="authentication">plg_authentication_profiles</folder>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="PKG_PROFILES">

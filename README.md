@@ -16,3 +16,6 @@ User Profiles component
 
 * **Profiles - Profile Module**  
 Single profile output module
+
+* **Authentication - Profiles Plugin**  
+Plugin for authorization by email, phone number and social networks
