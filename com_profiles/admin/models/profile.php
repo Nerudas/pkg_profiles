@@ -314,7 +314,7 @@ class ProfilesModelProfile extends AdminModel
 				}
 			}
 
-			if ($app->isAdmin() && $data['return'])
+			if ($app->isAdmin() && !empty($data['return']))
 			{
 				$app->input->set('return', $data['return']);
 			}
