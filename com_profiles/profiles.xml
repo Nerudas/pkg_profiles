@@ -62,9 +62,4 @@
 		<folder>js</folder>
 		<folder>images</folder>
 	</media>
-	<updateservers>
-		<server type="extension" priority="1" name="Profiles Component">
-			https://update.nerudas.ru?extension=com_profiles
-		</server>
-	</updateservers>
 </extension>
