@@ -1,5 +1,5 @@
 /*
- * @package    Profiles Package
+ * @package    Profiles Component
  * @version    1.0.0
  * @author     Nerudas  - nerudas.ru
  * @copyright  Copyright (c) 2013 - 2018 Nerudas. All rights reserved.
