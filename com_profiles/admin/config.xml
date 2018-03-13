@@ -8,14 +8,12 @@
 			   description="COM_PROFILES_PARAMS_OFFLINE_TIME_DESCRIPTION"
 			   min="1"
 			   default="5"/>
-
 		<field name="profile_tags" type="sql"
 			   label="COM_PROFILES_PARAMS_PROFILE_TAGS"
 			   query="SELECT id, title FROM #__tags WHERE level = 1"
 			   key_field="id"
 			   value_field="title"
 			   multiple="true"/>
-		<field name="sef_advanced" type="hidden" default="1"/>
 		<field name="profiles_limit" type="list"
 			   label="COM_PROFILES_PARAMS_PROFILES_LIMIT"
 			   default="10">
@@ -33,10 +31,10 @@
 			   label="COM_PROFILES_PARAMS_SEARCH_PLACEHOLDER"
 			   class="input-xlarge"
 			   size="40"/>
-		<field name="profiles_layout" type="componentlayout"
-			   label="COM_PROFILES_PARAMS_PROFILES_LAYOUT"
+		<field name="list_layout" type="componentlayout"
+			   label="COM_PROFILES_PARAMS_LIST_LAYOUT"
 			   extension="com_profiles"
-			   view="profiles"/>
+			   view="list"/>
 		<field name="profile_layout" type="componentlayout"
 			   label="COM_PROFILES_PARAMS_PROFILE_LAYOUT"
 			   extension="com_profiles"

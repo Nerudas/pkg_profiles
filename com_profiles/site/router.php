@@ -30,14 +30,14 @@ class ProfilesRouter extends RouterView
 	 */
 	public function __construct($app = null, $menu = null)
 	{
-		// Profiles route
-		$profiles = new RouterViewConfiguration('profiles');
-		$profiles->setKey('key');
-		$this->registerView($profiles);
+		// List route
+		$list = new RouterViewConfiguration('list');
+		$list->setKey('key');
+		$this->registerView($list);
 
 		// Item route
 		$profile = new RouterViewConfiguration('profile');
-		$profile->setKey('id')->setParent($profiles, 'key');
+		$profile->setKey('id')->setParent($list, 'key');
 		$this->registerView($profile);
 
 		parent::__construct($app, $menu);
@@ -49,7 +49,7 @@ class ProfilesRouter extends RouterView
 
 
 	/**
-	 * Method to get the segment(s) for profiles
+	 * Method to get the segment(s) for list view
 	 *
 	 * @param   string $id    ID of the item to retrieve the segments for
 	 * @param   array  $query The request that is built right now
@@ -58,7 +58,7 @@ class ProfilesRouter extends RouterView
 	 *
 	 * @since 1.0.0
 	 */
-	public function getProfilesSegment($id, $query)
+	public function getListSegment($id, $query)
 	{
 		return array(1 => 1);
 	}
@@ -93,7 +93,7 @@ class ProfilesRouter extends RouterView
 
 
 	/**
-	 * Method to get the id for a Profiles
+	 * Method to get the id for a List view
 	 *
 	 * @param   string $segment Segment to retrieve the ID for
 	 * @param   array  $query   The request that is parsed right now
@@ -102,7 +102,7 @@ class ProfilesRouter extends RouterView
 	 *
 	 * @since 1.0.0
 	 */
-	public function getProfilesId($segment, $query)
+	public function getListId($segment, $query)
 	{
 		return 1;
 	}

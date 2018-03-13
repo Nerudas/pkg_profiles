@@ -88,7 +88,7 @@ class ProfilesModelProfile extends ItemModel
 
 		if (!isset($this->_item[$pk]))
 		{
-			$errorRedirect = Route::_(ProfilesHelperRoute::getProfilesRoute());
+			$errorRedirect = Route::_(ProfilesHelperRoute::getListRoute());
 			$errorMsg      = Text::_('COM_PROFILER_ERROR_PROFILE_NOT_FOUND');
 			try
 			{

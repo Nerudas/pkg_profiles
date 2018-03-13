@@ -23,7 +23,7 @@ class ProfilesHelperRoute extends RouteHelper
 	 *
 	 * @throws  \InvalidArgumentException
 	 */
-	public static function getProfilesRoute()
+	public static function getListRoute()
 	{
 		return 'index.php?option=com_profiles&view=profiles&key=1';
 	}

@@ -17,7 +17,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
-class ProfilesViewProfiles extends HtmlView
+class ProfilesViewList extends HtmlView
 {
 
 	/**
@@ -118,7 +118,7 @@ class ProfilesViewProfiles extends HtmlView
 		$app = Factory::getApplication();
 
 		$this->state         = $this->get('State');
-		$this->link          = Route::_(ProfilesHelperRoute::getProfilesRoute());
+		$this->link          = Route::_(ProfilesHelperRoute::getListRoute());
 		$this->items         = $this->get('Items');
 		$this->params        = $this->state->get('params');
 		$this->pagination    = $this->get('Pagination');

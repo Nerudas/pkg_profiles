@@ -20,17 +20,8 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Router\Route;
 
-class ProfilesModelProfiles extends ListModel
+class ProfilesModelList extends ListModel
 {
-
-	/**
-	 * Context string for the model type.  This is used to handle uniqueness
-	 * when dealing with the getStoreId() method and caching data structures.
-	 *
-	 * @var    string
-	 * @since 1.0.0
-	 */
-	protected $context = 'com_profiles.profiles.site';
 
 	/**
 	 * Constructor.
