@@ -25,7 +25,7 @@ class ProfilesHelperRoute extends RouteHelper
 	 */
 	public static function getListRoute()
 	{
-		return 'index.php?option=com_profiles&view=profiles&key=1';
+		return 'index.php?option=com_profiles&view=list&key=1';
 	}
 
 
