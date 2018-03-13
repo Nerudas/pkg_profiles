@@ -29,45 +29,11 @@ class com_ProfilesInstallerScript
 
 		$this->fixTables($path);
 		$this->tagsIntegration();
-		$this->removeIndexFiles($path);
 		$this->createImageFolder();
 		$this->moveLayouts($path);
 		$this->createSecret();
 
 		return true;
-	}
-
-	/**
-	 * Remove index.html files
-	 *
-	 * @param string $path path to files
-	 *
-	 * @since 1.0.0
-	 */
-	protected function removeIndexFiles($path)
-	{
-		// Delete from admin
-		$index_files = JFolder::files(JPATH_ADMINISTRATOR . $path, 'index.html', true, true);
-		foreach ($index_files as $file)
-		{
-			JFile::delete($file);
-		}
-
-		// Delete from site
-		$index_files = JFolder::files(JPATH_SITE . $path, 'index.html', true, true);
-		foreach ($index_files as $file)
-		{
-			JFile::delete($file);
-		}
-
-		// Delete from media
-		$media       = '/media/com_profiles';
-		$index_files = JFolder::files(JPATH_SITE . $media, 'index.html', true, true);
-		foreach ($index_files as $file)
-		{
-			JFile::delete($file);
-		}
-
 	}
 
 	/**
@@ -231,6 +197,11 @@ class com_ProfilesInstallerScript
 		}
 	}
 
+	/**
+	 * Method to create secret key
+	 *
+	 * @since 1.0.0
+	 */
 	function createSecret()
 	{
 		$component = ComponentHelper::getComponent('com_profiles');
