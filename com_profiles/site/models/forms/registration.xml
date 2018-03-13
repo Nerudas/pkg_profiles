@@ -13,17 +13,20 @@
 		<field name="name" type="text"
 			   label="COM_PROFILES_PROFILE_NAME"
 			   filter="string"
-			   size="30"/>
+			   size="30"
+			   required="true"/>
 
 		<field name="company_name" type="text"
 			   label="COM_PROFILES_REGISTRATION_COMPANY_NAME"
 			   filter="string"
-			   size="30"/>
+			   size="30"
+			   required="true"/>
 
 		<field name="company_position" type="text"
 			   label="COM_PROFILES_REGISTRATION_COMPANY_POSITION"
 			   filter="string"
-			   size="30"/>
+			   size="30"
+			   required="true"/>
 
 		<field name="password1" type="password"
 			   label="COM_USERS_PROFILE_PASSWORD1_LABEL"

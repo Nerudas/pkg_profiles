@@ -125,6 +125,12 @@ class plgSystemProfiles extends CMSPlugin
 			Factory::getDocument()->addScriptOptions('adminuser.params', array(
 				'profileText' => Text::_('COM_PROFILES_PROFILE_ABOUT')));
 		}
+
+		if ($app->isSite() && $component == 'com_users' && $view == 'registration')
+		{
+			HTMLHelper::_('jquery.framework');
+			HTMLHelper::script('media/com_profiles/js/registration.min.js', array('version' => 'auto'));
+		}
 	}
 
 	/**
@@ -397,6 +403,7 @@ class plgSystemProfiles extends CMSPlugin
 			$register_as = (!empty($data['register_as'])) ? $data['register_as'] : 'user';
 			if ($register_as == 'company')
 			{
+				$form->setFieldAttribute('name', 'required', 'false');
 				$form->setFieldAttribute('company_name', 'required', 'true');
 				$form->setFieldAttribute('company_position', 'required', 'true');
 				if (!empty($data['company_name']) && !empty($data['company_position']))
@@ -407,6 +414,8 @@ class plgSystemProfiles extends CMSPlugin
 			else
 			{
 				$form->setFieldAttribute('name', 'required', 'true');
+				$form->setFieldAttribute('company_name', 'required', 'false');
+				$form->setFieldAttribute('company_position', 'required', 'false');
 			}
 
 			$data['email1'] = $data['email'];
