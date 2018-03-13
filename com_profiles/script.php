@@ -154,12 +154,18 @@ class com_ProfilesInstallerScript
 	 */
 	public function uninstall(JAdapterInstance $adapter)
 	{
-
+		// Remove content_type
 		$db    = Factory::getDbo();
 		$query = $db->getQuery(true)
 			->delete($db->quoteName('#__content_types'))
 			->where($db->quoteName('type_alias') . ' = ' . $db->quote('com_profiles.profile'));
 		$db->setQuery($query)->execute();
+
+		// Remove images
+		JFolder::delete(JPATH_ROOT . '/images/profiles');
+		
+		// Remove layouts
+		JFolder::delete(JPATH_ROOT . '/layouts/components/com_profiles');
 	}
 
 	/**
