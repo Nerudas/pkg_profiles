@@ -9,7 +9,7 @@
 
 (function ($) {
 	$(document).ready(function () {
-		var params = Joomla.getOptions('adminuser.params', ''),
+		var params = Joomla.getOptions('admin-user.params', ''),
 			profileText = params.profileText;
 
 		$('#jform_about').closest('.control-group').attr('id', 'about-field');

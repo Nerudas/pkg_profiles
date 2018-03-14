@@ -120,9 +120,9 @@ class plgSystemProfiles extends CMSPlugin
 		if ($app->isAdmin() && $component == 'com_users' && $view == 'user')
 		{
 			HTMLHelper::_('jquery.framework');
-			HTMLHelper::stylesheet('media/com_profiles/css/adminuser.min.css', array('version' => 'auto'));
-			HTMLHelper::script('media/com_profiles/js/adminuser.min.js', array('version' => 'auto'));
-			Factory::getDocument()->addScriptOptions('adminuser.params', array(
+			HTMLHelper::stylesheet('media/com_profiles/css/admin-user.min.css', array('version' => 'auto'));
+			HTMLHelper::script('media/com_profiles/js/admin-user.min.js', array('version' => 'auto'));
+			Factory::getDocument()->addScriptOptions('admin-user.params', array(
 				'profileText' => Text::_('COM_PROFILES_PROFILE_ABOUT')));
 		}
 

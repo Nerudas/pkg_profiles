@@ -23,7 +23,7 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', '.multipleTags', null, array('placeholder_text_multiple' => Text::_('JOPTION_SELECT_TAG')));
 HTMLHelper::_('formbehavior.chosen', 'select');
-HTMLHelper::stylesheet('media/com_profiles/css/adminprofiles.min.css', array('version' => 'auto'));
+HTMLHelper::stylesheet('media/com_profiles/css/admin-profiles.min.css', array('version' => 'auto'));
 
 $app       = Factory::getApplication();
 $doc       = Factory::getDocument();
