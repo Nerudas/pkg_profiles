@@ -154,11 +154,23 @@ class com_ProfilesInstallerScript
 	 */
 	public function uninstall(JAdapterInstance $adapter)
 	{
-		// Remove content_type
 		$db    = Factory::getDbo();
+		// Remove content_type
 		$query = $db->getQuery(true)
 			->delete($db->quoteName('#__content_types'))
 			->where($db->quoteName('type_alias') . ' = ' . $db->quote('com_profiles.profile'));
+		$db->setQuery($query)->execute();
+
+		// Remove tag_map
+		$query = $db->getQuery(true)
+			->delete($db->quoteName('#__contentitem_tag_map'))
+			->where($db->quoteName('type_alias') . ' = ' . $db->quote('com_profiles.profile'));
+		$db->setQuery($query)->execute();
+
+		// Remove ucm_content
+		$query = $db->getQuery(true)
+			->delete($db->quoteName('#__ucm_content'))
+			->where($db->quoteName('core_type_alias') . ' = ' . $db->quote('com_profiles.profile'));
 		$db->setQuery($query)->execute();
 
 		// Remove images
