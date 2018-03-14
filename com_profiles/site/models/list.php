@@ -72,7 +72,7 @@ class ProfilesModelList extends ListModel
 	 *
 	 * @since 1.0.0
 	 */
-	protected function populateState($ordering = 'avatar', $direction = 'desc')
+	protected function populateState($ordering = null, $direction = null)
 	{
 		$app  = Factory::getApplication();
 		$user = Factory::getUser();
@@ -116,8 +116,11 @@ class ProfilesModelList extends ListModel
 		$this->setState('list.limit', $params->get('profiles_limit', 10, 'uint'));
 		$this->setState('list.start', $app->input->get('limitstart', 0, 'uint'));
 
-		$this->setState('list.ordering', 'avatar');
-		$this->setState('list.direction', 'desc');
+		// Set ordering for query.
+		$ordering  = empty($ordering) ? 'avatar' : $ordering;
+		$direction = empty($direction) ? 'desc' : $direction;
+		$this->setState('list.ordering', $ordering);
+		$this->setState('list.direction', $direction);
 	}
 
 	/**

@@ -87,7 +87,7 @@ class ProfilesModelProfiles extends ListModel
 	 *
 	 * @since 1.0.0
 	 */
-	protected function populateState($ordering = 'p.created', $direction = 'desc')
+	protected function populateState($ordering = null, $direction = null)
 	{
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
@@ -108,6 +108,8 @@ class ProfilesModelProfiles extends ListModel
 		$this->setState('filter.tags', $tags);
 
 		// List state information.
+		$ordering  = empty($ordering) ? 'p.created' : $ordering;
+		$direction = empty($direction) ? 'desc' : $direction;
 		parent::populateState($ordering, $direction);
 	}
 
