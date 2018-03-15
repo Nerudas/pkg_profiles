@@ -141,6 +141,7 @@ class ProfilesModelList extends ListModel
 	{
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.region');
+		$id .= ':' . serialize($this->getState('filter.published'));
 		$id .= ':' . serialize($this->getState('filter.tags'));
 
 		return parent::getStoreId($id);
@@ -155,14 +156,15 @@ class ProfilesModelList extends ListModel
 	 */
 	protected function getListQuery()
 	{
-		$db        = $this->getDbo();
-		$query     = $db->getQuery(true);
+		$user      = Factory::getUser();
 		$component = ComponentHelper::getParams('com_profiles');
 
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models');
 		$userModel = BaseDatabaseModel::getInstance('User', 'ProfilesModel');
 
-		$query->select('p.*')
+		$db    = $this->getDbo();
+		$query = $db->getQuery(true)
+			->select('p.*')
 			->from($db->quoteName('#__profiles', 'p'));
 
 		// Join over the regions.
@@ -188,6 +190,28 @@ class ProfilesModelList extends ListModel
 			$regions[]   = $regionModel->getRegion($region)->parent;
 			$regions     = array_unique($regions);
 			$query->where($db->quoteName('p.region') . ' IN (' . implode(',', $regions) . ')');
+		}
+
+		// Filter by access level.
+		if (!$user->authorise('core.admin'))
+		{
+			$groups = implode(',', $user->getAuthorisedViewLevels());
+			$query->where('p.access IN (' . $groups . ')');
+		}
+
+		// Filter by published state.
+		$published = $this->getState('filter.published');
+		if (!empty($published))
+		{
+			if (is_numeric($published))
+			{
+				$query->where('( p.state = ' . (int) $published .
+					' OR ( p.id = ' . $user->id . ' AND p.state IN (0,1)))');
+			}
+			elseif (is_array($published))
+			{
+				$query->where('p.state IN (' . implode(',', $published) . ')');
+			}
 		}
 
 		// Filter by a single or group of tags.
