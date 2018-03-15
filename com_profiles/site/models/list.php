@@ -19,6 +19,7 @@ use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Form\Form;
 
 class ProfilesModelList extends ListModel
 {
@@ -145,7 +146,6 @@ class ProfilesModelList extends ListModel
 		return parent::getStoreId($id);
 	}
 
-
 	/**
 	 * Build an SQL query to load the list data.
 	 *
@@ -269,7 +269,6 @@ class ProfilesModelList extends ListModel
 	 * @return  object[]  An array of results.
 	 *
 	 * @since 1.0.0
-	 * @throws  \RuntimeException
 	 */
 	protected function _getList($query, $limitstart = 0, $limit = 0)
 	{
@@ -322,7 +321,7 @@ class ProfilesModelList extends ListModel
 	 * @param   array   $data     data
 	 * @param   boolean $loadData load current data
 	 *
-	 * @return  \JForm|boolean  The \JForm object or false on error
+	 * @return  Form|boolean  The Form object or false on error
 	 *
 	 * @since 1.0.0
 	 */
