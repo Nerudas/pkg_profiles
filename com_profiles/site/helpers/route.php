@@ -20,30 +20,23 @@ class ProfilesHelperRoute extends RouteHelper
 	 * @return  string
 	 *
 	 * @since 1.0.0
-	 *
-	 * @throws  \InvalidArgumentException
 	 */
 	public static function getListRoute()
 	{
 		return 'index.php?option=com_profiles&view=list&key=1';
 	}
 
-
 	/**
 	 * Fetches the profile route
 	 *
-	 * @param   int $id Category ID
+	 * @param int $id Profile ID
 	 *
 	 * @return  string
 	 *
 	 * @since 1.0.0
-	 *
-	 * @throws  \InvalidArgumentException
 	 */
 	public static function getProfileRoute($id = null)
 	{
 		return 'index.php?option=com_profiles&view=profile&key=1&id=' . $id;
 	}
-
-
 }

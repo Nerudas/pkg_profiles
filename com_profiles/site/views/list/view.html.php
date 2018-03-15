@@ -91,7 +91,6 @@ class ProfilesViewList extends HtmlView
 	 */
 	public $pageclass_sfx;
 
-
 	/**
 	 * Display the view
 	 *
