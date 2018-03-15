@@ -157,7 +157,7 @@ class ProfilesViewProfile extends HtmlView
 		{
 			if ($user->get('guest'))
 			{
-				$login_url = Route::_('index.php?option=com_users&return=' . base64_encode(Uri::getInstance()));
+				$login_url = Route::_('index.php?option=com_users&view=login&return=' . base64_encode(Uri::getInstance()));
 				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'notice');
 				$app->redirect($login_url, 403);
 			}
@@ -208,7 +208,7 @@ class ProfilesViewProfile extends HtmlView
 		}
 		else
 		{
-			$this->params->def('page_heading', Text::_('COM_PROFILE_PROFILE'));
+			$this->params->def('page_heading', Text::_('COM_PROFILES_PROFILE'));
 		}
 		$title = $this->params->get('page_title', $sitename);
 
