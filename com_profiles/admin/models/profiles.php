@@ -188,7 +188,7 @@ class ProfilesModelProfiles extends ListModel
 			$query->where($db->quoteName('p.region') . ' IN (' . implode(',', $regions) . ')');
 		}
 
-		// Filter by a single or group of tags.
+		// Filter by tags.
 		$tags = $this->getState('filter.tags');
 		if (is_array($tags))
 		{
