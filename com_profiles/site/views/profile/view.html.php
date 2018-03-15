@@ -163,7 +163,7 @@ class ProfilesViewProfile extends HtmlView
 			}
 			else
 			{
-				$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
 				$app->setHeader('status', 403, true);
 
 				return false;
