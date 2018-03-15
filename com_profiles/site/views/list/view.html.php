@@ -19,16 +19,6 @@ use Joomla\Registry\Registry;
 
 class ProfilesViewList extends HtmlView
 {
-
-	/**
-	 * The link to add form
-	 *
-	 * @var  string
-	 *
-	 * @since 1.0.0
-	 */
-	protected $addLink;
-
 	/**
 	 * The link
 	 *
