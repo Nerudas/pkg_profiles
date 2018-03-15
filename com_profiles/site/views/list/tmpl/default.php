@@ -14,7 +14,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 
-
 HTMLHelper::_('formbehavior.chosen', 'select');
 
 $filters = array_keys($this->filterForm->getGroup('filter'));
