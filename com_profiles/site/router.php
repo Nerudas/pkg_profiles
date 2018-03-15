@@ -21,7 +21,7 @@ use Joomla\CMS\Component\Router\Rules\StandardRules;
 class ProfilesRouter extends RouterView
 {
 	/**
-	 * JZPages Component router constructor
+	 * Router constructor
 	 *
 	 * @param   JApplicationCms $app  The application object
 	 * @param   JMenu           $menu The menu object to work with
@@ -35,7 +35,7 @@ class ProfilesRouter extends RouterView
 		$list->setKey('key');
 		$this->registerView($list);
 
-		// Item route
+		// Profiles route
 		$profile = new RouterViewConfiguration('profile');
 		$profile->setKey('id')->setParent($list, 'key');
 		$this->registerView($profile);
@@ -46,7 +46,6 @@ class ProfilesRouter extends RouterView
 		$this->attachRule(new StandardRules($this));
 		$this->attachRule(new NomenuRules($this));
 	}
-
 
 	/**
 	 * Method to get the segment(s) for list view
@@ -64,7 +63,7 @@ class ProfilesRouter extends RouterView
 	}
 
 	/**
-	 * Method to get the segment(s) for profile
+	 * Method to get the segment(s) for profile view
 	 *
 	 * @param   string $id    ID of the item to retrieve the segments for
 	 * @param   array  $query The request that is built right now
@@ -91,9 +90,8 @@ class ProfilesRouter extends RouterView
 		return false;
 	}
 
-
 	/**
-	 * Method to get the id for a List view
+	 * Method to get the id for a list view
 	 *
 	 * @param   string $segment Segment to retrieve the ID for
 	 * @param   array  $query   The request that is parsed right now
@@ -108,7 +106,7 @@ class ProfilesRouter extends RouterView
 	}
 
 	/**
-	 * Method to get the id for a Profile
+	 * Method to get the id for a profile view
 	 *
 	 * @param   string $segment Segment to retrieve the ID for
 	 * @param   array  $query   The request that is parsed right now
