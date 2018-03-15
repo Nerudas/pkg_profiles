@@ -33,11 +33,11 @@
 		<field name="avatar" type="ajaximage"
 			   filename="avatar"
 			   label="COM_PROFILES_PROFILE_AVATAR"
-			   noimage="media/com_profiles/images/noavatar.jpg"/>
+			   noimage="media/com_profiles/images/no-avatar.jpg"/>
 		<field name="header" type="ajaximage"
 			   filename="header"
 			   label="COM_PROFILES_PROFILE_HEADER"
-			   noimage="media/com_profiles/images/noheader.jpg"/>
+			   noimage="media/com_profiles/images/no-header.jpg"/>
 	</fieldset>
 	<fieldset name="contacts" label="COM_PROFILES_PROFILE_CONTACTS">
 		<fields name="contacts">

@@ -308,7 +308,7 @@ class ProfilesModelProfiles extends ListModel
 			foreach ($items as &$item)
 			{
 				$avatar = (!empty($item->avatar) && JFile::exists(JPATH_ROOT . '/' . $item->avatar)) ?
-					$item->avatar : 'media/com_profiles/images/noavatar.jpg';
+					$item->avatar : 'media/com_profiles/images/no-avatar.jpg';
 
 				$item->avatar = Uri::root(true) . '/' . $avatar;
 

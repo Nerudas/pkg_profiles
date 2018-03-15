@@ -151,12 +151,12 @@ class ProfilesModelProfile extends ItemModel
 				}
 
 				$avatar = (!empty($data->avatar) && JFile::exists(JPATH_ROOT . '/' . $data->avatar)) ?
-					$data->avatar : 'media/com_profiles/images/noavatar.jpg';
+					$data->avatar : 'media/com_profiles/images/no-avatar.jpg';
 
 				$data->avatar = Uri::root(true) . '/' . $avatar;
 
 				$header = (!empty($data->header) && JFile::exists(JPATH_ROOT . '/' . $data->header)) ?
-					$data->header : 'media/com_profiles/images/noheader.jpg';
+					$data->header : 'media/com_profiles/images/no-header.jpg';
 
 				$data->header = Uri::root(true) . '/' . $header;
 

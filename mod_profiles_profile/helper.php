@@ -59,9 +59,9 @@ class modProfilesProfileHelper
 		$user    = (!empty($pk)) ? Factory::getUser($pk) : Factory::getUser();
 		$profile = (!empty($user->id)) ? $this->getUserProfile($user->id) : $this->getGuestProfile();
 		$avatar  = (!empty($profile->avatar) && JFile::exists(JPATH_ROOT . '/' . $profile->avatar)) ?
-			$profile->avatar : 'media/com_profiles/images/noavatar.jpg';
+			$profile->avatar : 'media/com_profiles/images/no-avatar.jpg';
 		$header  = (!empty($profile->header) && JFile::exists(JPATH_ROOT . '/' . $profile->header)) ?
-			$profile->header : 'media/com_profiles/images/noheader.jpg';
+			$profile->header : 'media/com_profiles/images/no-header.jpg';
 
 		$profile->avatar   = Uri::root(true) . '/' . $avatar;
 		$profile->header   = Uri::root(true) . '/' . $header;
