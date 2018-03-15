@@ -173,7 +173,7 @@ class ProfilesModelProfile extends ItemModel
 				$data->params->merge($registry);
 
 				// If no access, the layout takes some responsibility for display of limited information.
-				$data->params->set('access-view', in_array($data->access, Factory::getUser()->getAuthorisedViewLevels()));
+				$data->params->set('access-view', in_array($data->access, $user->getAuthorisedViewLevels()));
 
 				$this->_item[$pk] = $data;
 			}
