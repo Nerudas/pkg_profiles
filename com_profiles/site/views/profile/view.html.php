@@ -71,7 +71,6 @@ class ProfilesViewProfile extends HtmlView
 		$dispatcher = JEventDispatcher::getInstance();
 
 		$this->item = $this->get('Item');
-
 		$this->link     = $this->item->link;
 		$this->editLink = $this->item->editLink;
 		$this->state    = $this->get('State');
