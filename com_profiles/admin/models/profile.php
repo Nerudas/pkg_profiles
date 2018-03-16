@@ -294,6 +294,8 @@ class ProfilesModelProfile extends AdminModel
 			$id = $data['id'];
 
 			// Save images
+			$data['avatar'] = (!empty($data['avatar'])) ? $data['avatar'] : '';
+			$data['header'] = (!empty($data['header'])) ? $data['header'] : '';
 			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'avatar', $data['avatar']);
 			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'header', $data['header']);
 
