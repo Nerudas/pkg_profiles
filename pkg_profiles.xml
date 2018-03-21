@@ -21,7 +21,7 @@
 		<folder type="plugin" id="profiles" group="system">plg_system_profiles</folder>
 	</files>
 	<updateservers>
-		<server type="extension" priority="1" name="PKG_PROFILES">
+		<server type="extension" priority="1" name="Profiles Package">
 			https://update.nerudas.ru?extension=pkg_profiles
 		</server>
 	</updateservers>
