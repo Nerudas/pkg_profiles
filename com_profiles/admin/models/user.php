@@ -466,4 +466,24 @@ class ProfilesModelUser extends BaseDatabaseModel
 		return (!empty($socials)) ? $passwords : array();
 	}
 
+
+	/**
+	 * Delete user jobs
+	 *
+	 * @param int $user_id User ID
+	 *
+	 * @return bool
+	 *
+	 * @since 1.0.0
+	 */
+	public function deleteJobs($user_id)
+	{
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->delete($db->quoteName('#__companies_employees'))
+			->where($db->quoteName('user_id') . ' = ' . $db->quote($user_id));
+		$db->setQuery($query);
+
+		return $db->execute();
+	}
 }

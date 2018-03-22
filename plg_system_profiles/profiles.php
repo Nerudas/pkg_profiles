@@ -542,6 +542,9 @@ class plgSystemProfiles extends CMSPlugin
 			// Delete socials
 			$userModel->deleteSocial($userId);
 
+			// Delete jobs
+			$userModel->deleteJobs($userId);
+
 			// Delete Profile
 			$profileModel->delete($userId);
 		}
