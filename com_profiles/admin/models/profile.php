@@ -364,6 +364,13 @@ class ProfilesModelProfile extends AdminModel
 	{
 		if (parent::delete($pks))
 		{
+			// Delete employees
+			$db = Factory::getDbo();
+			$query = $db->getQuery(true)
+				->delete($db->quoteName('#__companies_employees'))
+				->where($db->quoteName('user_id') . ' IN (' . implode(',', $pks) . ')');
+			$db->setQuery($query)->execute();
+
 			// Delete images
 			foreach ($pks as $pk)
 			{
