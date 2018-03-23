@@ -18,6 +18,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\UserHelper;
+use Joomla\CMS\Router\Route;
 
 class ProfilesControllerSocial extends BaseController
 {
@@ -29,6 +30,15 @@ class ProfilesControllerSocial extends BaseController
 	 * @since 1.0.0
 	 */
 	protected $config = null;
+
+	/**
+	 * User ID
+	 *
+	 * @var   int
+	 *
+	 * @since 1.0.0
+	 */
+	protected $user_id = null;
 
 	/**
 	 * Providers
@@ -86,19 +96,19 @@ class ProfilesControllerSocial extends BaseController
 	 */
 	public function __construct(array $config = array())
 	{
+		$app = Factory::getApplication();
+
 		$this->config = ComponentHelper::getParams('com_profiles');;
 
 		$this->providers       = array('vk', 'facebook', 'instagram', 'odnoklassniki');
 		$this->providersConfig = new Registry($this->config->get('social_providers'));
 
-		$this->provider       = Factory::getApplication()->input->get('provider');
+		$this->user_id = $app->input->get('user_id');
+
+		$this->provider       = $app->input->get('provider');
 		$this->providerConfig = new Registry($this->providersConfig->get($this->provider));
 
-		$this->redirect_uri = Uri::root() . 'index.php?option=com_profiles&task=social.authentication';
-		if (!empty($this->provider))
-		{
-			$this->redirect_uri .= '&provider=' . $this->provider;
-		}
+		$this->redirect_uri = trim(Uri::root(), '/');
 
 		parent::__construct($config);
 	}
@@ -123,18 +133,20 @@ class ProfilesControllerSocial extends BaseController
 	}
 
 	/**
-	 * Method to authentication user
+	 * Method to authorization user
 	 *
 	 * @return bool
 	 *
 	 * @since 1.0.0
 	 */
-	public function authentication()
+	public function authorization()
 	{
 		$app      = Factory::getApplication();
 		$user     = Factory::getUser();
 		$user_id  = $app->input->get('user_id');
 		$provider = $app->input->get('provider');
+
+		$this->redirect_uri .= Route::_(ProfilesHelperRoute::getSocialsAuthorizationRoute($user_id, $provider));
 
 		// Check if this my account
 		if (!empty($user_id) && $user->id != $user_id)
@@ -450,8 +462,9 @@ class ProfilesControllerSocial extends BaseController
 	 */
 	protected function getFacebookProfile()
 	{
-		$app    = Factory::getApplication();
-		$config = $this->providerConfig;
+		$app     = Factory::getApplication();
+		$config  = $this->providerConfig;
+		$user_id = $app->input->get('user_id', $app->input->get('amp;user_id'));
 
 		// Return if empty social provider config
 		if (empty($config) || empty($config->get('client_id')) || empty($config->get('client_secret')))
@@ -462,7 +475,7 @@ class ProfilesControllerSocial extends BaseController
 		$params = array(
 			'client_id'     => $config->get('client_id'),
 			'client_secret' => $config->get('client_secret'),
-			'redirect_uri'  => $this->redirect_uri,
+			'redirect_uri'  => Uri::root() . ProfilesHelperRoute::getSocialsAuthorizationRoute($user_id, 'facebook'),
 			'scope'         => 'email,public_profile'
 		);
 
@@ -687,13 +700,13 @@ class ProfilesControllerSocial extends BaseController
 	}
 
 	/**
-	 * Method to delete user social
+	 * Method to disconnect user social
 	 *
 	 * @return bool
 	 *
 	 * @since 1.0.0
 	 */
-	public function delete()
+	public function disconnect()
 	{
 		$model    = $this->getModel('User');
 		$user_id  = Factory::getApplication()->input->get('user_id');

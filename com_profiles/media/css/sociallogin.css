@@ -7,18 +7,18 @@
  * @link       https://nerudas.ru
  */
 
-[data-user-social-add],
-[data-user-social-delete] {
+[data-user-social-authorization],
+[data-user-social-disconnect] {
 	display: inline-block;
 	cursor: pointer;
 }
 
-[data-user-social-add] svg,
-[data-user-social-delete] svg {
+[data-user-social-authorization] svg,
+[data-user-social-disconnect] svg {
 	width: 48px;
 	height: 48px;
 }
 
-[data-user-social-add].not-active svg {
+[data-user-social-authorization].not-active svg {
 	opacity: 0.5;
 }

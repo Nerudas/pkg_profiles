@@ -39,4 +39,57 @@ class ProfilesHelperRoute extends RouteHelper
 	{
 		return 'index.php?option=com_profiles&view=profile&key=1&id=' . $id;
 	}
+
+	/**
+	 * Fetches the socials authorization route
+	 *
+	 * @param int    $user_id  User ID
+	 * @param string $provider Social network name
+	 *
+	 * @return  string
+	 *
+	 * @since 1.0.0
+	 */
+	public static function getSocialsAuthorizationRoute($user_id = null, $provider = null)
+	{
+		$link = 'index.php?option=com_profiles&task=social.authorization';
+
+		if (!empty($user_id))
+		{
+			$link .= '&user_id=' . $user_id;
+		}
+
+		if (!empty($provider))
+		{
+			$link .= '&provider=' . $provider;
+		}
+
+		return $link;
+	}
+	/**
+	 * Fetches the socials disconnect route
+	 *
+	 * @param int    $user_id  User ID
+	 * @param string $provider Social network name
+	 *
+	 * @return  string
+	 *
+	 * @since 1.0.0
+	 */
+	public static function getSocialsDisconnectRoute($user_id = null, $provider = null)
+	{
+		$link = 'index.php?option=com_profiles&task=social.disconnect';
+
+		if (!empty($user_id))
+		{
+			$link .= '&user_id=' . $user_id;
+		}
+
+		if (!empty($provider))
+		{
+			$link .= '&provider=' . $provider;
+		}
+
+		return $link;
+	}
 }

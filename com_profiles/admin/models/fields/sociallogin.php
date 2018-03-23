@@ -75,7 +75,6 @@ class JFormFieldSocialLogin extends FormField
 	 */
 	protected function getInput()
 	{
-		JLoader::register('ProfilesHelperRoute', JPATH_SITE . '/components/com_profiles/helpers/route.php');
 		$renderer = $this->getRenderer($this->layout);
 
 		return $renderer->render($this->getLayoutData());

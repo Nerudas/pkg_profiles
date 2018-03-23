@@ -16,8 +16,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
 jimport('joomla.filesystem.file');
+JLoader::register('ProfilesHelperRoute', JPATH_SITE . '/components/com_profiles/helpers/route.php');
 
 extract($displayData);
+
+Factory::getLanguage()->load('com_profiles', JPATH_SITE);
 
 HTMLHelper::_('jquery.framework');
 HTMLHelper::stylesheet('media/com_profiles/css/sociallogin.min.css', array('version' => 'auto'));
@@ -25,13 +28,12 @@ HTMLHelper::script('media/com_profiles/js/sociallogin.min.js', array('version' =
 
 $user_id = (!empty($user_id)) ? $user_id : Factory::getUser()->id;
 $actives = (!empty($actives)) ? $actives : array();
-$link    = Uri::root() . 'index.php?option=com_profiles&task=social';
 
-Factory::getLanguage()->load('com_profiles', JPATH_SITE);
+$root = Uri::root(true) . '/';
 Factory::getDocument()->addScriptOptions('user.social.params', array(
-	'addLink'     => $link . '.authentication&user_id=' . $user_id . '&provider=',
-	'deleteLink'  => $link . '.delete&user_id=' . $user_id . '&provider=',
-	'windowTitle' => Text::_('COM_PROFILES_SOCIALS_WINDOW')
+	'user_id'          => $user_id,
+	'authorizationURL' => $root . ProfilesHelperRoute::getSocialsAuthorizationRoute(),
+	'disconnectURL'    => $root . ProfilesHelperRoute::getSocialsDisconnectRoute()
 ));
 
 ?>
@@ -46,7 +48,8 @@ Factory::getDocument()->addScriptOptions('user.social.params', array(
 		{
 			$class .= ' not-active';
 		}
-		$data  = ($active) ? 'data-user-social-delete="' . $provider . '"' : 'data-user-social-add="' . $provider . '"';
+		$data  = ($active) ? 'data-user-social-disconnect="' . $provider . '"'
+			: 'data-user-social-authorization="' . $provider . '"';
 		$title = Text::_('COM_PROFILES_SOCIALS_' . mb_strtoupper($provider));
 
 		?>
