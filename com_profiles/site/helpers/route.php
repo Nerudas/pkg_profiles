@@ -66,6 +66,7 @@ class ProfilesHelperRoute extends RouteHelper
 
 		return $link;
 	}
+
 	/**
 	 * Fetches the socials disconnect route
 	 *

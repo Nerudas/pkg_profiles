@@ -154,7 +154,7 @@ class com_ProfilesInstallerScript
 	 */
 	public function uninstall(JAdapterInstance $adapter)
 	{
-		$db    = Factory::getDbo();
+		$db = Factory::getDbo();
 		// Remove content_type
 		$query = $db->getQuery(true)
 			->delete($db->quoteName('#__content_types'))
@@ -175,7 +175,7 @@ class com_ProfilesInstallerScript
 
 		// Remove images
 		JFolder::delete(JPATH_ROOT . '/images/profiles');
-		
+
 		// Remove layouts
 		JFolder::delete(JPATH_ROOT . '/layouts/components/com_profiles');
 	}
