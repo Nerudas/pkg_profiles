@@ -211,6 +211,13 @@ class ProfilesModelProfile extends AdminModel
 			$table->load($pk);
 		}
 
+		if (empty($data['region']))
+		{
+			$data['region'] = $app->input->cookie->get('region', '*');
+		}
+
+		$data['id']    = (!isset($data['id'])) ? 0 : $data['id'];
+		$data['alias'] = (!isset($data['alias'])) ? '' : $data['alias'];
 		// Check alias
 		$alias = $this->checkAlias($data['id'], $data['alias']);
 		if (!empty($alias->msg))
@@ -333,6 +340,7 @@ class ProfilesModelProfile extends AdminModel
 				$company['position']   = $data['job']['position'];
 				$company['as_company'] = $data['job']['as_company'];
 				$company['state']      = $data['state'];
+				$company['region']     = $data['region'];
 
 				$companyModel->save($company);
 			}
