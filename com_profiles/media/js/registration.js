@@ -12,10 +12,10 @@
 		var register_as = $('[name="jform[register_as]"]');
 
 		$(register_as).on('change', function () {
-			setRequiredFields($(this).val());
+			setRequiredFields($('[name="jform[register_as]"]:checked').val());
 		});
 
-		setRequiredFields($(register_as).val());
+		setRequiredFields($('[name="jform[register_as]"]:checked').val());
 
 		function setRequiredFields(type) {
 			var user = ['jform[name]'],
@@ -28,7 +28,6 @@
 				else {
 					field.removeAttr('required');
 				}
-				console.log(field);
 			});
 			$(company).each(function (key, name) {
 				var field = $('[name="' + name + '"]');
@@ -39,7 +38,6 @@
 					field.removeAttr('required');
 				}
 			});
-
 		}
 	});
 })(jQuery);

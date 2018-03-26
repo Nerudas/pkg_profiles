@@ -20,6 +20,7 @@ use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 class ProfilesModelProfile extends AdminModel
 {
@@ -294,8 +295,10 @@ class ProfilesModelProfile extends AdminModel
 			$id = $data['id'];
 
 			// Save images
-			$data['avatar'] = (!empty($data['avatar'])) ? $data['avatar'] : '';
-			$data['header'] = (!empty($data['header'])) ? $data['header'] : '';
+			$data['avatar']      = (!isset($data['avatar'])) ? '' : $data['avatar'];
+			$data['header']      = (!isset($data['header'])) ? '' : $data['header'];
+			$data['imagefolder'] = (!isset($data['imagefolder'])) ? '' : $data['imagefolder'];
+
 			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'avatar', $data['avatar']);
 			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'header', $data['header']);
 
@@ -318,6 +321,20 @@ class ProfilesModelProfile extends AdminModel
 			if ($app->isAdmin() && !empty($data['return']))
 			{
 				$app->input->set('return', $data['return']);
+			}
+
+			if (!empty($data['job']) && !empty($data['job']['company_name']))
+			{
+				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_companies/models');
+				$companyModel = BaseDatabaseModel::getInstance('Company', 'CompaniesModel', array('ignore_request' => true));
+
+				$company               = array();
+				$company['name']       = $data['job']['company_name'];
+				$company['position']   = $data['job']['position'];
+				$company['as_company'] = $data['job']['as_company'];
+				$company['state']      = $data['state'];
+
+				$companyModel->save($company);
 			}
 
 			return true;
