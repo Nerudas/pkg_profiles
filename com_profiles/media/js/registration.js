@@ -39,5 +39,23 @@
 				}
 			});
 		}
+
+		var personaldata = $('[name="jform[personaldata]"]'),
+			form = $(personaldata).parents('form'),
+			button = $(form).find('[type=submit]');
+		if ($(personaldata).is(':checked')) {
+			button.removeAttr('disabled');
+		}
+		else {
+			button.attr('disabled', 'disabled');
+		}
+		$(personaldata).on('change', function () {
+			if ($(personaldata).is(':checked')) {
+				button.removeAttr('disabled');
+			}
+			else {
+				button.attr('disabled', 'disabled');
+			}
+		});
 	});
 })(jQuery);

@@ -39,6 +39,10 @@
 			   label="COM_PROFILES_PARAMS_PROFILE_LAYOUT"
 			   extension="com_profiles"
 			   view="profile"/>
+		<field name="personaldata_link" type="text"
+			   label="COM_PROFILES_PARAMS_PERSONALDATA_LINK"
+			   class="input-xxlarge"
+			   size="40"/>
 	</fieldset>
 	<fieldset name="social_providers" label="COM_PROFILES_SOCIALS">
 		<fields name="social_providers">

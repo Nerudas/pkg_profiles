@@ -60,6 +60,12 @@
 			   unique="true"
 			   validate="email"
 			   autocomplete="email"/>
+
+		<field name="personaldata" type="personaldata"
+			   label="COM_PROFILES_REGISTRATION_PERSONALDATA"
+			   required="true"
+			   value="1" />
+
 		<field name="captcha" type="captcha"
 			   label="COM_USERS_CAPTCHA_LABEL"
 			   description="COM_USERS_CAPTCHA_DESC"
