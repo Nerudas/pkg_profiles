@@ -485,7 +485,6 @@ class plgSystemProfiles extends CMSPlugin
 				$userModel->addPhone($userId, $data['phone']);
 			}
 
-
 			// Registration as company
 			if ($isNew && !empty($data['register_as']) && $data['register_as'] == 'company')
 			{
