@@ -337,6 +337,7 @@ class ProfilesModelProfile extends AdminModel
 
 				$company               = array();
 				$company['name']       = $data['job']['company_name'];
+				$company['created_by'] = $id;
 				$company['position']   = $data['job']['position'];
 				$company['as_company'] = $data['job']['as_company'];
 				$company['state']      = $data['state'];
@@ -394,6 +395,12 @@ class ProfilesModelProfile extends AdminModel
 			{
 				$this->imageFolderHelper->deleteItemImageFolder($pk);
 			}
+
+			$db    = Factory::getDbo();
+			$query = $db->getQuery(true)
+				->delete($db->quoteName('#__companies_employees'))
+				->where($db->quoteName('user_id') . ' IN (' . implode(',', $pks) . ')');
+			$db->setQuery($query)->execute();
 
 			return true;
 		}
