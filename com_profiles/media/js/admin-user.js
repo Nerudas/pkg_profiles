@@ -14,6 +14,7 @@
 
 		$('#jform_about').closest('.control-group').attr('id', 'about-field');
 		$('#jform_tags').closest('.control-group').attr('id', 'tags-field');
+		$('#jform_jobs').closest('.control-group').attr('id', 'jobs-field');
 
 		var setProfileText = setInterval(function () {
 			var tab = $('#myTabTabs').find('a[href="#details"]');

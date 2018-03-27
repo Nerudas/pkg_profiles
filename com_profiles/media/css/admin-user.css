@@ -9,12 +9,14 @@
 
 #about-field > .control-label,
 #tags-field > .control-label,
-#attrib-tags > .control-group > .control-label {
+#jobs-field > .control-label,
+#attrib-tags > .control-group > .control-label{
 	display: none;
 }
 
 #about-field > .controls,
 #tags-field > .controls,
+#jobs-field > .controls,
 #attrib-tags > .control-group > .controls {
 	margin-left: 0;
 }

@@ -21,11 +21,22 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 
 class ProfilesModelProfile extends AdminModel
 {
 	/**
-	 * Imagefolder helper helper
+	 * Profile jobs array
+	 *
+	 * @var    array
+	 *
+	 * @since 1.0.0
+	 */
+	protected $_jobs = null;
+
+	/**
+	 * Imagefolder helper
 	 *
 	 * @var    new imageFolderHelper
 	 *
@@ -79,10 +90,66 @@ class ProfilesModelProfile extends AdminModel
 			$item->tags = new TagsHelper;
 			$item->tags->getTagIds($item->id, 'com_profiles.profile');
 
+			// Get jobs
+			$item->jobs = $this->getJobs($item->id);
+
 			$item->published = $item->state;
 		}
 
 		return $item;
+	}
+
+	/**
+	 * Method to get jobs.
+	 *
+	 * @param   integer $pk The id of the primary key.
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
+	public function getJobs($pk = null)
+	{
+		$app = Factory::getApplication();
+		if (!is_array($this->_jobs))
+		{
+			$pk = (!empty($pk)) ? $pk : (int) $this->getState('profile.id');
+
+			$db    = Factory::getDbo();
+			$query = $db->getQuery(true)
+				->select(array('ce.company_id as id', 'ce.position', 'c.name', 'c.logo', 'ce.key', 'ce.as_company'))
+				->from($db->quoteName('#__companies_employees', 'ce'))
+				->join('LEFT', '#__companies AS c ON c.id = ce.company_id')
+				->where('user_id = ' . $pk);
+			$db->setQuery($query);
+			$companies = $db->loadObjectList('id');
+
+			JLoader::register('CompaniesHelperEmployees', JPATH_SITE . '/components/com_companies/helpers/employees.php');
+			JLoader::register('CompaniesHelperRoute', JPATH_SITE . '/components/com_companies/helpers/route.php');
+			foreach ($companies as &$company)
+			{
+				$company->logo = (!empty($company->logo) && JFile::exists(JPATH_ROOT . '/' . $company->logo)) ?
+					Uri::root(true) . '/' . $company->logo : false;
+
+				$company->confirm = CompaniesHelperEmployees::keyCheck($company->key, $company->id, $pk);
+
+				$link = 'index.php?option=com_companies&view=company&layout=edit&id=' . $company->id;
+				if ($app->isSite())
+				{
+					$link = ($company->confirm == 'confirm') ? Route::_(CompaniesHelperRoute::getFormRoute($company->id))
+						: Route::_(CompaniesHelperRoute::getCompanyRoute($company->id));
+				}
+				$company->link = $link;
+
+				unset($company->key);
+
+				$company->as_company = ($company->as_company == 1);
+			}
+
+			$this->_jobs = $companies;
+		}
+
+		return $this->_jobs;
 	}
 
 	/**

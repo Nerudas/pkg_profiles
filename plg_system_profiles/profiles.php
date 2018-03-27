@@ -210,11 +210,27 @@ class plgSystemProfiles extends CMSPlugin
 				$form->setFieldAttribute('avatar', 'saveurl', $saveurl . 'avatar');
 				$form->setFieldAttribute('header', 'saveurl', $saveurl . 'header');
 
+				// Remove job
+				$jobs = array();
+				if (is_array($data) && !empty($data['jobs']))
+				{
+					$jobs = $data['jobs'];
+				}
+				elseif (is_object($data) && !empty($data->jobs))
+				{
+					$jobs = $data->jobs;
+				}
+				if (!empty($jobs))
+				{
+					$form->removeGroup('job');
+				}
+
 				// Set return
 				if ($return = $app->input->get('return', false, 'base64'))
 				{
 					$form->setValue('return', '', $return);
 				}
+
 			}
 
 			// Change site com_users.login form
