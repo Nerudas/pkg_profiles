@@ -13,3 +13,4 @@ defined('_JEXEC') or die;
 ?>
 
 <?php echo '<pre>', print_r($this->item, true), '</pre>'; ?>
+<?php echo '<pre>', print_r($this->jobs, true), '</pre>'; ?>

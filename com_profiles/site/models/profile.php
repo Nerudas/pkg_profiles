@@ -24,6 +24,15 @@ use Joomla\CMS\Uri\Uri;
 class ProfilesModelProfile extends ItemModel
 {
 	/**
+	 * Profile jobs array
+	 *
+	 * @var    array
+	 *
+	 * @since 1.0.0
+	 */
+	protected $_jobs = null;
+
+	/**
 	 * Model context string.
 	 *
 	 * @var        string
@@ -204,6 +213,50 @@ class ProfilesModelProfile extends ItemModel
 		}
 
 		return $this->_item[$pk];
+	}
+
+	/**
+	 * Method to get jobs.
+	 *
+	 * @param   integer $pk The id of the primary key.
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
+	public function getJobs($pk = null)
+	{
+		if (!is_array($this->_jobs))
+		{
+			$pk = (!empty($pk)) ? $pk : (int) $this->getState('profile.id');
+
+			$db    = Factory::getDbo();
+			$query = $db->getQuery(true)
+				->select(array('ce.company_id as id', 'ce.position', 'c.name', 'c.logo', 'c.about', 'c.hits', 'c.region'))
+				->from($db->quoteName('#__companies_employees', 'ce'))
+				->join('LEFT', '#__companies AS c ON c.id = ce.company_id')
+				->where('user_id = ' . $pk);
+
+			// Join over the regions.
+			$query->select(array('r.id as region_id', 'r.name AS region_name'))
+				->join('LEFT', '#__regions AS r ON r.id = 
+					(CASE c.region WHEN ' . $db->quote('*') . ' THEN 100 ELSE c.region END)');
+
+			$db->setQuery($query);
+			$companies = $db->loadObjectList('id');
+
+			foreach ($companies as &$company)
+			{
+				$company->logo = (!empty($company->logo) && JFile::exists(JPATH_ROOT . '/' . $company->logo)) ?
+					Uri::root(true) . '/' . $company->logo : false;
+
+				$company->link = Route::_(CompaniesHelperRoute::getCompanyRoute($company->id));
+			}
+
+			$this->_jobs = $companies;
+		}
+
+		return $this->_jobs;
 	}
 
 	/**

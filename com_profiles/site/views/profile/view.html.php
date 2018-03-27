@@ -73,6 +73,7 @@ class ProfilesViewProfile extends HtmlView
 		$this->item     = $this->get('Item');
 		$this->link     = $this->item->link;
 		$this->editLink = $this->item->editLink;
+		$this->jobs     = $this->get('Jobs');
 		$this->state    = $this->get('State');
 		$this->user     = $user;
 
