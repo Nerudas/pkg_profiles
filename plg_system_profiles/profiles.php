@@ -176,6 +176,15 @@ class plgSystemProfiles extends CMSPlugin
 			{
 				$user_id = $data->id;
 			}
+			$jobs = array();
+			if (is_array($data) && !empty($data['jobs']))
+			{
+				$jobs = $data['jobs'];
+			}
+			elseif (is_object($data) && !empty($data->jobs))
+			{
+				$jobs = $data->jobs;
+			}
 
 			// Change admin com_users.user form
 			if ($app->isAdmin() && $formName == 'com_users.user')
@@ -210,16 +219,7 @@ class plgSystemProfiles extends CMSPlugin
 				$form->setFieldAttribute('avatar', 'saveurl', $saveurl . 'avatar');
 				$form->setFieldAttribute('header', 'saveurl', $saveurl . 'header');
 
-				// Remove job
-				$jobs = array();
-				if (is_array($data) && !empty($data['jobs']))
-				{
-					$jobs = $data['jobs'];
-				}
-				elseif (is_object($data) && !empty($data->jobs))
-				{
-					$jobs = $data->jobs;
-				}
+				// Remove job field
 				if (!empty($jobs))
 				{
 					$form->removeGroup('job');
@@ -300,6 +300,12 @@ class plgSystemProfiles extends CMSPlugin
 				if ($config->get('profile_tags'))
 				{
 					$form->setFieldAttribute('tags', 'parents', implode(',', $config->get('profile_tags')));
+				}
+
+				// Remove job field
+				if (!empty($jobs))
+				{
+					$form->removeGroup('job');
 				}
 			}
 		}

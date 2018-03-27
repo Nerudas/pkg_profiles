@@ -120,6 +120,27 @@
 			   validate="equals"
 			   showon="change_password:1"/>
 	</fieldset>
+	<fieldset name="jobs" label="COM_PROFILES_PROFILE_JOBS">
+		<fields name="job">
+			<field name="company_name" type="text"
+				   label="COM_PROFILES_PROFILE_JOB_COMPANY_NAME"
+				   filter="string"
+				   size="30"/>
+			<field name="position" type="text"
+				   label="COM_PROFILES_PROFILE_JOB_POSITION"
+				   filter="string"
+				   size="30"/>
+			<field name="as_company" type="radio"
+				   default="0"
+				   label="COM_PROFILES_PROFILE_JOB_AS_COMPANY"
+				   class="btn-group btn-group-yesno">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+		</fields>
+		<field name="jobs" type="jobs"
+			   label="COM_PROFILES_PROFILE_JOBS"/>
+	</fieldset>
 	<fieldset name="settings" label="COM_USERS_SETTINGS_FIELDSET_LABEL">
 		<fields name="params">
 			<field name="timezone"

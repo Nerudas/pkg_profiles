@@ -78,7 +78,7 @@ HTMLHelper::_('script', 'media/com_profiles/js/form-jobs.min.js', array('version
 							</div>
 						<?php elseif ($company->confirm == 'error'): ?>
 							<div class="text-error text-small">
-								<?php echo Text::_('COM_COMPANIES_ERROR_EMPLOYEES_KEY'); ?>
+								<?php echo Text::_('COM_PROFILES_PROFILE_JOBS_CONFIRM_ERROR'); ?>
 							</div>
 						<?php endif; ?>
 					</div>
