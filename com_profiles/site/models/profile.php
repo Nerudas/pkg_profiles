@@ -112,6 +112,12 @@ class ProfilesModelProfile extends ItemModel
 					->join('LEFT', '#__regions AS r ON r.id = 
 					(CASE p.region WHEN ' . $db->quote('*') . ' THEN 100 ELSE p.region END)');
 
+				// Join over the companies.
+				$query->select(array('company.id as job_id', 'company.name as job_name', 'company.logo as job_logo', 'employees.position'))
+					->join('LEFT', '#__companies_employees AS employees ON employees.user_id = p.id AND ' .
+						$db->quoteName('employees.key') . ' = ' . $db->quote(''))
+					->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
+
 				// Filter by published state.
 				$published = $this->getState('filter.published');
 				if (!empty($published))
@@ -159,6 +165,12 @@ class ProfilesModelProfile extends ItemModel
 					$data->header : 'media/com_profiles/images/no-header.jpg';
 
 				$data->header = Uri::root(true) . '/' . $header;
+
+				$data->job = (!empty($data->job_name));
+				if ($data->job)
+				{
+					$data->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($data->id));
+				}
 
 				// Convert the metadata field
 				$data->metadata = new Registry($data->metadata);
