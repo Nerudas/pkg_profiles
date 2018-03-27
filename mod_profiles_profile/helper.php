@@ -100,10 +100,11 @@ class modProfilesProfileHelper
 		$query->select('(session.time IS NOT NULL) AS online')
 			->join('LEFT', '#__session AS session ON session.userid = p.id AND session.time > ' . $offline_time);
 
-		$query->select(array('ce.position', 'c.logo as job_logo', 'c.name as job_name', 'c.id as job_id'))
-			->join('LEFT', '#__companies_employees AS ce ON ce.user_id = p.id AND ' .
-				$db->quoteName('key') . ' = ' . $db->quote(''))
-			->join('LEFT', '#__companies AS c ON c.id = ce.company_id AND c.state = 1');
+		// Join over the companies.
+		$query->select(array('company.id as job_id', 'company.name as job_name', 'company.logo as job_logo', 'employees.position'))
+			->join('LEFT', '#__companies_employees AS employees ON employees.user_id = p.id AND ' .
+				$db->quoteName('employees.key') . ' = ' . $db->quote(''))
+			->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
 
 		$db->setQuery($query);
 		$profile = $db->loadObject();
