@@ -175,6 +175,12 @@ class ProfilesModelProfiles extends ListModel
 		$query->select('user.email AS user_email')
 			->join('LEFT', '#__users AS user ON user.id = p.id');
 
+		// Join over the companies.
+		$query->select(array('company.id as job_id', 'company.name as job_name', 'company.logo as job_logo', 'employees.position'))
+			->join('LEFT', '#__companies_employees AS employees ON employees.user_id = p.id AND ' .
+				$db->quoteName('employees.key') . ' = ' . $db->quote(''))
+			->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
+
 		// Filter by regions
 		$region = $this->getState('filter.region');
 		if (is_numeric($region))

@@ -96,14 +96,25 @@ $columns = 10;
 						</div>
 					</td>
 					<td class="nowrap">
-						<?php if ($canDo->get('core.edit')) : ?>
-							<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
-							   href="<?php echo Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id
-								   . '&return=' . $return); ?>">
-								<?php echo $this->escape($item->name); ?>
-							</a>
-						<?php else : ?>
-							<span class="nowrap"><?php echo $this->escape($item->name); ?></span>
+						<div>
+							<?php if ($canDo->get('core.edit')) : ?>
+								<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
+								   href="<?php echo Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id
+									   . '&return=' . $return); ?>">
+									<?php echo $this->escape($item->name); ?>
+								</a>
+							<?php else : ?>
+								<span class="nowrap"><?php echo $this->escape($item->name); ?></span>
+							<?php endif; ?>
+						</div>
+						<?php if (!empty($item->job_name)): ?>
+							<div class="job">
+								<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
+								   target="_blank"
+								   href="<?php echo Route::_('index.php?option=com_companies&task=company.edit&id=' . $item->job_id); ?>">
+									<?php echo $this->escape($item->job_name); ?>
+								</a>
+							</div>
 						<?php endif; ?>
 					</td>
 					<td class="nowrap">

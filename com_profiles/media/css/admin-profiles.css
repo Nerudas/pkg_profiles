@@ -42,3 +42,11 @@
 #system-message-container {
 	width: 100%;
 }
+
+#adminForm .job a,
+#adminForm .job span {
+	color: #999;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 10px;
+}
