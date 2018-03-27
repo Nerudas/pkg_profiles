@@ -31,7 +31,6 @@ class modProfilesProfileHelper
 	 */
 	public $params = null;
 
-
 	/**
 	 * Method to instantiate the Profiles Profile Module Helper
 	 *
@@ -68,6 +67,7 @@ class modProfilesProfileHelper
 		$profile->link     = Route::_(ProfilesHelperRoute::getProfileRoute($profile->id));
 		$profile->editLink = (!$user->guest && $user->id == $profile->id) ?
 			Route::_('index.php?option=com_users&view=profile&layout=edit') : '';
+		$profile->job = '';
 
 		return new Registry($profile);
 	}
@@ -85,16 +85,21 @@ class modProfilesProfileHelper
 	{
 		$db    = Factory::getDbo();
 		$query = $db->getQuery(true)
-			->select(array('id', 'name', 'avatar', 'header', 'status'))
+			->select(array('p.id', 'p.name', 'p.avatar', 'p.header', 'p.status'))
 			->from($db->quoteName('#__profiles', 'p'))
-			->where('state = 1')
-			->where('id = ' . $pk);
+			->where('p.state = 1')
+			->where('p.id = ' . $pk);
 
 		// Join over the sessions.
 		$offline      = (int) ComponentHelper::getParams('com_profiles')->get('offline_time', 5) * 60;
 		$offline_time = Factory::getDate()->toUnix() - $offline;
 		$query->select('(session.time IS NOT NULL) AS online')
 			->join('LEFT', '#__session AS session ON session.userid = p.id AND session.time > ' . $offline_time);
+
+		$query->select(array('ce.position', 'c.logo as company_logo', 'c.name as company_name', 'c.id as company_id'))
+			->join('LEFT', '#__companies_employees AS ce ON ce.user_id = p.id AND ' .
+				$db->quoteName('key') . ' = ' . $db->quote(''))
+			->join('LEFT', '#__companies AS c ON c.id = ce.company_id AND c.state = 1');
 
 		$db->setQuery($query);
 		$profile = $db->loadObject();
