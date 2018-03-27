@@ -132,6 +132,7 @@ class ProfilesModelProfile extends AdminModel
 					Uri::root(true) . '/' . $company->logo : false;
 
 				$company->confirm = CompaniesHelperEmployees::keyCheck($company->key, $company->id, $pk);
+				unset($company->key);
 
 				$link = 'index.php?option=com_companies&view=company&layout=edit&id=' . $company->id;
 				if ($app->isSite())
@@ -140,8 +141,6 @@ class ProfilesModelProfile extends AdminModel
 						: Route::_(CompaniesHelperRoute::getCompanyRoute($company->id));
 				}
 				$company->link = $link;
-
-				unset($company->key);
 
 				$company->as_company = ($company->as_company == 1);
 			}

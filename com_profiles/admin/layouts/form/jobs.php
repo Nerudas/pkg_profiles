@@ -17,7 +17,7 @@ extract($displayData);
 
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('stylesheet', 'media/com_profiles/css/form-jobs.min.css', array('version' => 'auto'));
-HTMLHelper::_('script', 'media/com_profiles/js/form-jobs.js', array('version' => 'auto'));
+HTMLHelper::_('script', 'media/com_profiles/js/form-jobs.min.js', array('version' => 'auto'));
 
 ?>
 <div id="<?php echo $id; ?>" data-input-jobs="<?php echo $id; ?>">
