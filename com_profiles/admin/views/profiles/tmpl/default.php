@@ -107,7 +107,7 @@ $columns = 10;
 								<span class="nowrap"><?php echo $this->escape($item->name); ?></span>
 							<?php endif; ?>
 						</div>
-						<?php if (!empty($item->job_name)): ?>
+						<?php if ($item->job): ?>
 							<div class="job">
 								<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
 								   target="_blank"

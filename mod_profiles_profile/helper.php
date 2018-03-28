@@ -67,7 +67,6 @@ class modProfilesProfileHelper
 		$profile->link     = Route::_(ProfilesHelperRoute::getProfileRoute($profile->id));
 		$profile->editLink = (!$user->guest && $user->id == $profile->id) ?
 			Route::_('index.php?option=com_users&view=profile&layout=edit') : '';
-		$profile->job      = (!empty($profile->job_name));
 		$profile->job_link = ($profile->job) ? Route::_(CompaniesHelperRoute::getCompanyRoute($profile->job_id)) : false;
 
 		$profile->job_logo = (!empty($profile->job_logo) && JFile::exists(JPATH_ROOT . '/' . $profile->job_logo)) ?
@@ -101,7 +100,7 @@ class modProfilesProfileHelper
 			->join('LEFT', '#__session AS session ON session.userid = p.id AND session.time > ' . $offline_time);
 
 		// Join over the companies.
-		$query->select(array('company.id as job_id', 'company.name as job_name', 'company.logo as job_logo', 'employees.position'))
+		$query->select(array('(company.id IS NOT NULL) AS job', 'company.id as job_id', 'company.name as job_name', 'company.logo as job_logo', 'employees.position'))
 			->join('LEFT', '#__companies_employees AS employees ON employees.user_id = p.id AND ' .
 				$db->quoteName('employees.key') . ' = ' . $db->quote(''))
 			->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
