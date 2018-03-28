@@ -14,6 +14,9 @@ Thank you for your understanding.
 * **Profiles Component**  
 User Profiles component
 
+* **Profiles - Latest Module**  
+Module for displaying the latest profiles
+
 * **Profiles - Profile Module**  
 Single profile output module
 

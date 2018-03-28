@@ -10,7 +10,7 @@
 #about-field > .control-label,
 #tags-field > .control-label,
 #jobs-field > .control-label,
-#attrib-tags > .control-group > .control-label{
+#attrib-tags > .control-group > .control-label {
 	display: none;
 }
 
