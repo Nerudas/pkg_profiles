@@ -15,7 +15,7 @@ extract($displayData);
 ?>
 
 <label for="<?php echo $id; ?>" class="checkbox">
-	<input id="" type="checkbox" name="<?php echo $name; ?>"
-		   value="<?php echo $value; ?>"/>
+	<input id="<?php echo $id; ?>" type="checkbox" name="<?php echo $name; ?>"
+		   value="1"/>
 	<?php echo $text; ?>
 </label>

@@ -283,6 +283,7 @@ class ProfilesControllerSocial extends BaseController
 			return false;
 		}
 		$form->removeField('captcha');
+		$form->removeField('personaldata');
 
 		$data = $model->validate($form, array(
 			'name'        => $profile->get('name'),
