@@ -177,7 +177,7 @@ class ProfilesModelProfile extends ItemModel
 
 				if ($data->job)
 				{
-					$data->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($data->id));
+					$data->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($data->job_id));
 				}
 
 				// Convert the metadata field

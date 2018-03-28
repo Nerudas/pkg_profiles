@@ -340,7 +340,7 @@ class ProfilesModelList extends ListModel
 
 				if ($item->job)
 				{
-					$item->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($item->id));
+					$item->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($item->job_id));
 				}
 			}
 		}
