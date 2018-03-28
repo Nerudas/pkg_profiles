@@ -463,10 +463,7 @@ class plgSystemProfiles extends CMSPlugin
 		{
 			$data['params']['region'] = $app->input->cookie->get('region');
 		}
-		if (empty($data['region']))
-		{
-			$data['region'] = $data['params']['region'];
-		}
+		$data['region'] = $data['params']['region'];
 
 		if (!empty($data['phone']))
 		{
