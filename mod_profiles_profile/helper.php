@@ -128,6 +128,7 @@ class modProfilesProfileHelper
 		$profile->header = '';
 		$profile->status = '';
 		$profile->online = 0;
+		$profile->job    = 0;
 
 		return $profile;
 	}
