@@ -23,6 +23,10 @@ JLoader::register('CompaniesHelperRoute', JPATH_SITE . '/components/com_companie
 BaseDatabaseModel::addIncludePath(JPATH_ROOT . '/components/com_profiles/models');
 $model = BaseDatabaseModel::getInstance('List', 'ProfilesModel', array('ignore_request' => true));
 $model->setState('list.limit', $params->get('limit', 5));
+if ($params->get('avatar_first', 1))
+{
+	$model->setState('list.ordering', 'avatar');
+}
 if ((!Factory::getUser()->authorise('core.edit.state', 'com_profiles.profile')) &&
 	(!Factory::getUser()->authorise('core.edit', 'com_profiles.profile')))
 {

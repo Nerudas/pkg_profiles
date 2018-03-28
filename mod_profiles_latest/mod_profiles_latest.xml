@@ -23,6 +23,13 @@
 		<fields name="params">
 			<fieldset name="basic">
 				<field name="limit" type="number" label="MOD_PROFILES_LATEST_PARAMS_LIMIT" default="5"/>
+				<field name="avatar_first" type="radio"
+					   default="1"
+					   label="MOD_PROFILES_LATEST_PARAMS_AVATAR_FIRST"
+					   class="btn-group btn-group-yesno">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="layout" type="modulelayout"
