@@ -590,8 +590,6 @@ class ProfilesControllerSocial extends BaseController
 
 		$profile = new Registry($getProfile->get('user'));
 		$avatar  = $profile->get('profile_picture');
-		$avatar  = str_replace('s150x150/', 's320x320/', $avatar);
-		$avatar  = preg_replace('/vp\/[^\/]*/', 'hphotos-xfp1', $avatar);
 
 		$data         = new stdClass();
 		$data->id     = $profile->get('id');
