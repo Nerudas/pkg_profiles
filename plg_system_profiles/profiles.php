@@ -412,6 +412,10 @@ class plgSystemProfiles extends CMSPlugin
 			return false;
 		}
 
+		// Set user name
+		$data['username'] = $data['email'];
+
+		// Set required password if new user
 		if (!empty($user_id))
 		{
 			$form->setFieldAttribute('password', 'required', 'false');
