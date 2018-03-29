@@ -32,7 +32,6 @@
 						'popup': 1
 					})
 				;
-				console.log(popupURL);
 				window.open(popupURL, null, popupParams);
 			});
 		});
@@ -45,7 +44,6 @@
 						'popup': 1
 					})
 				;
-				console.log(popupURL);
 				window.open(popupURL, null, popupParams);
 			});
 		});
