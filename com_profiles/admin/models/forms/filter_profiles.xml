@@ -47,6 +47,8 @@
 			<option value="p.hits DESC">JGLOBAL_HITS_DESC</option>
 			<option value="p.created ASC">JDATE_ASC</option>
 			<option value="p.created DESC">JDATE_DESC</option>
+			<option value="last_visit ASC">COM_PROFILES_PROFILE_LAST_VISIT_ASC</option>
+			<option value="last_visit DESC">COM_PROFILES_PROFILE_LAST_VISIT_DESC</option>
 		</field>
 		<field name="limit" type="limitbox"
 			   class="inputbox input-mini"

@@ -68,7 +68,7 @@ class ProfilesModelProfiles extends ListModel
 				'p.metadata', 'metadata',
 				'p.tags_search', 'tags_search',
 				'p.tags_map', 'tags_map',
-
+				'last_visit'
 			);
 		}
 		parent::__construct($config);
@@ -172,7 +172,7 @@ class ProfilesModelProfiles extends ListModel
 			->join('LEFT', '#__session AS session ON session.userid = p.id AND session.time > ' . $offline_time);
 
 		// Join over the users.
-		$query->select('user.email AS user_email')
+		$query->select(array('user.email AS user_email', 'user.lastvisitDate as last_visit'))
 			->join('LEFT', '#__users AS user ON user.id = p.id');
 
 		// Join over the companies.

@@ -135,6 +135,7 @@ class ProfilesViewProfiles extends HtmlView
 			'p.created'   => Text::_('JGLOBAL_CREATED_DATE'),
 			'p.hits'      => Text::_('JGLOBAL_HITS'),
 			'region_name' => Text::_('JGRID_HEADING_REGION'),
+			'last_visit' => Text::_('COM_PROFILES_PROFILE_LAST_VISIT'),
 		];
 	}
 }

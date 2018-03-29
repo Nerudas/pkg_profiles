@@ -63,11 +63,11 @@ $columns = 10;
 				<th class="nowrap">
 					<?php echo Text::_('COM_PROFILES_SOCIALS'); ?>
 				</th>
-				<th class="nowrap">
-					<?php echo Text::_('COM_PROFILES_USERGROUP'); ?>
-				</th>
 				<th width="10%" class="nowrap hidden-phone">
 					<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_REGION', 'region_name', $listDirn, $listOrder); ?>
+				</th>
+				<th width="10%" class="nowrap hidden-phone">
+					<?php echo HTMLHelper::_('searchtools.sort', 'COM_PROFILES_PROFILE_LAST_VISIT', 'last_visit', $listDirn, $listOrder); ?>
 				</th>
 				<th width="10%" class="nowrap hidden-phone">
 					<?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_CREATED_DATE', 'p.created', $listDirn, $listOrder); ?>
@@ -141,17 +141,13 @@ $columns = 10;
 							} ?>
 						</div>
 					</td>
-					<td class="nowrap">
-						<?php foreach ($item->user_groups as &$group)
-						{
-							$group = '<span class="nowrap">' . $group . '</span>';
-						}
-						echo implode(', ', $item->user_groups);
-						?>
-					</td>
 					<td class="small hidden-phone nowrap">
 						<?php echo ($item->region !== '*') ? $this->escape($item->region_name) :
 							Text::_('JGLOBAL_FIELD_REGIONS_ALL'); ?>
+					</td>
+					<td class="nowrap">
+						<?php echo $item->last_visit > 0 ? HTMLHelper::_('date', $item->last_visit,
+							Text::_('DATE_FORMAT_LC2')) : Text::_('JNEVER') ?>
 					</td>
 					<td class="nowrap small hidden-phone">
 						<?php echo $item->created > 0 ? HTMLHelper::_('date', $item->created,
