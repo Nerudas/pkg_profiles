@@ -330,7 +330,7 @@ class ProfilesModelProfile extends AdminModel
 		$data['imagefolder'] = (!empty($data['imagefolder'])) ? $data['imagefolder'] :
 			$this->imageFolderHelper->getItemImageFolder($data['id']);
 
-		$data['tags'] = (!is_object($data['tags'])) ? $data['tags'] : array();
+		$data['tags'] = (!empty($data['tags']) && !is_object($data['tags'])) ? $data['tags'] : array();
 		if (!empty($data['tags']))
 		{
 			$table->newTags = $data['tags'];
