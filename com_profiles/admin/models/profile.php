@@ -370,7 +370,8 @@ class ProfilesModelProfile extends AdminModel
 			// Save images
 			$data['avatar']      = (!isset($data['avatar'])) ? '' : $data['avatar'];
 			$data['header']      = (!isset($data['header'])) ? '' : $data['header'];
-			$data['imagefolder'] = (!isset($data['imagefolder'])) ? '' : $data['imagefolder'];
+			$data['imagefolder'] = (!empty($data['imagefolder'])) ? $data['imagefolder'] :
+				$this->imageFolderHelper->getItemImageFolder($id);
 
 			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'avatar', $data['avatar']);
 			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'header', $data['header']);
