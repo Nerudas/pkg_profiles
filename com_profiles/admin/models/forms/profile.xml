@@ -40,6 +40,12 @@
 			   noimage="media/com_profiles/images/no-header.jpg"/>
 	</fieldset>
 	<fieldset name="contacts" label="COM_PROFILES_PROFILE_CONTACTS">
+		<fields name="params">
+			<field name="region" type="regions"
+				   label="JGLOBAL_FIELD_REGIONS_LABEL"
+				   description="JGLOBAL_FIELD_REGIONS_DESC"
+				   show_all="true"/>
+		</fields>
 		<fields name="contacts">
 			<field name="phones" type="phones"
 				   label="JGLOBAL_FIELD_PHONES_LABEL"
@@ -204,10 +210,6 @@
 				   description="COM_USERS_USER_FIELD_TIMEZONE_DESC">
 				<option value="">JOPTION_USE_DEFAULT</option>
 			</field>
-			<field name="region" type="regions"
-				   label="JGLOBAL_FIELD_REGIONS_LABEL"
-				   description="JGLOBAL_FIELD_REGIONS_DESC"
-				   show_all="true"/>
 			<field name="helpsite" type="hidden" default=""/>
 		</fields>
 		<field name="sendEmail" type="radio"
