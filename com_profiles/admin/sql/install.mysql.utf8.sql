@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `#__profiles` (
   `contacts`    MEDIUMTEXT       NOT NULL DEFAULT '',
   `avatar`      TEXT             NOT NULL DEFAULT '',
   `header`      TEXT             NOT NULL DEFAULT '',
+  `notes`       LONGTEXT         NOT NULL DEFAULT '',
   `state`       TINYINT(3)       NOT NULL DEFAULT '0',
   `created`     DATETIME         NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified`    DATETIME         NOT NULL DEFAULT '0000-00-00 00:00:00',

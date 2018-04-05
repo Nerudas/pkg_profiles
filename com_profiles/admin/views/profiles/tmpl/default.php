@@ -55,25 +55,22 @@ $columns = 10;
 					<?php echo HTMLHelper::_('searchtools.sort', 'COM_PROFILES_PROFILE_NAME', 'p.name', $listDirn, $listOrder); ?>
 				</th>
 				<th class="nowrap">
-					<?php echo Text::_('JGLOBAL_EMAIL'); ?>
+					<?php echo Text::_('COM_PROFILES_PROFILE_NOTES_NOTE'); ?>
 				</th>
-				<th class="nowrap">
-					<?php echo Text::_('COM_PROFILES_PROFILE_PHONE'); ?>
-				</th>
-				<th class="nowrap">
-					<?php echo Text::_('COM_PROFILES_SOCIALS'); ?>
+				<th width="10%" class="nowrap">
+					<?php echo Text::_('COM_PROFILES_PROFILE_SITE_ACCESS'); ?>
 				</th>
 				<th width="10%" class="nowrap hidden-phone">
 					<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_REGION', 'region_name', $listDirn, $listOrder); ?>
 				</th>
 				<th width="10%" class="nowrap hidden-phone">
-					<?php echo HTMLHelper::_('searchtools.sort', 'COM_PROFILES_PROFILE_LAST_VISIT', 'last_visit', $listDirn, $listOrder); ?>
+					<?php echo HTMLHelper::_('searchtools.sort', 'COM_PROFILES_HEADING_LAST_VISIT', 'last_visit', $listDirn, $listOrder); ?>
 				</th>
 				<th width="10%" class="nowrap hidden-phone">
-					<?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_CREATED_DATE', 'p.created', $listDirn, $listOrder); ?>
+					<?php echo HTMLHelper::_('searchtools.sort', 'COM_PROFILES_HEADING_CREATED_DATE', 'p.created', $listDirn, $listOrder); ?>
 				</th>
 				<th width="1%" class="nowrap hidden-phone">
-					<?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_HITS', 'p.hits', $listDirn, $listOrder); ?>
+					<?php echo HTMLHelper::_('searchtools.sort', 'COM_PROFILES_HEADING_HITS', 'p.hits', $listDirn, $listOrder); ?>
 				</th>
 				<th width="1%" class="nowrap hidden-phone center">
 					<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'p.id', $listDirn, $listOrder); ?>
@@ -118,14 +115,17 @@ $columns = 10;
 							</div>
 						<?php endif; ?>
 					</td>
-					<td class="nowrap">
-						<?php echo $item->user_email; ?>
+					<td>
+						<?php echo $item->note; ?>
 					</td>
 					<td class="nowrap">
-						<?php echo preg_replace('/(\\+\\d{1})(\\d{3})(\\d{3})(\\d{2})(\\d{2})/',
-							'$1($2)$3-$4-$5', $item->user_phone); ?>
-					</td>
-					<td class="nowrap">
+						<div class="email">
+							<?php echo $item->user_email; ?>
+						</div>
+						<div class="phone">
+							<?php echo preg_replace('/(\\+\\d{1})(\\d{3})(\\d{3})(\\d{2})(\\d{2})/',
+								'$1($2)$3-$4-$5', $item->user_phone); ?>
+						</div>
 						<div class="socials">
 							<?php foreach ($item->user_socials as $provider)
 							{
@@ -140,7 +140,6 @@ $columns = 10;
 									echo $title;
 								}
 							} ?>
-						</div>
 					</td>
 					<td class="small hidden-phone nowrap">
 						<?php echo ($item->region !== '*') ? $this->escape($item->region_name) :
@@ -152,7 +151,7 @@ $columns = 10;
 					</td>
 					<td class="nowrap small hidden-phone">
 						<?php echo $item->created > 0 ? HTMLHelper::_('date', $item->created,
-							Text::_('DATE_FORMAT_LC2')) : '-' ?>
+							Text::_('DATE_FORMAT_LC1')) : '-' ?>
 					</td>
 					<td class="hidden-phone center">
 							<span class="badge badge-info">

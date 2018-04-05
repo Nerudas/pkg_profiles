@@ -243,4 +243,24 @@ class com_ProfilesInstallerScript
 			Factory::getDbo()->updateObject('#__extensions', $object, 'extension_id');
 		}
 	}
+
+	/**
+	 * This method is called after a component is updated.
+	 *
+	 * @param  \stdClass $parent - Parent object calling object.
+	 *
+	 * @return void
+	 *
+	 * @since  1.0.0
+	 */
+	public function update($parent)
+	{
+		$db      = Factory::getDbo();
+		$columns = $db->getTableColumns('#__profiles');
+		if (!isset($columns['notes']))
+		{
+			$db->setQuery("ALTER TABLE #__profiles ADD `notes` LONGTEXT  NOT NULL DEFAULT '' AFTER `header`")
+				->query();
+		}
+	}
 }

@@ -74,6 +74,10 @@ class ProfilesModelProfile extends AdminModel
 	{
 		if ($item = parent::getItem($pk))
 		{
+			// Convert the contacts field to an array.
+			$registry    = new Registry($item->notes);
+			$item->notes = $registry->toArray();
+
 			// Convert the metadata field to an array.
 			$registry       = new Registry($item->metadata);
 			$item->metadata = $registry->toArray();
@@ -293,6 +297,12 @@ class ProfilesModelProfile extends AdminModel
 		}
 
 		$data['alias'] = $alias->data;
+
+		if (isset($data['notes']) && is_array($data['notes']))
+		{
+			$registry      = new Registry($data['notes']);
+			$data['notes'] = (string) $registry;
+		}
 
 		if (isset($data['metadata']) && isset($data['metadata']['author']))
 		{

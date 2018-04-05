@@ -123,7 +123,7 @@ class plgSystemProfiles extends CMSPlugin
 			HTMLHelper::stylesheet('media/com_profiles/css/admin-user.min.css', array('version' => 'auto'));
 			HTMLHelper::script('media/com_profiles/js/admin-user.min.js', array('version' => 'auto'));
 			Factory::getDocument()->addScriptOptions('admin-user.params', array(
-				'profileText' => Text::_('COM_PROFILES_PROFILE_ABOUT')));
+				'profileText' => Text::_('COM_PROFILES_PROFILE_NOTES')));
 
 			// Add link to page
 			if ($user_id = $app->input->get('id'))

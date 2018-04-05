@@ -17,6 +17,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\Registry\Registry;
 
 class ProfilesModelProfiles extends ListModel
 {
@@ -333,6 +334,9 @@ class ProfilesModelProfiles extends ListModel
 				$item->user_socials = (isset($socials[$item->id])) ? $socials[$item->id] : array();
 
 				$item->user_groups = (isset($usergroups[$item->id])) ? $usergroups[$item->id] : array();
+
+				$notes = new Registry($item->notes);
+				$item->note = $notes->get('note');
 
 				// Get Tags
 				$item->tags = new TagsHelper;

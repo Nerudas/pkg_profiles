@@ -157,6 +157,12 @@
 	</fieldset>
 
 	<fieldset name="hidden">
+		<fields name="notes">
+			<field name="note" type="hidden" readonly="true"/>
+			<field name="city" type="hidden" readonly="true"/>
+		</fields>
+
+		<field name="author" type="hidden" readonly="true"/>
 		<fields name="params">
 			<field name="editor" type="hidden" readonly="true"/>
 			<field name="language" type="hidden" readonly="true"/>
