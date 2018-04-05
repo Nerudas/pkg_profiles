@@ -124,6 +124,20 @@ class plgSystemProfiles extends CMSPlugin
 			HTMLHelper::script('media/com_profiles/js/admin-user.min.js', array('version' => 'auto'));
 			Factory::getDocument()->addScriptOptions('admin-user.params', array(
 				'profileText' => Text::_('COM_PROFILES_PROFILE_ABOUT')));
+
+			// Add link to page
+			if ($user_id = $app->input->get('id'))
+			{
+				JLoader::register('ProfilesHelperRoute', JPATH_SITE . '/components/com_profiles/helpers/route.php');
+				$site       = JApplication::getInstance('site');
+				$siteRouter = $site->getRouter();
+				$pageLink   = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($user_id))->toString();
+				$pageLink   = str_replace(Uri::base(true), trim(Uri::root(), '/'), $pageLink);
+
+				$toolbar = JToolBar::getInstance('toolbar');
+				$toolbar->appendButton('Custom', '<a  href="' . $pageLink . '" class="btn btn-small btn-primary" 
+				target="_blank">' . Text::_('COM_PROFILES_PROFILE_GO_TO_PAGE') . '</a>', 'goToPage');
+			}
 		}
 
 		if ($app->isSite() && $component == 'com_users' && $view == 'registration')

@@ -76,3 +76,7 @@
 	left: 0;
 	bottom: -43px;
 }
+
+#toolbar #toolbar-goToPage {
+	float: right;
+}
