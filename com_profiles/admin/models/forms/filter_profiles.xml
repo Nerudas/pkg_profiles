@@ -9,6 +9,13 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="online" type="list"
+			   label="COM_PROFILES_PROFILE_AVATAR"
+			   onchange="this.form.submit();">
+			<option value="">COM_PROFILES_ONLINE_STATUS_SELECT</option>
+			<option value="0">COM_PROFILES_ONLINE_STATUS_OFFLINE</option>
+			<option value="1">COM_PROFILES_ONLINE_STATUS_ONLINE</option>
+		</field>
 		<field name="social" type="list"
 			   label="COM_PROFILES_SOCIALS"
 			   onchange="this.form.submit();">

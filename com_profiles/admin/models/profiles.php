@@ -104,6 +104,9 @@ class ProfilesModelProfiles extends ListModel
 		$usergroup = $this->getUserStateFromRequest($this->context . '.filter.usergroup', 'filter_usergroup', '');
 		$this->setState('filter.usergroup', $usergroup);
 
+		$usergroup = $this->getUserStateFromRequest($this->context . '.filter.online', 'filter_online', '');
+		$this->setState('filter.online', $usergroup);
+
 		$tags = $this->getUserStateFromRequest($this->context . '.filter.tags', 'filter_tags', '');
 		$this->setState('filter.tags', $tags);
 
@@ -133,6 +136,7 @@ class ProfilesModelProfiles extends ListModel
 		$id .= ':' . $this->getState('filter.avatar');
 		$id .= ':' . $this->getState('filter.social');
 		$id .= ':' . $this->getState('filter.usergroup');
+		$id .= ':' . $this->getState('filter.online');
 		$id .= ':' . serialize($this->getState('filter.tags'));
 
 		return parent::getStoreId($id);
@@ -215,6 +219,14 @@ class ProfilesModelProfiles extends ListModel
 		{
 			$operator = ($avatar == 0) ? ' = ' : ' <>';
 			$query->where($db->quoteName('p.avatar') . $operator . $db->quote(''));
+		}
+
+		// Filter by online
+		$online = $this->getState('filter.online');
+		if (is_numeric($online))
+		{
+			$operator = ($online == 1) ? ' IS NOT NULL' : ' IS NULL';
+			$query->where($db->quoteName('session.time') . $operator);
 		}
 
 		// Filter by social
