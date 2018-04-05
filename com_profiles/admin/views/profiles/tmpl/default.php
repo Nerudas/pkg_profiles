@@ -99,6 +99,7 @@ $columns = 10;
 						<div>
 							<?php if ($canDo->get('core.edit')) : ?>
 								<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
+								   target="_blank"
 								   href="<?php echo Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id
 									   . '&return=' . $return); ?>">
 									<?php echo $this->escape($item->name); ?>
