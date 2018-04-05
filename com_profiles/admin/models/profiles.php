@@ -335,7 +335,7 @@ class ProfilesModelProfiles extends ListModel
 
 				$item->user_groups = (isset($usergroups[$item->id])) ? $usergroups[$item->id] : array();
 
-				$notes = new Registry($item->notes);
+				$notes      = new Registry($item->notes);
 				$item->note = $notes->get('note');
 
 				// Get Tags
