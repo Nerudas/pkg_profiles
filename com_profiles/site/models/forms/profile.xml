@@ -160,6 +160,7 @@
 		<fields name="notes">
 			<field name="note" type="hidden" readonly="true"/>
 			<field name="city" type="hidden" readonly="true"/>
+			<field name="tech" type="hidden" readonly="true"/>
 		</fields>
 
 		<field name="author" type="hidden" readonly="true"/>
