@@ -80,3 +80,7 @@
 #toolbar #toolbar-goToPage {
 	float: right;
 }
+
+#toolbar #toolbar-help {
+	display: none;
+}
