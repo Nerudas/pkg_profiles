@@ -39,7 +39,7 @@ use Joomla\CMS\Language\Text;
 							</dt>
 							<dd>
 							<dd>
-								<a href="<?php echo $value['jod_link']; ?>"
+								<a href="<?php echo $value['job_link']; ?>"
 								   target="_blank"><?php echo $value['job_name']; ?></a>
 							</dd>
 							<?php if (!empty($value['job_position'])): ?>

@@ -24,6 +24,9 @@
 				   label="COM_PROFILES_PROFILE_NOTES_CITY"
 				   class="input-xxlarge"
 				   size="30"/>
+			<field name="tech" type="textarea"
+				   label="COM_PROFILES_PROFILE_NOTES_TECH"
+				   class="input-xxlarge"/>
 		</fields>
 	</fieldset>
 	<fieldset name="about" label="COM_PROFILES_PROFILE_ABOUT">
