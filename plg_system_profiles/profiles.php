@@ -557,6 +557,12 @@ class plgSystemProfiles extends CMSPlugin
 				);
 				$app->login($credentials, $options);
 			}
+
+			if ($app->isAdmin() && $app->input->get('task') == 'save')
+			{
+				$return = base64_encode('index.php?option&option=com_profiles&views=profiles');
+				$app->input->set('return', $return);
+			}
 		}
 
 		return $result;
