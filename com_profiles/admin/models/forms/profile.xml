@@ -17,10 +17,9 @@
 	</fieldset>
 	<fieldset name="notes" label="COM_PROFILES_PROFILE_NOTES">
 		<fields name="notes">
-			<field name="note" type="text"
+			<field name="note" type="textarea"
 				   label="COM_PROFILES_PROFILE_NOTES_NOTE"
-				   class="input-xxlarge"
-				   size="30"/>
+				   class="input-xxlarge"/>
 			<field name="city" type="text"
 				   label="COM_PROFILES_PROFILE_NOTES_CITY"
 				   class="input-xxlarge"

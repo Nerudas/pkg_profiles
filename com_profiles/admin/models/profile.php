@@ -232,13 +232,25 @@ class ProfilesModelProfile extends AdminModel
 					$region                = $db->loadResult();
 					$information['region'] = (!empty($region)) ? $region : Text::_('JGLOBAL_FIELD_REGIONS_NULL');
 				}
+
+				// Get Tags
+				$tags = '';
+				if ((!empty($item->tags->tags)))
+				{
+					$query = $db->getQuery(true)
+						->select('title')
+						->from('#__tags')
+						->where('id IN (' . $item->tags->tags . ')');
+					$db->setQuery($query);
+					$tags = implode(',', $db->loadColumn());
+				}
+				$information['tags'] = $tags;
 			}
 			$this->_information = $information;
 		}
 
 		return $this->_information;
 	}
-
 
 	/**
 	 * Method to get jobs.

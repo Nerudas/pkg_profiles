@@ -110,3 +110,7 @@
 	background-position: 50% 50%;
 	background-size: cover;
 }
+#jform_information .tags .label {
+	margin-right: 3px;
+	margin-bottom: 3px;
+}

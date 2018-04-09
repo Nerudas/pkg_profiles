@@ -55,10 +55,11 @@
 		var notes = $('#attrib-notes'),
 			information = $('#jform_information').closest('.controls'),
 			html = '<div class="row-fluid form-horizontal-desktop">\n' +
-				'<div id="note" class="span9">' + $(notes).html() + '</div>\n' +
-				'<div id="information" class="span3">' + $(information).html() + '</div>\n' +
+				'<div id="information" class="span9">' + $(information).html() + '</div>\n' +
+				'<div id="note" class="span3">' + $(notes).html() + '</div>\n' +
 				'</div>';
 		$(html).appendTo($('#details'));
+		$('#details').find('.row-fluid').removeClass('form-horizontal-desktop').addClass('form-vertical');
 		$(notes).remove();
 		$('#attrib-information').remove();
 		var removeInfoTabs = setInterval(function () {
