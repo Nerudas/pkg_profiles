@@ -372,13 +372,16 @@ class ProfilesModelProfile extends AdminModel
 			$id = $data['id'];
 
 			// Save images
-			$data['avatar']      = (!isset($data['avatar'])) ? '' : $data['avatar'];
-			$data['header']      = (!isset($data['header'])) ? '' : $data['header'];
 			$data['imagefolder'] = (!empty($data['imagefolder'])) ? $data['imagefolder'] :
 				$this->imageFolderHelper->getItemImageFolder($id);
-
-			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'avatar', $data['avatar']);
-			$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'header', $data['header']);
+			if (isset($data['avatar']))
+			{
+				$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'avatar', $data['avatar']);
+			}
+			if (isset($data['header']))
+			{
+				$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'header', $data['header']);
+			}
 
 			// Update contacts
 			if (!empty($data['update_contacts']))
