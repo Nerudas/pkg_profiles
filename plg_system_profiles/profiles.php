@@ -62,7 +62,6 @@ class plgSystemProfiles extends CMSPlugin
 		$language = Factory::getLanguage();
 		$path     = ($app->isSite()) ? JPATH_SITE : JPATH_ADMINISTRATOR;
 		$language->load('com_profiles', $path, $language->getTag(), true);
-
 	}
 
 	/**
@@ -129,10 +128,9 @@ class plgSystemProfiles extends CMSPlugin
 			if ($user_id = $app->input->get('id'))
 			{
 				JLoader::register('ProfilesHelperRoute', JPATH_SITE . '/components/com_profiles/helpers/route.php');
-				$site       = JApplication::getInstance('site');
-				$siteRouter = $site->getRouter();
+				$siteRouter = SiteApplication::getRouter();
 				$pageLink   = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($user_id))->toString();
-				$pageLink   = str_replace(Uri::base(true), trim(Uri::root(), '/'), $pageLink);
+				$pageLink   = str_replace('administrator/', '', $pageLink);
 
 				$toolbar = JToolBar::getInstance('toolbar');
 				$toolbar->appendButton('Custom', '<a  href="' . $pageLink . '" class="btn btn-small btn-primary" 
