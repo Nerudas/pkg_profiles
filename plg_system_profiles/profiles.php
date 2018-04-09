@@ -115,7 +115,7 @@ class plgSystemProfiles extends CMSPlugin
 		$component = $app->input->get('option', '');
 		$view      = $app->input->get('view', '');
 
-		// Add style for admin user view
+		// Admin user view
 		if ($app->isAdmin() && $component == 'com_users' && $view == 'user')
 		{
 			HTMLHelper::_('jquery.framework');
@@ -135,6 +135,21 @@ class plgSystemProfiles extends CMSPlugin
 				$toolbar = JToolBar::getInstance('toolbar');
 				$toolbar->appendButton('Custom', '<a  href="' . $pageLink . '" class="btn btn-small btn-primary" 
 				target="_blank">' . Text::_('COM_PROFILES_PROFILE_GO_TO_PAGE') . '</a>', 'goToPage');
+			}
+		}
+		// Admin users view
+		if ($app->isAdmin() && $component == 'com_users' && $view == 'users')
+		{
+
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_users/models', 'UsersModel');
+			$usersModel = BaseDatabaseModel::getInstance('Users', 'UsersModel', array('ignore_request' => false));
+			$userBlock  = $usersModel->getState('filter.state');
+			$doc        = Factory::getDocument();
+			if (empty($userBlock) || $userBlock != 1)
+			{
+				$doc->addScriptDeclaration("jQuery(document).ready(function() {
+					jQuery('#toolbar-delete').remove();
+				});");
 			}
 		}
 
