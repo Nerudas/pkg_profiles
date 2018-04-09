@@ -10,6 +10,7 @@
 #about-field > .control-label,
 #tags-field > .control-label,
 #jobs-field > .control-label,
+#information-field > .control-label,
 #attrib-tags > .control-group > .control-label {
 	display: none;
 }
@@ -17,6 +18,7 @@
 #about-field > .controls,
 #tags-field > .controls,
 #jobs-field > .controls,
+#information-field > .controls,
 #attrib-tags > .control-group > .controls {
 	margin-left: 0;
 }
@@ -83,4 +85,28 @@
 
 #toolbar #toolbar-help {
 	display: none;
+}
+
+#jform_information .name {
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 3px;
+}
+
+#jform_information .region {
+	margin-bottom: 10px;
+}
+
+#jform_information .avatar {
+	text-align: center;
+	margin-bottom: 3px;
+}
+
+#jform_information .avatar .image {
+	display: inline-block;
+	width: 128px;
+	height: 128px;
+	background-position: 50% 50%;
+	background-size: cover;
 }

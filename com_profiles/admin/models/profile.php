@@ -23,6 +23,7 @@ use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Application\SiteApplication;
 
 class ProfilesModelProfile extends AdminModel
 {
@@ -34,6 +35,15 @@ class ProfilesModelProfile extends AdminModel
 	 * @since 1.0.0
 	 */
 	protected $_jobs = null;
+
+	/**
+	 * Profile information
+	 *
+	 * @var    array
+	 *
+	 * @since 1.0.0
+	 */
+	protected $_information = null;
 
 	/**
 	 * Imagefolder helper
@@ -96,10 +106,139 @@ class ProfilesModelProfile extends AdminModel
 
 			// Get jobs
 			$item->jobs = $this->getJobs($item->id);
+
+			// Get Info
+			$item->information = $this->getInformation($item);
+
 		}
 
 		return $item;
 	}
+
+	/**
+	 * Method to get information.
+	 *
+	 * @param   object $item Profile object
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
+	public function getInformation($item)
+	{
+		if (!is_array($this->_information))
+		{
+			$information = array();
+			if (!empty($item->id))
+			{
+				$db = Factory::getDbo();
+				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models', 'ProfilesModel');
+				$userModel = BaseDatabaseModel::getInstance('User', 'ProfilesModel', array('ignore_request' => false));
+				$userInfo  = Factory::getUser($item->id);
+
+				$information['id']   = $item->id;
+				$information['name'] = $item->name;
+
+				JLoader::register('ProfilesHelperRoute', JPATH_SITE . '/components/com_profiles/helpers/route.php');
+				$siteRouter          = SiteApplication::getRouter();
+				$link                = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($item->id))->toString();
+				$information['link'] = str_replace('administrator/', '', $link);
+
+				$avatar                = (!empty($item->avatar) && JFile::exists(JPATH_ROOT . '/' . $item->avatar)) ?
+					$item->avatar : 'media/com_profiles/images/no-avatar.jpg';
+				$information['avatar'] = Uri::root(true) . '/' . $avatar;
+
+				$information['email'] = $userInfo->email;
+
+
+				$phone                = $userModel->getPhone($item->id);
+				$information['phone'] = ($phone) ? $phone->code . $phone->number : '';
+
+				$socials                      = $userModel->getSocial($item->id);
+				$information['vk']            = (!empty($socials['vk'])) ? $socials['vk']->social_id : '';
+				$information['facebook']      = (!empty($socials['facebook'])) ? $socials['facebook']->social_id : '';
+				$information['odnoklassniki'] = (!empty($socials['odnoklassniki'])) ? $socials['odnoklassniki']->social_id : '';
+
+				$contacts = (!empty($item->contacts)) ? $item->contacts : array();
+				if (!empty($contacts['email']))
+				{
+					$information['contacts_email'] = $contacts['email'];
+				}
+				if (!empty($contacts['phones']))
+				{
+					$phones = array();
+					foreach ($contacts['phones'] as $phone)
+					{
+						$phones[] = $phone['code'] . $phone['number'];
+					}
+					$information['contacts_phones'] = implode(',', $phones);
+				}
+				if (!empty($contacts['site']))
+				{
+					$information['contacts_site'] = $contacts['site'];
+				}
+				if (!empty($contacts['vk']))
+				{
+					$information['contacts_vk'] = $contacts['vk'];
+				}
+				if (!empty($contacts['facebook']))
+				{
+					$information['contacts_facebook'] = $contacts['facebook'];
+				}
+				if (!empty($contacts['instagram']))
+				{
+					$information['contacts_instagram'] = $contacts['instagram'];
+				}
+				if (!empty($contacts['odnoklassniki']))
+				{
+					$information['contacts_odnoklassniki'] = $contacts['odnoklassniki'];
+				}
+
+				// Get Job
+				$query = $db->getQuery(true)
+					->select(array('company.id as id', 'company.name', 'company.logo', 'employees.position'))
+					->from($db->quoteName('#__companies_employees', 'employees'))
+					->join('LEFT', '#__companies AS company ON company.id = employees.company_id')
+					->where('employees.user_id = ' . $item->id)
+					->where($db->quoteName('employees.key') . ' = ' . $db->quote(''))
+					->where('company.state = 1');
+				$db->setQuery($query);
+				$job = $db->loadObject();
+
+				$information['job_id'] = (!empty($job)) ? $job->id : '';
+				if (!empty($job->id))
+				{
+					$information['job_name'] = $job->name;
+
+					JLoader::register('CompaniesHelperRoute', JPATH_SITE . '/components/com_companies/helpers/route.php');
+					$job_link                    = $siteRouter->build(CompaniesHelperRoute::getCompanyRoute($job->id))->toString();
+					$information['job_link']     = $job_link;
+					$information['job_position'] = $job->position;
+					$information['job_logo']     = (!empty($job->logo) && JFile::exists(JPATH_ROOT . '/' . $job->logo)) ?
+						Uri::root(true) . '/' . $job->logo : '';
+				}
+
+				if ($item->region == '*')
+				{
+					$information['region'] = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
+				}
+				else
+				{
+					$query = $db->getQuery(true)
+						->select('name')
+						->from('#__regions')
+						->where('id = ' . $item->region);
+					$db->setQuery($query);
+					$region                = $db->loadResult();
+					$information['region'] = (!empty($region)) ? $region : Text::_('JGLOBAL_FIELD_REGIONS_NULL');
+				}
+			}
+			$this->_information = $information;
+		}
+
+		return $this->_information;
+	}
+
 
 	/**
 	 * Method to get jobs.

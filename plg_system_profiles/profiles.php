@@ -123,18 +123,18 @@ class plgSystemProfiles extends CMSPlugin
 			HTMLHelper::stylesheet('media/com_profiles/css/admin-user.min.css', array('version' => 'auto'));
 			HTMLHelper::script('media/com_profiles/js/admin-user.min.js', array('version' => 'auto'));
 			Factory::getDocument()->addScriptOptions('admin-user.params', array(
-				'profileText' => Text::_('COM_PROFILES_PROFILE_NOTES')));
+				'profileText' => Text::_('COM_PROFILES_PROFILE_INFORMATION')));
 
 			// Add link to page
 			if ($user_id = $app->input->get('id'))
 			{
 				JLoader::register('ProfilesHelperRoute', JPATH_SITE . '/components/com_profiles/helpers/route.php');
-				$siteRouter = SiteApplication::getRouter();
-				$pageLink   = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($user_id))->toString();
-				$pageLink   = str_replace('administrator/', '', $pageLink);
+				$siteRouter  = SiteApplication::getRouter();
+				$profileLink = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($user_id))->toString();
+				$profileLink = str_replace('administrator/', '', $profileLink);
 
 				$toolbar = JToolBar::getInstance('toolbar');
-				$toolbar->appendButton('Custom', '<a  href="' . $pageLink . '" class="btn btn-small btn-primary" 
+				$toolbar->appendButton('Custom', '<a  href="' . $profileLink . '" class="btn btn-small btn-primary" 
 				target="_blank">' . Text::_('COM_PROFILES_PROFILE_GO_TO_PAGE') . '</a>', 'goToPage');
 			}
 		}

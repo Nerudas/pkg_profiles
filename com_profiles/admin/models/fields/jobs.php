@@ -25,7 +25,7 @@ class JFormFieldJobs extends FormField
 	protected $type = 'jobs';
 
 	/**
-	 * Company ID
+	 * User ID
 	 *
 	 * @var    int
 	 * @since  1.0.0

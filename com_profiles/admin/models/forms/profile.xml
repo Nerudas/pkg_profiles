@@ -10,6 +10,12 @@
 			   label="JGLOBAL_FIELD_AJAXALIAS_LABEL"
 			   hint="JGLOBAL_FIELD_AJAXALIAS_PLACEHOLDER"
 			   size="40"/>
+
+	</fieldset>
+	<fieldset name="information" label="COM_PROFILES_PROFILE_INFORMATION">
+		<field name="information" type="information"/>
+	</fieldset>
+	<fieldset name="notes" label="COM_PROFILES_PROFILE_NOTES">
 		<fields name="notes">
 			<field name="note" type="text"
 				   label="COM_PROFILES_PROFILE_NOTES_NOTE"

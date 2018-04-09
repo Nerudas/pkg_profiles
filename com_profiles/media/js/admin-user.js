@@ -52,6 +52,25 @@
 			}
 		}, 3);
 
+		var notes = $('#attrib-notes'),
+			information = $('#jform_information').closest('.controls'),
+			html = '<div class="row-fluid form-horizontal-desktop">\n' +
+				'<div id="note" class="span9">' + $(notes).html() + '</div>\n' +
+				'<div id="information" class="span3">' + $(information).html() + '</div>\n' +
+				'</div>';
+		$(html).appendTo($('#details'));
+		$(notes).remove();
+		$('#attrib-information').remove();
+		var removeInfoTabs = setInterval(function () {
+			var notes = $('#myTabTabs').find('a[href="#attrib-notes"]'),
+				information = $('#myTabTabs').find('a[href="#attrib-information"]');
+			if ($(notes).length > 0 && $(information).length > 0) {
+				$(notes).parent().remove();
+				$(information).parent().remove();
+				clearInterval(removeInfoTabs);
+			}
+		}, 3);
+
 		var form = $('#user-form');
 		$(form).prepend($('<div id="header" class="form-inline form-inline-header"></div>'));
 		$(form).find('> h4').remove();
@@ -65,6 +84,8 @@
 			}
 		}, 3);
 
+
+		// Set cancel redirect
 		$(form).on('submit', function () {
 			if ($('[name="task"]').val() == 'user.cancel') {
 				$('[name="task"]').val('profile.cancel');
