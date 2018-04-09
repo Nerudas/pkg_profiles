@@ -10,11 +10,12 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Response\JsonResponse;
 
-class ProfilesControllerProfile extends FormController
+JLoader::register('UsersControllerUser', JPATH_ADMINISTRATOR . '/components/com_users/controllers/user.php');
+
+class ProfilesControllerProfile extends UsersControllerUser
 {
 	/**
 	 * The prefix to use with controller messages.
@@ -66,6 +67,22 @@ class ProfilesControllerProfile extends FormController
 		echo new JsonResponse($check->data, $check->msg, ($check->status == 'error'));
 
 		$app->close();
+
+		return true;
+	}
+
+	/**
+	 * Method to cancel an edit.
+	 *
+	 * @param   string $key The name of the primary key of the URL variable.
+	 *
+	 * @return  boolean  True if access level checks pass, false otherwise.
+	 *
+	 * @since   1.6
+	 */
+	public function cancel($key = null)
+	{
+		parent::cancel($key);
 
 		return true;
 	}

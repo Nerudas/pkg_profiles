@@ -15,7 +15,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Layout\LayoutHelper;
-use Joomla\CMS\Uri\Uri;
 
 jimport('joomla.filesystem.file');
 
@@ -32,7 +31,6 @@ $userId    = $user->get('id');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $canDo     = ProfilesHelper::getActions('com_users');
-$return    = urlencode(base64_encode((string) Uri::getInstance()));
 
 $columns = 10;
 
@@ -96,9 +94,7 @@ $columns = 10;
 						<div>
 							<?php if ($canDo->get('core.edit')) : ?>
 								<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
-								   target="_blank"
-								   href="<?php echo Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id
-									   . '&return=' . $return); ?>">
+								   href="<?php echo Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id); ?>">
 									<?php echo $this->escape($item->name); ?>
 								</a>
 							<?php else : ?>

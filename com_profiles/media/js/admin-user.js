@@ -61,10 +61,17 @@
 			if ($('#header').length > 0) {
 				$('#jform_name').closest('.control-group').appendTo($('#header'));
 				$('#jform_alias').closest('.control-group').appendTo($('#header'));
-				// $('#jform_status').closest('.control-group').appendTo($('#header'));
 				clearInterval(appendHeader);
 			}
 		}, 3);
+
+		$(form).on('submit', function () {
+			if ($('[name="task"]').val() == 'user.cancel') {
+				$('[name="task"]').val('profile.cancel');
+				var action = $(form).attr('action').replace('com_users', 'com_profiles');
+				$(form).attr('action', action);
+			}
+		});
 
 	});
 })(jQuery);

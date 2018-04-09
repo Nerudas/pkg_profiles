@@ -253,12 +253,6 @@ class plgSystemProfiles extends CMSPlugin
 					$form->removeGroup('job');
 				}
 
-				// Set return
-				if ($return = $app->input->get('return', false, 'base64'))
-				{
-					$form->setValue('return', '', $return);
-				}
-
 			}
 
 			// Change site com_users.login form
