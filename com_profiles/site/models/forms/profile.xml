@@ -171,7 +171,6 @@
 			<field name="helpsite" type="hidden" readonly="true" default=""/>
 		</fields>
 		<field name="region" type="hidden"/>
-		<field name="access" type="hidden" readonly="true"/>
 		<fields name="attribs">
 			<field name="profile_layout" type="hidden" readonly="true" useglobal="true"/>
 		</fields>

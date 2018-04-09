@@ -90,7 +90,6 @@ class modProfilesProfileHelper
 		$query = $db->getQuery(true)
 			->select(array('p.id', 'p.name', 'p.avatar', 'p.header', 'p.status'))
 			->from($db->quoteName('#__profiles', 'p'))
-			->where('p.state = 1')
 			->where('p.id = ' . $pk);
 
 		// Join over the sessions.

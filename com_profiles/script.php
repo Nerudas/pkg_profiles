@@ -89,7 +89,7 @@ class com_ProfilesInstallerScript
 		$profile->field_mappings->common                       = new stdClass();
 		$profile->field_mappings->common->core_content_item_id = 'id';
 		$profile->field_mappings->common->core_title           = 'name';
-		$profile->field_mappings->common->core_state           = 'state';
+		$profile->field_mappings->common->core_state           = 'null';
 		$profile->field_mappings->common->core_alias           = 'alias';
 		$profile->field_mappings->common->core_created_time    = 'created';
 		$profile->field_mappings->common->core_modified_time   = 'modified';
@@ -97,7 +97,7 @@ class com_ProfilesInstallerScript
 		$profile->field_mappings->common->core_hits            = 'hits';
 		$profile->field_mappings->common->core_publish_up      = 'created';
 		$profile->field_mappings->common->core_publish_down    = 'null';
-		$profile->field_mappings->common->core_access          = 'access';
+		$profile->field_mappings->common->core_access          = 'null';
 		$profile->field_mappings->common->core_params          = 'null';
 		$profile->field_mappings->common->core_featured        = 'null';
 		$profile->field_mappings->common->core_metadata        = 'metadata';
@@ -251,15 +251,20 @@ class com_ProfilesInstallerScript
 	 *
 	 * @return void
 	 *
-	 * @since  1.0.0
+	 * @since  1.0.3
 	 */
 	public function update($parent)
 	{
 		$db      = Factory::getDbo();
 		$columns = $db->getTableColumns('#__profiles');
-		if (!isset($columns['notes']))
+		if (isset($columns['state']))
 		{
-			$db->setQuery("ALTER TABLE #__profiles ADD `notes` LONGTEXT  NOT NULL DEFAULT '' AFTER `header`")
+			$db->setQuery("ALTER TABLE #__profiles DROP state")
+				->query();
+		}
+		if (isset($columns['access']))
+		{
+			$db->setQuery("ALTER TABLE #__profiles DROP access")
 				->query();
 		}
 	}

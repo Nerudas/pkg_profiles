@@ -246,10 +246,6 @@
 		</fields>
 	</fieldset>
 	<fieldset name="publishingdata">
-		<field name="access" type="accesslevel"
-			   label="JFIELD_ACCESS_LABEL"
-			   description="JFIELD_ACCESS_DESC"
-			   size="1"/>
 		<field name="registerDate" type="calendar"
 			   label="COM_USERS_USER_FIELD_REGISTERDATE_LABEL"
 			   description="COM_USERS_USER_FIELD_REGISTERDATE_DESC"

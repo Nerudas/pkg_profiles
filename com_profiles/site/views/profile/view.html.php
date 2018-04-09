@@ -12,7 +12,6 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -147,28 +146,6 @@ class ProfilesViewProfile extends HtmlView
 		}
 
 		$offset = $this->state->get('list.offset');
-
-		/* Check for no 'access-view',
-		 * - Redirect guest users to login
-		 * - Deny access to logged users with 403 code
-		 * NOTE: we do not recheck for no access-view + show_noauth disabled ... since it was checked above
-		 */
-		if ($item->params->get('access-view') == false)
-		{
-			if ($user->get('guest'))
-			{
-				$login_url = Route::_('index.php?option=com_users&view=login&return=' . base64_encode(Uri::getInstance()));
-				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'notice');
-				$app->redirect($login_url, 403);
-			}
-			else
-			{
-				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
-				$app->setHeader('status', 403, true);
-
-				return false;
-			}
-		}
 
 		// Process the content plugins.
 		PluginHelper::importPlugin('content');

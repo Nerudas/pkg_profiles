@@ -44,13 +44,11 @@ class ProfilesModelList extends ListModel
 				'p.contacts', 'contacts',
 				'p.avatar', 'avatar',
 				'p.header', 'header',
-				'p.state', 'state',
 				'p.created', 'created',
 				'p.modified', 'modified',
 				'p.attribs', 'attribs',
 				'p.metakey', 'metakey',
 				'p.metadesc', 'metadesc',
-				'p.access', 'access',
 				'p.hits', 'hits',
 				'region', 'p.region', 'region_name',
 				'p.metadata', 'metadata',
@@ -76,7 +74,6 @@ class ProfilesModelList extends ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
 		$app  = Factory::getApplication();
-		$user = Factory::getUser();
 
 		// Load the parameters. Merge Global and Menu Item params into new object
 		$params     = $app->getParams();
@@ -90,16 +87,6 @@ class ProfilesModelList extends ListModel
 		$mergedParams->merge($params);
 		$this->setState('params', $mergedParams);
 
-		// Published state
-		if ((!$user->authorise('core.manage', 'com_profiles')))
-		{
-			// Limit to published for people who can't edit or edit.state.
-			$this->setState('filter.published', 1);
-		}
-		else
-		{
-			$this->setState('filter.published', array(0, 1));
-		}
 
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
@@ -141,7 +128,6 @@ class ProfilesModelList extends ListModel
 	{
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.region');
-		$id .= ':' . serialize($this->getState('filter.published'));
 		$id .= ':' . serialize($this->getState('filter.tags'));
 
 		return parent::getStoreId($id);
@@ -156,7 +142,6 @@ class ProfilesModelList extends ListModel
 	 */
 	protected function getListQuery()
 	{
-		$user      = Factory::getUser();
 		$component = ComponentHelper::getParams('com_profiles');
 
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models');
@@ -166,6 +151,12 @@ class ProfilesModelList extends ListModel
 		$query = $db->getQuery(true)
 			->select('p.*')
 			->from($db->quoteName('#__profiles', 'p'));
+
+		// Join over the users
+		$query->join('LEFT', '#__users AS user ON user.id = p.id')
+			->where('user.block = 0')
+			->where('(' . $db->quoteName('user.activation') . ' = ' . $db->quote('') .
+				' OR ' . $db->quoteName('user.activation') . ' =' . $db->quote(0) . ')');
 
 		// Join over the regions.
 		$query->select(array('r.id as region_id', 'r.name AS region_name'))
@@ -195,28 +186,6 @@ class ProfilesModelList extends ListModel
 			$regions[]   = $regionModel->getRegion($region)->parent;
 			$regions     = array_unique($regions);
 			$query->where($db->quoteName('p.region') . ' IN (' . implode(',', $regions) . ')');
-		}
-
-		// Filter by access level.
-		if (!$user->authorise('core.admin'))
-		{
-			$groups = implode(',', $user->getAuthorisedViewLevels());
-			$query->where('p.access IN (' . $groups . ')');
-		}
-
-		// Filter by published state.
-		$published = $this->getState('filter.published');
-		if (!empty($published))
-		{
-			if (is_numeric($published))
-			{
-				$query->where('( p.state = ' . (int) $published .
-					' OR ( p.id = ' . $user->id . ' AND p.state IN (0,1)))');
-			}
-			elseif (is_array($published))
-			{
-				$query->where('p.state IN (' . implode(',', $published) . ')');
-			}
 		}
 
 		// Filter by a single or group of tags.

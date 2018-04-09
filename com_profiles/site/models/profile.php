@@ -61,19 +61,6 @@ class ProfilesModelProfile extends ItemModel
 		$offset = $app->input->getUInt('limitstart');
 		$this->setState('list.offset', $offset);
 
-		$user = Factory::getUser();
-
-		// Published state
-		if ((!$user->authorise('core.manage', 'com_profiles')))
-		{
-			// Limit to published for people who can't edit or edit.state.
-			$this->setState('filter.published', 1);
-		}
-		else
-		{
-			$this->setState('filter.published', array(0, 1));
-		}
-
 		// Load the parameters.
 		$params = $app->getParams();
 		$this->setState('params', $params);
@@ -109,6 +96,12 @@ class ProfilesModelProfile extends ItemModel
 					->from('#__profiles AS p')
 					->where('p.id = ' . (int) $pk);
 
+				// Join over the users
+				$query->join('LEFT', '#__users AS user ON user.id = p.id')
+					->where('user.block = 0')
+					->where('(' . $db->quoteName('user.activation') . ' = ' . $db->quote('') .
+						' OR ' . $db->quoteName('user.activation') . ' =' . $db->quote(0) . ')');
+
 				// Join over the sessions.
 				$offline      = (int) $component->get('offline_time', 5) * 60;
 				$offline_time = Factory::getDate()->toUnix() - $offline;
@@ -127,20 +120,6 @@ class ProfilesModelProfile extends ItemModel
 						$db->quoteName('employees.key') . ' = ' . $db->quote(''))
 					->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
 
-				// Filter by published state.
-				$published = $this->getState('filter.published');
-				if (!empty($published))
-				{
-					if (is_numeric($published))
-					{
-						$query->where('( p.state = ' . (int) $published .
-							' OR ( p.id = ' . $user->id . ' AND p.state IN (0,1)))');
-					}
-					elseif (is_array($published))
-					{
-						$query->where('p.state IN (' . implode(',', $published) . ')');
-					}
-				}
 
 				$db->setQuery($query);
 				$data = $db->loadObject();
@@ -191,9 +170,6 @@ class ProfilesModelProfile extends ItemModel
 				$registry     = new Registry($data->attribs);
 				$data->params = clone $this->getState('params');
 				$data->params->merge($registry);
-
-				// If no access, the layout takes some responsibility for display of limited information.
-				$data->params->set('access-view', in_array($data->access, $user->getAuthorisedViewLevels()));
 
 				$this->_item[$pk] = $data;
 			}

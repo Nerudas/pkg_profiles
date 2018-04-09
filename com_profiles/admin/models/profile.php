@@ -96,8 +96,6 @@ class ProfilesModelProfile extends AdminModel
 
 			// Get jobs
 			$item->jobs = $this->getJobs($item->id);
-
-			$item->published = $item->state;
 		}
 
 		return $item;
@@ -327,10 +325,6 @@ class ProfilesModelProfile extends AdminModel
 			$data['contacts'] = (string) $registry;
 		}
 
-		if (!isset($data['state']) && empty($data['block']))
-		{
-			$data['state'] = 1;
-		}
 		if (empty($data['created']))
 		{
 			$data['created'] = (!empty($data['registerDate'])) ? $data['registerDate'] : Factory::getDate()->toSql();
@@ -417,7 +411,7 @@ class ProfilesModelProfile extends AdminModel
 				$company['created_by'] = $id;
 				$company['position']   = $data['job']['position'];
 				$company['as_company'] = $data['job']['as_company'];
-				$company['state']      = $data['state'];
+				$company['state']      = 1;
 				$company['region']     = $data['region'];
 
 				$companyModel->save($company);
