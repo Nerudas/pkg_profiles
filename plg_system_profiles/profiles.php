@@ -146,10 +146,23 @@ class plgSystemProfiles extends CMSPlugin
 			$usersModel = BaseDatabaseModel::getInstance('Users', 'UsersModel', array('ignore_request' => false));
 			$userBlock  = $usersModel->getState('filter.state');
 			$doc        = Factory::getDocument();
-			if (empty($userBlock) || $userBlock != 1)
+			if ($userBlock != 1)
 			{
 				$doc->addScriptDeclaration("jQuery(document).ready(function() {
 					jQuery('#toolbar-delete').remove();
+					jQuery('#toolbar-unblock').remove();
+				});");
+			}
+			else
+			{
+				$doc->addScriptDeclaration("jQuery(document).ready(function() {
+					jQuery('#toolbar-unpublish').remove();
+				});");
+			}
+			if ($usersModel->getState('filter.active') != 1)
+			{
+				$doc->addScriptDeclaration("jQuery(document).ready(function() {
+					jQuery('#toolbar-publish').remove();
 				});");
 			}
 		}
