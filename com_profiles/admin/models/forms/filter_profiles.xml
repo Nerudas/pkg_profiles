@@ -2,6 +2,13 @@
 <form>
 	<fields name="filter">
 		<field name="search" type="text" hint="JSEARCH_FILTER"/>
+		<field name="state" type="list"
+			   label="COM_PROFILES_STATE"
+			   onchange="this.form.submit();">
+			<option value="">COM_PROFILES_STATE_SELECT</option>
+			<option value="blocked">COM_PROFILES_STATE_BLOCKED</option>
+			<option value="not_activated">COM_PROFILES_STATE_NOT_ACTIVATED</option>
+		</field>
 		<field name="avatar" type="list"
 			   label="COM_PROFILES_PROFILE_AVATAR"
 			   onchange="this.form.submit();">

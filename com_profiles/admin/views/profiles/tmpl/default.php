@@ -46,8 +46,8 @@ $columns = 10;
 		<table id="itemList" class="table table-striped">
 			<thead>
 			<tr>
-				<th width="30px" class="nowrap hidden-phone center">
-					<i class="icon-image"></i>
+				<th width="1%" class="center">
+					<?php echo HTMLHelper::_('grid.checkall'); ?>
 				</th>
 				<th class="nowrap">
 					<?php echo HTMLHelper::_('searchtools.sort', 'COM_PROFILES_PROFILE_NAME', 'p.name', $listDirn, $listOrder); ?>
@@ -86,30 +86,35 @@ $columns = 10;
 			<?php foreach ($this->items as $i => $item) : ?>
 				<tr>
 					<td class="center">
-						<div class="avatar<?php echo ($item->online) ? ' online' : '' ?>"
-							 style="background-image: url(' <?php echo $item->avatar; ?>')">
-						</div>
+						<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 					</td>
 					<td class="nowrap">
-						<div>
-							<?php if ($canDo->get('core.edit')) : ?>
-								<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
-								   href="<?php echo Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id); ?>">
-									<?php echo $this->escape($item->name); ?>
-								</a>
-							<?php else : ?>
-								<span class="nowrap"><?php echo $this->escape($item->name); ?></span>
-							<?php endif; ?>
-						</div>
-						<?php if ($item->job): ?>
-							<div class="job">
-								<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
-								   target="_blank"
-								   href="<?php echo Route::_('index.php?option=com_companies&task=company.edit&id=' . $item->job_id); ?>">
-									<?php echo $this->escape($item->job_name); ?>
-								</a>
+						<div class="author">
+							<div class="avatar<?php echo ($item->online) ? ' online' : '' ?>"
+								 style="background-image: url(' <?php echo $item->avatar; ?>')">
 							</div>
-						<?php endif; ?>
+							<div>
+								<div>
+									<?php if ($canDo->get('core.edit')) : ?>
+										<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
+										   href="<?php echo Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id); ?>">
+											<?php echo $this->escape($item->name); ?>
+										</a>
+									<?php else : ?>
+										<span class="nowrap"><?php echo $this->escape($item->name); ?></span>
+									<?php endif; ?>
+								</div>
+								<?php if ($item->job): ?>
+									<div class="job">
+										<a class="hasTooltip nowrap" title="<?php echo Text::_('JACTION_EDIT'); ?>"
+										   target="_blank"
+										   href="<?php echo Route::_('index.php?option=com_companies&task=company.edit&id=' . $item->job_id); ?>">
+											<?php echo $this->escape($item->job_name); ?>
+										</a>
+									</div>
+								<?php endif; ?>
+							</div>
+						</div>
 					</td>
 					<td>
 						<?php echo $item->note; ?>

@@ -7,15 +7,20 @@
  * @link       https://nerudas.ru
  */
 
+#adminForm .author {
+	display: flex;
+	align-items: center;
+}
 #adminForm .avatar {
 	position: relative;
-	width: 30px;
-	height: 30px;
+	width: 38px;
+	height: 38px;
 	display: block;
 	background-position: 50% 50%;
 	background-size: cover;
 	border: 1px solid #e5e5e5;
 	border-radius: 1px;
+	margin-right: 5px;
 }
 
 #adminForm .avatar.online::after {
@@ -36,7 +41,7 @@
 }
 
 #adminForm .socials svg {
-	height: 30px;
+	height: 24px;
 }
 
 #system-message-container {

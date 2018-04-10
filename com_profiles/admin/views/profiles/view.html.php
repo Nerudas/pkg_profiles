@@ -111,8 +111,45 @@ class ProfilesViewProfiles extends HtmlView
 
 		if ($canDo->get('core.create'))
 		{
-			JToolbarHelper::custom('profiles.synchronize', 'loop', 'loop', 'COM_PROFILES_SYNCHRONIZE', false);
+			JToolbarHelper::addNew('profile.add');
 		}
+
+		if ($canDo->get('core.edit'))
+		{
+			JToolbarHelper::editList('profile.edit');
+		}
+
+		$state = $this->state->get('filter.state');
+		if ($state == 'blocked')
+		{
+			if ($canDo->get('core.edit.state'))
+			{
+				JToolbarHelper::custom('profiles.unblock', 'unblock.png', 'unblock_f2.png',
+					'COM_PROFILES_TOOLBAR_UNBLOCK', true);
+			}
+			if ($canDo->get('core.delete'))
+			{
+				JToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'profiles.delete', 'JTOOLBAR_DELETE');
+				JToolbarHelper::divider();
+			}
+		}
+		elseif ($state == 'not_activated' && $canDo->get('core.edit.state'))
+		{
+			JToolbarHelper::unpublish('profiles.block', 'COM_PROFILES_TOOLBAR_BLOCK', true);
+			JToolbarHelper::publish('profiles.activate', 'COM_PROFILES_TOOLBAR_ACTIVATE', true);
+		}
+		else
+		{
+			JToolbarHelper::unpublish('profiles.block', 'COM_PROFILES_TOOLBAR_BLOCK', true);
+		}
+
+		if ($canDo->get('core.create'))
+		{
+			JToolbarHelper::custom('profiles.synchronize', 'loop', 'loop',
+				'COM_PROFILES_TOOLBAR_SYNCHRONIZE', false);
+		}
+
+
 		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))
 		{
 			JToolbarHelper::preferences('com_profiles');

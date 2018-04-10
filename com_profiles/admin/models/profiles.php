@@ -91,6 +91,9 @@ class ProfilesModelProfiles extends ListModel
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
+		$state = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '');
+		$this->setState('filter.state', $state);
+
 		$region = $this->getUserStateFromRequest($this->context . '.filter.region', 'filter_region', '');
 		$this->setState('filter.region', $region);
 
@@ -131,6 +134,7 @@ class ProfilesModelProfiles extends ListModel
 	protected function getStoreId($id = '')
 	{
 		$id .= ':' . $this->getState('filter.search');
+		$id .= ':' . $this->getState('filter.state');
 		$id .= ':' . $this->getState('filter.region');
 		$id .= ':' . $this->getState('filter.avatar');
 		$id .= ':' . $this->getState('filter.social');
@@ -184,6 +188,21 @@ class ProfilesModelProfiles extends ListModel
 				$db->quoteName('employees.key') . ' = ' . $db->quote(''))
 			->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
 
+		// Filter by state
+		$state = $this->getState('filter.state');
+		if ($state == 'blocked')
+		{
+			$query->where('user.block = 1');
+		}
+		elseif ($state == 'not_activated')
+		{
+			$query->where($query->length('user.activation') . ' > 1');
+		}
+		else
+		{
+			$query->where('user.block = 0')
+				->where('user.activation IN (' . $db->quote('') . ', ' . $db->quote('0') . ')');
+		}
 		// Filter by regions
 		$region = $this->getState('filter.region');
 		if (is_numeric($region))

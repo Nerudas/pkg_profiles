@@ -72,6 +72,37 @@ class ProfilesControllerProfile extends UsersControllerUser
 	}
 
 	/**
+	 * Method to add a new record.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.3
+	 */
+	public function add()
+	{
+		Factory::getApplication()->redirect('index.php?option=com_users&task=user.add');
+	}
+
+	/**
+	 * Method to edit an existing record.
+	 *
+	 * @param   string $key      The name of the primary key of the URL variable.
+	 * @param   string $urlVar   The name of the URL variable if different from the primary key
+	 *                           (sometimes required to avoid router collisions).
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.3
+	 */
+	public function edit($key = null, $urlVar = null)
+	{
+		$cid = $this->input->post->get('cid', array(), 'array');
+		$id  = (!empty($cid[0])) ? $cid[0] : 0;
+
+		Factory::getApplication()->redirect('index.php?option=com_users&task=user.edit&id=' . $id);
+	}
+
+	/**
 	 * Method to cancel an edit.
 	 *
 	 * @param   string $key The name of the primary key of the URL variable.

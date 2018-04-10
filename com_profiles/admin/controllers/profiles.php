@@ -10,11 +10,15 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\Utilities\ArrayHelper;
 
-class ProfilesControllerProfiles extends AdminController
+JLoader::register('UsersControllerUsers', JPATH_ADMINISTRATOR . '/components/com_users/controllers/users.php');
+
+
+class ProfilesControllerProfiles extends UsersControllerUsers
 {
 	/**
 	 * The prefix to use with controller messages.
@@ -32,13 +36,100 @@ class ProfilesControllerProfiles extends AdminController
 	 * @param   string $prefix The class prefix. Optional.
 	 * @param   array  $config The array of possible config values. Optional.
 	 *
-	 * @return  JModelLegacy
+	 * @return  object
 	 *
 	 * @since 1.0.0
 	 */
-	public function getModel($name = 'Profile', $prefix = 'ProfilesModel', $config = array('ignore_request' => true))
+	public function getModel($name = 'User', $prefix = 'UsersModel', $config = array('ignore_request' => true))
 	{
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_users/models', 'UsersModel');
+
 		return parent::getModel($name, $prefix, $config);
+	}
+
+	/**
+	 * Method to change the block status on a record.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.3
+	 */
+	public function changeBlock()
+	{
+		// Check for request forgeries.
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		$ids    = $this->input->get('cid', array(), 'array');
+		$values = array('block' => 1, 'unblock' => 0);
+		$task   = $this->getTask();
+		$value  = ArrayHelper::getValue($values, $task, 0, 'int');
+
+		if (empty($ids))
+		{
+			JError::raiseWarning(500, Text::_('COM_PROFILES_ERROR_NO_ITEM_SELECTED'));
+		}
+		else
+		{
+			// Get the model.
+			$model = $this->getModel();
+
+			// Change the state of the records.
+			if (!$model->block($ids, $value))
+			{
+				JError::raiseWarning(500, $model->getError());
+			}
+			else
+			{
+				if ($value == 1)
+				{
+					$this->setMessage(Text::plural('COM_PROFILES_N_ITEMS_BLOCKED', count($ids)));
+				}
+				elseif ($value == 0)
+				{
+					$this->setMessage(Text::plural('COM_PROFILES_N_ITEMS_UNBLOCKED', count($ids)));
+				}
+			}
+		}
+
+		$this->setRedirect('index.php?option=com_profiles&view=profiles');
+	}
+
+
+	/**
+	 * Method to activate a record.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.3
+	 */
+	public function activate()
+	{
+		// Check for request forgeries.
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		$ids = $this->input->get('cid', array(), 'array');
+
+		if (empty($ids))
+		{
+			JError::raiseWarning(500, Text::_('COM_PROFILES_ERROR_NO_ITEM_SELECTED'));
+		}
+		else
+		{
+			// Get the model.
+			$model = $this->getModel();
+
+			// Change the state of the records.
+			if (!$model->activate($ids))
+			{
+				JError::raiseWarning(500, $model->getError());
+			}
+			else
+			{
+				$this->setMessage(Text::plural('COM_PROFILES_N_ITEMS_ACTIVATED', count($ids)));
+			}
+		}
+
+		$this->setRedirect('index.php?option=com_profiles&view=profiles');
 	}
 
 	/**
@@ -52,10 +143,9 @@ class ProfilesControllerProfiles extends AdminController
 	{
 		// Check for request forgeries
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
-
 		try
 		{
-			$model       = $this->getModel();
+			$model       = $this->getModel('Profile', 'ProfilesModel');
 			$synchronize = $model->synchronizeItems();
 			$this->setMessage(Text::plural('COM_PROFILES_N_ITEMS_SYNCHRONIZE', $synchronize));
 		}
@@ -66,6 +156,5 @@ class ProfilesControllerProfiles extends AdminController
 
 		$this->setRedirect('index.php?option=com_profiles&view=profiles');
 	}
-
 }
 
