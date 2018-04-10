@@ -18,6 +18,7 @@ use Joomla\Registry\Registry;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 class ProfilesModelExport extends BaseDatabaseModel
 {
@@ -273,7 +274,7 @@ class ProfilesModelExport extends BaseDatabaseModel
 					'-';
 
 				$link        = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($item->id))->toString();
-				$row['link'] = str_replace('administrator/', '', $link);
+				$row['link'] = trim(Uri::root(), '/') . str_replace('administrator/', '', $link);
 
 				$rows[] = $row;
 			}
