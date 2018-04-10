@@ -99,8 +99,7 @@ class ProfilesModelProfile extends ItemModel
 				// Join over the users
 				$query->join('LEFT', '#__users AS user ON user.id = p.id')
 					->where('user.block = 0')
-					->where('(' . $db->quoteName('user.activation') . ' = ' . $db->quote('') .
-						' OR ' . $db->quoteName('user.activation') . ' =' . $db->quote(0) . ')');
+					->where('user.activation IN (' . $db->quote('') . ', ' . $db->quote('0') . ')');
 
 				// Join over the sessions.
 				$offline      = (int) $component->get('offline_time', 5) * 60;
