@@ -30,7 +30,7 @@ class ProfilesModelProfiles extends ListModel
 	protected $_socials = null;
 
 	/**
-	 * User socials
+	 * User groups
 	 *
 	 * @var    array
 	 * @since 1.0.0

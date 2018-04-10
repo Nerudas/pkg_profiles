@@ -145,16 +145,16 @@ class ProfilesViewProfiles extends HtmlView
 
 		if ($canDo->get('core.create'))
 		{
+			JToolbarHelper::custom('export.excel', 'file-add', 'file-add',
+				'COM_PROFILES_TOOLBAR_EXPORT_EXCEL', false);
 			JToolbarHelper::custom('profiles.synchronize', 'loop', 'loop',
 				'COM_PROFILES_TOOLBAR_SYNCHRONIZE', false);
 		}
-
 
 		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))
 		{
 			JToolbarHelper::preferences('com_profiles');
 		}
-
 	}
 
 	/**

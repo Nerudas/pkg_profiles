@@ -32,8 +32,18 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $canDo     = ProfilesHelper::getActions('com_users');
 
-$columns = 10;
+$doc->addScriptDeclaration("jQuery(document).ready(function () {
+	jQuery('form').on('submit', function () {
+		var task = jQuery(this).find('[name=\"task\"]');
+		if (task.val() == 'export.excel') {
+			setTimeout(function () {
+				task.val('');
+			}, 50);
+		}
+	});
+});");
 
+$columns = 10;
 ?>
 <form action="<?php echo Route::_('index.php?option=com_profiles&view=profiles'); ?>" method="post" name="adminForm"
 	  id="adminForm">
