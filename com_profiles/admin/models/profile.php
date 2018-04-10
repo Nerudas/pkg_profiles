@@ -212,7 +212,7 @@ class ProfilesModelProfile extends AdminModel
 
 					JLoader::register('CompaniesHelperRoute', JPATH_SITE . '/components/com_companies/helpers/route.php');
 					$job_link                    = $siteRouter->build(CompaniesHelperRoute::getCompanyRoute($job->id))->toString();
-					$information['job_link']     = $job_link;
+					$information['job_link']     = str_replace('administrator/', '', $job_link);
 					$information['job_position'] = $job->position;
 					$information['job_logo']     = (!empty($job->logo) && JFile::exists(JPATH_ROOT . '/' . $job->logo)) ?
 						Uri::root(true) . '/' . $job->logo : '';
