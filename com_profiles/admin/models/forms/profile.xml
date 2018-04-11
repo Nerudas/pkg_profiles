@@ -10,7 +10,13 @@
 			   label="JGLOBAL_FIELD_AJAXALIAS_LABEL"
 			   hint="JGLOBAL_FIELD_AJAXALIAS_PLACEHOLDER"
 			   size="40"/>
-
+		<field name="in_work" type="list"
+			   default="0"
+			   label="COM_PROFILES_STATE_IN_WORK"
+			   class="chzn-color-state">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 	</fieldset>
 	<fieldset name="information" label="COM_PROFILES_PROFILE_INFORMATION">
 		<field name="information" type="information"/>

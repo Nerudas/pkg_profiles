@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `#__profiles` (
   `notes`       LONGTEXT         NOT NULL DEFAULT '',
   `created`     DATETIME         NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified`    DATETIME         NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `in_work`     TINYINT(3)       NOT NULL DEFAULT '0',
   `attribs`     TEXT             NOT NULL DEFAULT '',
   `metakey`     MEDIUMTEXT       NOT NULL DEFAULT '',
   `metadesc`    MEDIUMTEXT       NOT NULL DEFAULT '',

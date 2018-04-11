@@ -717,4 +717,37 @@ class ProfilesModelProfile extends AdminModel
 
 		return $response;
 	}
+
+	/**
+	 * Method to set in_work to one or more records.
+	 *
+	 * @param   array &$pks An array of record primary keys.
+	 *
+	 * @return true
+	 *
+	 * @since 1.0.0
+	 */
+	public function toWork($pks = array())
+	{
+		try
+		{
+			$db = $this->getDbo();
+			foreach ($pks as $pk)
+			{
+				$update          = new stdClass();
+				$update->id      = $pk;
+				$update->in_work = 1;
+
+				$db->updateObject('#__profiles', $update, 'id');
+			}
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e);
+
+			return false;
+		}
+
+		return true;
+	}
 }

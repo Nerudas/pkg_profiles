@@ -113,6 +113,11 @@ $columns = 10;
 									<?php else : ?>
 										<span class="nowrap"><?php echo $this->escape($item->name); ?></span>
 									<?php endif; ?>
+									<?php if ($item->in_work): ?>
+										<sup class="label label-info">
+											<?php echo Text::_('COM_PROFILES_PROFILE_IN_WORK'); ?>
+										</sup>
+									<?php endif; ?>
 								</div>
 								<?php if ($item->job): ?>
 									<div class="job">

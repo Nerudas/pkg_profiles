@@ -203,6 +203,11 @@ class ProfilesModelProfiles extends ListModel
 			$query->where('user.block = 0')
 				->where('user.activation IN (' . $db->quote('') . ', ' . $db->quote('0') . ')');
 		}
+		if ($state == 'in_work')
+		{
+			$query->where('p.in_work = 1');
+		}
+
 		// Filter by regions
 		$region = $this->getState('filter.region');
 		if (is_numeric($region))

@@ -267,5 +267,10 @@ class com_ProfilesInstallerScript
 			$db->setQuery("ALTER TABLE #__profiles DROP access")
 				->query();
 		}
+		if (!isset($columns['in_work']))
+		{
+			$db->setQuery("ALTER TABLE #__profiles ADD `in_work` TINYINT(3) NOT NULL DEFAULT '0' AFTER `modified`")
+				->query();
+		}
 	}
 }

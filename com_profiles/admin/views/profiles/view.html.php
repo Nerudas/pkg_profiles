@@ -147,12 +147,17 @@ class ProfilesViewProfiles extends HtmlView
 		{
 			JToolbarHelper::custom('export.excel', 'file-add', 'file-add',
 				'COM_PROFILES_TOOLBAR_EXPORT_EXCEL', false);
-			JToolbarHelper::custom('profiles.synchronize', 'loop', 'loop',
-				'COM_PROFILES_TOOLBAR_SYNCHRONIZE', false);
+		}
+		if ($canDo->get('core.edit'))
+		{
+			JToolbarHelper::custom('profiles.toWork', 'box-add', 'box-add',
+				'COM_PROFILES_TOOLBAR_TO_WORK', true);
 		}
 
 		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))
 		{
+			JToolbarHelper::custom('profiles.synchronize', 'loop', 'loop',
+				'COM_PROFILES_TOOLBAR_SYNCHRONIZE', false);
 			JToolbarHelper::preferences('com_profiles');
 		}
 	}

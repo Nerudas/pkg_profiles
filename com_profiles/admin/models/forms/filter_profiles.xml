@@ -8,6 +8,7 @@
 			<option value="">COM_PROFILES_STATE_SELECT</option>
 			<option value="blocked">COM_PROFILES_STATE_BLOCKED</option>
 			<option value="not_activated">COM_PROFILES_STATE_NOT_ACTIVATED</option>
+			<option value="in_work">COM_PROFILES_STATE_IN_WORK</option>
 		</field>
 		<field name="avatar" type="list"
 			   label="COM_PROFILES_PROFILE_AVATAR"

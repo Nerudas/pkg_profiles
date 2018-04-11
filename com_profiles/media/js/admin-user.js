@@ -81,6 +81,7 @@
 			if ($('#header').length > 0) {
 				$('#jform_name').closest('.control-group').appendTo($('#header'));
 				$('#jform_alias').closest('.control-group').appendTo($('#header'));
+				$('#jform_in_work').closest('.control-group').appendTo($('#header'));
 				clearInterval(appendHeader);
 			}
 		}, 3);
