@@ -14,6 +14,9 @@ Thank you for your understanding.
 * **Profiles Component**  
 User Profiles component
 
+* **Profiles - Administrator Module**  
+Module for displaying information about profiles in the admin panel
+
 * **Profiles - Latest Module**  
 Module for displaying the latest profiles
 
