@@ -154,7 +154,7 @@ class ProfilesControllerProfiles extends UsersControllerUsers
 		else
 		{
 			// Get the model.
-			$model =  $this->getModel('Profile', 'ProfilesModel');;
+			$model = $this->getModel('Profile', 'ProfilesModel');;
 
 			// Change the state of the records.
 			if (!$model->toWork($ids))

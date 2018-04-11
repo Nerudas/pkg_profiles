@@ -73,7 +73,7 @@ class ProfilesModelList extends ListModel
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		$app  = Factory::getApplication();
+		$app = Factory::getApplication();
 
 		// Load the parameters. Merge Global and Menu Item params into new object
 		$params     = $app->getParams();

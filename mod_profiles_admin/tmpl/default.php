@@ -21,7 +21,7 @@ HTMLHelper::_('stylesheet', 'media/mod_profiles_admin/css/default.min.css', arra
 
 <div data-mod-profiles-admin="<?php echo $module->id; ?>">
 	<?php echo HTMLHelper::_('bootstrap.startTabSet', 'modProfilesAdmin' . $module->id, array('active' => 'new')); ?>
-	
+
 	<?php echo HTMLHelper::_('bootstrap.addTab', 'modProfilesAdmin' . $module->id, 'new',
 		Text::_('MOD_PROFILES_ADMIN_TABS_NEW')); ?>
 	<div data-mod-profiles-admin-tab="new">
@@ -33,7 +33,7 @@ HTMLHelper::_('stylesheet', 'media/mod_profiles_admin/css/default.min.css', arra
 		</div>
 	</div>
 	<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
-	
+
 	<?php echo HTMLHelper::_('bootstrap.addTab', 'modProfilesAdmin' . $module->id, 'modified',
 		Text::_('MOD_PROFILES_ADMIN_TABS_MODIFIED')); ?>
 	<div data-mod-profiles-admin-tab="modified">
@@ -57,7 +57,7 @@ HTMLHelper::_('stylesheet', 'media/mod_profiles_admin/css/default.min.css', arra
 		</div>
 	</div>
 	<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
-	
+
 	<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 	<div class="actions ">
 		<div class="btn-group">

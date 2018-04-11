@@ -25,7 +25,7 @@ class ModProfilesAdminHelper
 	 *
 	 * @return bool|string
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 */
 	public static function getAjax()
 	{
@@ -79,7 +79,7 @@ class ModProfilesAdminHelper
 	 *
 	 * @return bool|Registry
 	 *
-	 * @since 1.0.0
+	 * @since 1.0.3
 	 */
 	protected static function getModuleParams($pk = null)
 	{

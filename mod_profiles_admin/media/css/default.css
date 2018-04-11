@@ -23,6 +23,7 @@
 	display: flex;
 	align-items: center;
 }
+
 [data-mod-profiles-admin] .avatar {
 	position: relative;
 	width: 38px;
