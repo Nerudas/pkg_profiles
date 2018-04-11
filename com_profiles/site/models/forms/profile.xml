@@ -26,6 +26,7 @@
 		<field name="tags" type="advtags"
 			   label="JTAG"
 			   description="JTAG_DESC"
+			   root_titles="true"
 			   multiple="true"/>
 	</fieldset>
 	<fieldset name="images" label="COM_PROFILES_PROFILE_IMAGES">

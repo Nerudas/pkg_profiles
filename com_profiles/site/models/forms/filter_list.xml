@@ -9,6 +9,7 @@
 		<field name="tags" type="advtags"
 			   label="JTAG"
 			   description="JTAG_DESC"
+			   root_titles="true"
 			   multiple="true"/>
 	</fields>
 </form>
