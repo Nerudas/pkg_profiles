@@ -218,6 +218,16 @@ class ProfilesModelProfile extends AdminModel
 						Uri::root(true) . '/' . $job->logo : '';
 				}
 
+				// Check as_company
+				$query = $db->getQuery(true)
+					->select('COUNT(*)')
+					->from($db->quoteName('#__companies_employees', 'employees'))
+					->where('employees.user_id = ' . $item->id)
+					->where('employees.as_company = ' . 1)
+					->where($db->quoteName('employees.key') . ' = ' . $db->quote(''));
+				$db->setQuery($query);
+				$information['as_company'] = ($db->loadResult() > 0);
+
 				if ($item->region == '*')
 				{
 					$information['region'] = Text::_('JGLOBAL_FIELD_REGIONS_ALL');

@@ -20,8 +20,16 @@ use Joomla\CMS\Language\Text;
 		<div class="well">
 			<div class="row-fluid form-horizontal-desktop">
 				<div class="span6">
+					<?php if ($value['as_company']): ?>
+						<div class="as_company text-right">
+							<span class="label label-success">
+								<?php echo Text::_('COM_PROFILES_PROFILE_JOB_AS_COMPANY'); ?>
+							</span>
+						</div>
+					<?php endif; ?>
 					<div class="avatar">
-						<a href="<?php echo $value['link']; ?>" target="_blank" class="image" style="background-image: url('<?php echo $value['avatar']; ?>')"></a>
+						<a href="<?php echo $value['link']; ?>" target="_blank" class="image"
+						   style="background-image: url('<?php echo $value['avatar']; ?>')"></a>
 					</div>
 					<div class="name">
 						<a href="<?php echo $value['link']; ?>" target="_blank"><?php echo $value['name']; ?></a>
