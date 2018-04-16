@@ -40,6 +40,14 @@ class ProfilesModelExport extends BaseDatabaseModel
 	protected $_socials = null;
 
 	/**
+	 * Users as company
+	 *
+	 * @var    array
+	 * @since 1.0.0
+	 */
+	protected $_as_company = null;
+
+	/**
 	 * Method to get csv headers
 	 * @return array
 	 *
@@ -52,6 +60,7 @@ class ProfilesModelExport extends BaseDatabaseModel
 			Text::_('COM_PROFILES_PROFILE_NAME'),
 			Text::_('COM_PROFILES_PROFILE_JOB_COMPANY_NAME'),
 			Text::_('COM_PROFILES_PROFILE_JOB_POSITION'),
+			Text::_('COM_PROFILES_PROFILE_JOB_AS_COMPANY'),
 			Text::_('JTAG'),
 			Text::_('COM_PROFILES_PROFILE_NOTES_NOTE'),
 			Text::_('COM_PROFILES_PROFILE_NOTES_TECH'),
@@ -127,15 +136,17 @@ class ProfilesModelExport extends BaseDatabaseModel
 					->order('p.id ASC');
 				$db->setQuery($query);
 
-				$items   = $db->loadObjectList('id');
-				$socials = $this->getSocials(array_keys($items));
+				$items      = $db->loadObjectList('id');
+				$socials    = $this->getSocials(array_keys($items));
+				$as_company = $this->getAsCompany(array_keys($items));
 
 				foreach ($items as $id => &$item)
 				{
-					$item->socials  = (isset($socials[$item->id])) ? $socials[$item->id] : array();
-					$item->notes    = new Registry($item->notes);
-					$item->contacts = new Registry($item->contacts);
-					$item->tags     = new TagsHelper;
+					$item->socials    = (isset($socials[$item->id])) ? $socials[$item->id] : array();
+					$item->as_company = (in_array($item->id, $as_company));
+					$item->notes      = new Registry($item->notes);
+					$item->contacts   = new Registry($item->contacts);
+					$item->tags       = new TagsHelper;
 					$item->tags->getItemTags('com_profiles.profile', $item->id);
 				}
 
@@ -153,7 +164,7 @@ class ProfilesModelExport extends BaseDatabaseModel
 	}
 
 	/**
-	 * Method to get an array of data items.
+	 * Method to get an array of data items socials.
 	 *
 	 * @param array $pks items id
 	 *
@@ -183,12 +194,45 @@ class ProfilesModelExport extends BaseDatabaseModel
 					}
 					$socials[$object->user_id][$object->provider] = $object->social_id;
 				}
-
-				$this->_socials = $socials;
 			}
+			$this->_socials = $socials;
 		}
 
 		return $this->_socials;
+	}
+
+	/**
+	 * Method to get an array of data items as company.
+	 *
+	 * @param array $pks items id
+	 *
+	 * @return mixed An array of data items on success, false on failure.
+	 *
+	 * @since 1.0.0
+	 */
+	public function getAsCompany($pks = array())
+	{
+		if (!is_array($this->_as_company))
+		{
+			$as_company = array();
+			if (!empty($pks))
+			{
+				$db    = Factory::getDbo();
+				$query = $db->getQuery(true)
+					->select('user_id')
+					->from($db->quoteName('#__companies_employees', 'employees'))
+					->where($db->quoteName('employees.user_id') . ' IN (' . implode(',', $pks) . ')')
+					->where('employees.as_company = ' . 1)
+					->where($db->quoteName('employees.key') . ' = ' . $db->quote(''));
+				$db->setQuery($query);
+
+				$as_company = $db->loadColumn();
+
+			}
+			$this->_as_company = $as_company;
+		}
+
+		return $this->_as_company;
 	}
 
 	/**
@@ -215,6 +259,7 @@ class ProfilesModelExport extends BaseDatabaseModel
 				$row['name']         = $item->name;
 				$row['job_name']     = $item->job_name;
 				$row['job_position'] = $item->job_position;
+				$row['as_company']   = ($item->as_company) ? Text::_('JYES') : '';
 
 				$tags = array();
 				if (!empty($item->tags->itemTags))
