@@ -21,7 +21,7 @@ use Joomla\CMS\Language\Text;
 			<div class="row-fluid form-horizontal-desktop">
 				<div class="span6">
 					<div class="avatar">
-						<div class="image" style="background-image: url('<?php echo $value['avatar']; ?>')"></div>
+						<a href="<?php echo $value['link']; ?>" target="_blank" class="image" style="background-image: url('<?php echo $value['avatar']; ?>')"></a>
 					</div>
 					<div class="name">
 						<a href="<?php echo $value['link']; ?>" target="_blank"><?php echo $value['name']; ?></a>
