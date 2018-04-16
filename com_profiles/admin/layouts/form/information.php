@@ -129,7 +129,9 @@ use Joomla\CMS\Language\Text;
 									<?php echo Text::_('JGLOBAL_EMAIL'); ?>
 								</dt>
 								<dd>
-									<a href="mailto:<?php echo $value['email']; ?>"><?php echo $value['email']; ?></a>
+									<a href="mailto:<?php echo $value['contacts_email']; ?>">
+										<?php echo $value['contacts_email']; ?>
+									</a>
 								</dd>
 							<?php endif; ?>
 							<?php if (!empty($value['contacts_phones'])): ?>
