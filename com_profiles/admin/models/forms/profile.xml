@@ -13,7 +13,7 @@
 		<field name="in_work" type="list"
 			   default="0"
 			   label="COM_PROFILES_STATE_IN_WORK"
-			   class="chzn-color-state">
+			   class="chzn-color-state input-small">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
