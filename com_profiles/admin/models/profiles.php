@@ -113,7 +113,7 @@ class ProfilesModelProfiles extends ListModel
 		$this->setState('filter.tags', $tags);
 
 		// List state information.
-		$ordering  = empty($ordering) ? 'p.created' : $ordering;
+		$ordering  = empty($ordering) ? 'last_visit' : $ordering;
 		$direction = empty($direction) ? 'desc' : $direction;
 		parent::populateState($ordering, $direction);
 	}
@@ -305,7 +305,7 @@ class ProfilesModelProfiles extends ListModel
 		$query->group(array('p.id'));
 
 		// Add the list ordering clause.
-		$ordering  = $this->state->get('list.ordering', 'p.created');
+		$ordering  = $this->state->get('list.ordering', 'last_visit');
 		$direction = $this->state->get('list.direction', 'desc');
 		$query->order($db->escape($ordering) . ' ' . $db->escape($direction));
 
