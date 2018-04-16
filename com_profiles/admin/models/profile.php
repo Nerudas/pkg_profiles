@@ -84,7 +84,7 @@ class ProfilesModelProfile extends AdminModel
 	{
 		if ($item = parent::getItem($pk))
 		{
-			// Convert the contacts field to an array.
+			// Convert the notes field to an array.
 			$registry    = new Registry($item->notes);
 			$item->notes = $registry->toArray();
 
