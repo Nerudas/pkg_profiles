@@ -243,34 +243,4 @@ class com_ProfilesInstallerScript
 			Factory::getDbo()->updateObject('#__extensions', $object, 'extension_id');
 		}
 	}
-
-	/**
-	 * This method is called after a component is updated.
-	 *
-	 * @param  \stdClass $parent - Parent object calling object.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0.3
-	 */
-	public function update($parent)
-	{
-		$db      = Factory::getDbo();
-		$columns = $db->getTableColumns('#__profiles');
-		if (isset($columns['state']))
-		{
-			$db->setQuery("ALTER TABLE #__profiles DROP state")
-				->query();
-		}
-		if (isset($columns['access']))
-		{
-			$db->setQuery("ALTER TABLE #__profiles DROP access")
-				->query();
-		}
-		if (!isset($columns['in_work']))
-		{
-			$db->setQuery("ALTER TABLE #__profiles ADD `in_work` TINYINT(3) NOT NULL DEFAULT '0' AFTER `modified`")
-				->query();
-		}
-	}
 }
