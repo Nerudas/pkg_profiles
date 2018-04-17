@@ -34,6 +34,9 @@ class ModProfilesAdminHelper
 
 		if ($params = self::getModuleParams($app->input->get('module_id', 0)))
 		{
+			$language = Factory::getLanguage();
+			$language->load('com_profiles', JPATH_ADMINISTRATOR, $language->getTag(), true);
+
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models', 'ProfilesModel');
 			$model = BaseDatabaseModel::getInstance('Profiles', 'ProfilesModel', array('ignore_request' => false));
 
