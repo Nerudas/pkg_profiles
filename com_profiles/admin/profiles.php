@@ -19,7 +19,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 JLoader::register('ProfilesHelper', __DIR__ . '/helpers/profiles.php');
 HTMLHelper::_('behavior.tabstate');
 
-if (!Factory::getUser()->authorise('core.manage', 'com_profiles'))
+if (!Factory::getUser()->authorise('core.manage', 'com_profiles') || !Factory::getUser()->authorise('core.manage', 'com_users'))
 {
 	throw new NotAllowed(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 }
