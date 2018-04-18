@@ -54,14 +54,12 @@
 
 		var notes = $('#attrib-notes'),
 			information = $('#jform_information').closest('.controls'),
-			html = '<div class="row-fluid form-horizontal-desktop">\n' +
+			html = '<div class="row-fluid">\n' +
 				'<div id="information" class="span9">' + $(information).html() + '</div>\n' +
-				'<div id="note" class="span3">' + $(notes).html() + '</div>\n' +
+				'<div id="note" class="span3 form-vertical"></div>\n' +
 				'</div>';
 		$(html).appendTo($('#details'));
-		$('#details').find('.row-fluid').removeClass('form-horizontal-desktop').addClass('form-vertical');
-		$(notes).remove();
-		$('#attrib-information').remove();
+		$(notes).appendTo($('#note'));
 		var removeInfoTabs = setInterval(function () {
 			var notes = $('#myTabTabs').find('a[href="#attrib-notes"]'),
 				information = $('#myTabTabs').find('a[href="#attrib-information"]');
@@ -81,7 +79,6 @@
 			if ($('#header').length > 0) {
 				$('#jform_name').closest('.control-group').appendTo($('#header'));
 				$('#jform_alias').closest('.control-group').appendTo($('#header'));
-				$('#jform_in_work').closest('.control-group').appendTo($('#header'));
 				clearInterval(appendHeader);
 			}
 		}, 3);
