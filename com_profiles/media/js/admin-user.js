@@ -83,7 +83,6 @@
 			}
 		}, 3);
 
-
 		// Set cancel redirect
 		$(form).on('submit', function () {
 			if ($('[name="task"]').val() == 'user.cancel') {
