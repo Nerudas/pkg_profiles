@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 extract($displayData);
 
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 ?>
 <div id="<?php echo $id; ?>">
@@ -37,7 +38,35 @@ use Joomla\CMS\Language\Text;
 					<div class="region center muted">
 						(<?php echo $value['region']; ?>)
 					</div>
+					<div class="publishing">
+						<div><strong><?php echo Text::_('JGLOBAL_FIELDSET_PUBLISHING'); ?></strong></div>
+						<dl class="dl-horizontal">
+							<dt>
+								<?php echo Text::_('COM_USERS_USER_FIELD_REGISTERDATE_LABEL'); ?>
+							</dt>
+							<dd>
+								<?php echo $value['registerDate'] > 0 ? HTMLHelper::_('date', $value['registerDate'],
+									Text::_('DATE_FORMAT_LC2')) : '-' ?>
+							</dd>
+							<dt>
+								<?php echo Text::_('COM_USERS_USER_FIELD_LASTVISIT_LABEL'); ?>
+							</dt>
+							<dd>
+								<?php echo $value['lastvisitDate'] > 0 ? HTMLHelper::_('date', $value['lastvisitDate'],
+									Text::_('DATE_FORMAT_LC2')) : Text::_('JNEVER') ?>
+							</dd>
+							<dt>
+								<?php echo Text::_('JGLOBAL_FIELD_MODIFIED_LABEL'); ?>
+							</dt>
+							<dd>
+								<?php echo $value['modified'] > 0 ? HTMLHelper::_('date', $value['modified'],
+									Text::_('DATE_FORMAT_LC2')) : Text::_('JNEVER') ?>
+							</dd>
+
+						</dl>
+					</div>
 					<?php if (!empty($value['job_id'])): ?>
+						<hr>
 						<div class="job">
 							<div><strong><?php echo Text::_('COM_PROFILES_PROFILE_JOBS'); ?></strong></div>
 						</div>

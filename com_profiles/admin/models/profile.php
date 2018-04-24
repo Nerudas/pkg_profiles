@@ -228,6 +228,11 @@ class ProfilesModelProfile extends AdminModel
 				$db->setQuery($query);
 				$information['as_company'] = ($db->loadResult() > 0);
 
+				// Get publishing info
+				$information['registerDate'] = $userInfo->registerDate;
+				$information['lastvisitDate'] = $userInfo->lastvisitDate;
+				$information['modified'] = $item->modified;
+
 				if ($item->region == '*')
 				{
 					$information['region'] = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
