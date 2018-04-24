@@ -47,7 +47,8 @@ $columns = 10;
 ?>
 <form action="<?php echo Route::_('index.php?option=com_profiles&view=profiles'); ?>" method="post" name="adminForm"
 	  id="adminForm">
-	<?php echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+	<?php echo LayoutHelper::render('joomla.searchtools.default',
+		array('view' => $this, 'options' => array('filtersHidden' => false))); ?>
 	<?php if (empty($this->items)) : ?>
 		<div class="alert alert-no-items">
 			<?php echo Text::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
