@@ -134,7 +134,7 @@ class ProfilesControllerProfiles extends UsersControllerUsers
 
 
 	/**
-	 * Method to activate a record.
+	 * Method to set in_work to one or more records.
 	 *
 	 * @return  void
 	 *
@@ -164,6 +164,43 @@ class ProfilesControllerProfiles extends UsersControllerUsers
 			else
 			{
 				$this->setMessage(Text::plural('COM_PROFILES_N_ITEMS_IN_WORK', count($ids)));
+			}
+		}
+
+		$this->setRedirect('index.php?option=com_profiles&view=profiles');
+	}
+
+	/**
+	 * Method to unset in_work to one or more records.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.7
+	 */
+	public function unWork()
+	{
+		// Check for request forgeries.
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		$ids = $this->input->get('cid', array(), 'array');
+
+		if (empty($ids))
+		{
+			JError::raiseWarning(500, Text::_('COM_PROFILES_ERROR_NO_ITEM_SELECTED'));
+		}
+		else
+		{
+			// Get the model.
+			$model = $this->getModel('Profile', 'ProfilesModel');;
+
+			// Change the state of the records.
+			if (!$model->unWork($ids))
+			{
+				JError::raiseWarning(500, $model->getError());
+			}
+			else
+			{
+				$this->setMessage(Text::plural('COM_PROFILES_N_ITEMS_UN_WORK', count($ids)));
 			}
 		}
 

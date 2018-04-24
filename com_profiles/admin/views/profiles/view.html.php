@@ -152,6 +152,8 @@ class ProfilesViewProfiles extends HtmlView
 		{
 			JToolbarHelper::custom('profiles.toWork', 'box-add', 'box-add',
 				'COM_PROFILES_TOOLBAR_TO_WORK', true);
+			JToolbarHelper::custom('profiles.unWork', 'box-remove', 'box-remove',
+				'COM_PROFILES_TOOLBAR_UN_WORK', true);
 		}
 
 		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))

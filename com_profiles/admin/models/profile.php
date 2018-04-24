@@ -229,9 +229,9 @@ class ProfilesModelProfile extends AdminModel
 				$information['as_company'] = ($db->loadResult() > 0);
 
 				// Get publishing info
-				$information['registerDate'] = $userInfo->registerDate;
+				$information['registerDate']  = $userInfo->registerDate;
 				$information['lastvisitDate'] = $userInfo->lastvisitDate;
-				$information['modified'] = $item->modified;
+				$information['modified']      = $item->modified;
 
 				if ($item->region == '*')
 				{
@@ -752,6 +752,39 @@ class ProfilesModelProfile extends AdminModel
 				$update          = new stdClass();
 				$update->id      = $pk;
 				$update->in_work = 1;
+
+				$db->updateObject('#__profiles', $update, 'id');
+			}
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e);
+
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Method to unset in_work to one or more records.
+	 *
+	 * @param   array &$pks An array of record primary keys.
+	 *
+	 * @return true
+	 *
+	 * @since 1.0.7
+	 */
+	public function unWork($pks = array())
+	{
+		try
+		{
+			$db = $this->getDbo();
+			foreach ($pks as $pk)
+			{
+				$update          = new stdClass();
+				$update->id      = $pk;
+				$update->in_work = 0;
 
 				$db->updateObject('#__profiles', $update, 'id');
 			}
