@@ -243,27 +243,4 @@ class com_ProfilesInstallerScript
 			Factory::getDbo()->updateObject('#__extensions', $object, 'extension_id');
 		}
 	}
-
-	/**
-	 * Change database structure
-	 *
-	 * @param  \stdClass $parent - Parent object calling object.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0.8
-	 */
-	public function update($parent)
-	{
-		$db      = Factory::getDbo();
-		$table   = '#__profiles';
-		$columns = $db->getTableColumns($table);
-
-		// Change tags_map format
-		if ($columns['tags_map'] == 'longtext')
-		{
-			$db->setQuery("ALTER TABLE " . $table . " MODIFY `tags_map` MEDIUMTEXT NOT NULL DEFAULT ''")
-				->query();
-		}
-	}
 }
