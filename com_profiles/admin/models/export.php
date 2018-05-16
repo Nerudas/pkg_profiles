@@ -19,6 +19,7 @@ use Joomla\CMS\Helper\TagsHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
 
 class ProfilesModelExport extends BaseDatabaseModel
 {
@@ -81,6 +82,7 @@ class ProfilesModelExport extends BaseDatabaseModel
 			Text::_('COM_PROFILES_HEADING_LAST_VISIT'),
 			Text::_('COM_PROFILES_HEADING_CREATED_DATE'),
 			Text::_('JGLOBAL_FIELD_AJAXALIAS_LABEL'),
+			Text::_('JACTION_EDIT'),
 		);
 
 		return $headers;
@@ -320,6 +322,8 @@ class ProfilesModelExport extends BaseDatabaseModel
 
 				$link        = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($item->id))->toString();
 				$row['link'] = trim(Uri::root(), '/') . str_replace('administrator/', '', $link);
+
+				$row['edit'] = trim(Uri::root(), '/') . Route::_('index.php?option=com_users&task=user.edit&id=' . $item->id);
 
 				$rows[] = $row;
 			}

@@ -48,7 +48,7 @@ class ProfilesControllerExport extends BaseController
 		{
 			fputcsv($file, $item, ';');
 		}
-		$csv = ob_get_clean();
+		$csv = htmlspecialchars_decode(ob_get_clean(), ENT_NOQUOTES);
 
 		// Set Headers
 		$date     = new Date();
