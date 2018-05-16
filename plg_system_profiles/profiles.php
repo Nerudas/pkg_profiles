@@ -22,6 +22,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Application\SiteApplication;
+use Joomla\Registry\Registry;
 
 class plgSystemProfiles extends CMSPlugin
 {
@@ -208,24 +209,9 @@ class plgSystemProfiles extends CMSPlugin
 			Form::addRulePath($path . '/rules');
 			Form::addFormPath($path . '/forms');
 
-			$user_id = 0;
-			if (is_array($data) && !empty($data['id']))
-			{
-				$user_id = $data['id'];
-			}
-			elseif (is_object($data) && !empty($data->id))
-			{
-				$user_id = $data->id;
-			}
-			$jobs = array();
-			if (is_array($data) && !empty($data['jobs']))
-			{
-				$jobs = $data['jobs'];
-			}
-			elseif (is_object($data) && !empty($data->jobs))
-			{
-				$jobs = $data->jobs;
-			}
+			$user_data = new Registry($data);
+			$user_id   = $user_data->get('id', 0);
+			$jobs      = $user_data->get('jobs', array());
 
 			// Change admin com_users.user form
 			if ($app->isAdmin() && $formName == 'com_users.user')
@@ -370,15 +356,8 @@ class plgSystemProfiles extends CMSPlugin
 
 		if (is_object($data))
 		{
-			$user_id = 0;
-			if (is_array($data) && !empty($data['id']))
-			{
-				$user_id = $data['id'];
-			}
-			elseif (is_object($data) && !empty($data->id))
-			{
-				$user_id = $data->id;
-			}
+			$user_data = new Registry($data);
+			$user_id   = $user_data->get('id', 0);
 
 			// Get Phone
 			if ($phone = $userModel->getPhone($user_id))
