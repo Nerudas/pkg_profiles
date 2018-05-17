@@ -359,6 +359,13 @@ class plgSystemProfiles extends CMSPlugin
 			$user_data = new Registry($data);
 			$user_id   = $user_data->get('id', 0);
 
+			// Add region on registration
+			if ($context == 'com_users.registration' && (empty($data->params) || empty($data->params['region'])))
+			{
+				$data->params           = (!empty($data->params)) ? $data->params : array();
+				$data->params['region'] = Factory::getApplication()->input->cookie->get('region');
+			}
+
 			// Get Phone
 			if ($phone = $userModel->getPhone($user_id))
 			{
