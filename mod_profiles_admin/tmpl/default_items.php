@@ -1,7 +1,7 @@
 <?php
 /**
  * @package    Profiles - Administrator Module
- * @version    1.0.8
+ * @version    1.0.9
  * @author     Nerudas  - nerudas.ru
  * @copyright  Copyright (c) 2013 - 2018 Nerudas. All rights reserved.
  * @license    GNU/GPL license: http://www.gnu.org/copyleft/gpl.html

@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>support@nerudas.ru</authorEmail>
 	<authorUrl>nerudas.ru</authorUrl>
-	<version>1.0.8</version>
+	<version>1.0.9</version>
 	<description>COM_PROFILES_DESCRIPTION</description>
 	<scriptfile>script.php</scriptfile>
 	<install>
