@@ -435,6 +435,7 @@ class ProfilesModelProfile extends AdminModel
 		$pk     = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
 		$filter = InputFilter::getInstance();
 		$table  = $this->getTable();
+		$isNew  = true;
 
 		// Include the plugins for the save events.
 		PluginHelper::importPlugin($this->events_map['save']);
@@ -443,6 +444,7 @@ class ProfilesModelProfile extends AdminModel
 		if ($pk > 0)
 		{
 			$table->load($pk);
+			$isNew = false;
 		}
 
 		if (empty($data['region']))
@@ -540,10 +542,18 @@ class ProfilesModelProfile extends AdminModel
 			// Save images
 			$data['imagefolder'] = (!empty($data['imagefolder'])) ? $data['imagefolder'] :
 				$this->imageFolderHelper->getItemImageFolder($id);
+
+			if ($isNew)
+			{
+				$data['avatar'] = (isset($data['avatar'])) ? $data['avatar'] : '';
+				$data['header'] = (isset($data['header'])) ? $data['header'] : '';
+			}
+
 			if (isset($data['avatar']))
 			{
 				$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'avatar', $data['avatar']);
 			}
+
 			if (isset($data['header']))
 			{
 				$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'header', $data['header']);
