@@ -134,15 +134,6 @@ $columns = 10;
 					</td>
 					<td>
 						<div><?php echo $item->note; ?></div>
-						<div class="tags">
-							<?php if (!empty($item->tags->itemTags)): ?>
-								<?php foreach ($item->tags->itemTags as $tag): ?>
-									<span class="label label-<?php echo ($tag->main) ? 'success' : 'inverse' ?>">
-										<?php echo $tag->title; ?>
-									</span>
-								<?php endforeach; ?>
-							<?php endif; ?>
-						</div>
 					</td>
 					<td class="nowrap">
 						<div class="email">
