@@ -40,6 +40,6 @@ else
 
 // Variables
 $items    = $model->getItems();
-$listLink = Route::_(ProfilesHelperRoute::getListRoute());
+$listLink = Route::_(ProfilesHelperRoute::getListRoute($params->get('tag_id', 1)));
 
 require ModuleHelper::getLayoutPath($module->module, $params->get('layout', 'default'));
