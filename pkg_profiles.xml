@@ -22,6 +22,7 @@
 		<folder type="module" id="mod_profiles_tags" client="site">mod_profiles_tags</folder>
 		<folder type="plugin" id="profiles" group="authentication">plg_authentication_profiles</folder>
 		<folder type="plugin" id="profiles" group="system">plg_system_profiles</folder>
+		<folder type="plugin" id="profiles_shortcodes" group="system">plg_system_profiles_shortcodes</folder>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="Profiles Package">

@@ -31,3 +31,6 @@ Plugin for integration com_users with com_profiles
 
 * **Profiles - Tags Module**  
 Module for displaying profiles tags
+
+* **System - Profiles Shortcodes Plugin**  
+Plugin for displaying profiles via shortcodes
