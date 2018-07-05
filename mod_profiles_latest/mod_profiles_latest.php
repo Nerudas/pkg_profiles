@@ -22,6 +22,7 @@ JLoader::register('CompaniesHelperRoute', JPATH_SITE . '/components/com_companie
 // Initialize model
 BaseDatabaseModel::addIncludePath(JPATH_ROOT . '/components/com_profiles/models');
 $model = BaseDatabaseModel::getInstance('List', 'ProfilesModel', array('ignore_request' => true));
+$model->setState('tag.id', $params->get('tag_id', 1));
 $model->setState('list.limit', $params->get('limit', 5));
 if ($params->get('avatar_first', 1))
 {

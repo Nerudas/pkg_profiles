@@ -12,7 +12,6 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
@@ -107,7 +106,8 @@ class ProfilesViewList extends HtmlView
 		$app = Factory::getApplication();
 
 		$this->state         = $this->get('State');
-		$this->link          = Route::_(ProfilesHelperRoute::getListRoute());
+		$this->tag           = $this->get('tag');
+		$this->link          = $this->tag->link;
 		$this->items         = $this->get('Items');
 		$this->params        = $this->state->get('params');
 		$this->pagination    = $this->get('Pagination');
@@ -153,7 +153,9 @@ class ProfilesViewList extends HtmlView
 		$app      = Factory::getApplication();
 		$url      = rtrim(URI::root(), '/') . $this->link;
 		$sitename = $app->get('sitename');
+		$pathway  = $app->getPathway();
 		$menu     = $app->getMenu()->getActive();
+		$id       = (int) @$menu->query['id'];
 
 		if ($menu)
 		{
@@ -163,7 +165,26 @@ class ProfilesViewList extends HtmlView
 		{
 			$this->params->def('page_heading', Text::_('COM_PROFILES'));
 		}
-		$title = $this->params->get('page_title', $sitename);
+
+		// If the menu item does not concern this contact
+		if ($menu && ($menu->query['option'] !== 'com_profiles' || $menu->query['view'] !== 'list' || $id != $this->tag->id))
+		{
+			$path   = array();
+			$path[] = array('title' => $this->tag->title, 'link' => '');
+			foreach (array_reverse($path) as $item)
+			{
+				$pathway->addItem($item['title'], $item['link']);
+			}
+		}
+
+		// Set pathway title
+		$title = array();
+		foreach ($pathway->getPathWay() as $item)
+		{
+			$title[] = $item->name;
+		}
+		$title = implode(' / ', $title);
+
 
 		if ($app->get('sitename_pagetitles', 0) == 1)
 		{

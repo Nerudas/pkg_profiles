@@ -133,7 +133,16 @@ $columns = 10;
 						</div>
 					</td>
 					<td>
-						<?php echo $item->note; ?>
+						<div><?php echo $item->note; ?></div>
+						<div class="tags">
+							<?php if (!empty($item->tags->itemTags)): ?>
+								<?php foreach ($item->tags->itemTags as $tag): ?>
+									<span class="label label-<?php echo ($tag->main) ? 'success' : 'inverse' ?>">
+										<?php echo $tag->title; ?>
+									</span>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</div>
 					</td>
 					<td class="nowrap">
 						<div class="email">
@@ -171,9 +180,9 @@ $columns = 10;
 							Text::_('DATE_FORMAT_LC1')) : '-' ?>
 					</td>
 					<td class="hidden-phone center">
-							<span class="badge badge-info">
-								<?php echo (int) $item->hits; ?>
-							</span>
+						<span class="badge badge-info">
+							<?php echo (int) $item->hits; ?>
+						</span>
 					</td>
 					<td class="hidden-phone center">
 						<?php echo $item->id; ?>

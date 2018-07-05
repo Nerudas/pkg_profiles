@@ -6,10 +6,8 @@
 			   label="JGLOBAL_FIELD_REGIONS_LABEL"
 			   description="JGLOBAL_FIELD_REGIONS_DESC"
 			   layout="joomla.form.field.regions.current"/>
-		<field name="tags" type="advtags"
+		<field name="tag" type="profilestags"
 			   label="JTAG"
-			   description="JTAG_DESC"
-			   root_titles="true"
-			   multiple="true"/>
+			   links="true"/>
 	</fields>
 </form>

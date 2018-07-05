@@ -20,6 +20,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\Language\Text;
 
 class ProfilesModelList extends ListModel
 {
@@ -374,6 +375,8 @@ class ProfilesModelList extends ListModel
 			{
 				$form->setFieldAttribute('search', 'hint', $params->get('search_placeholder'), 'filter');
 			}
+
+			$form->setValue('tag', 'filter', $this->getState('tag.id', 1));
 		}
 
 		return $form;

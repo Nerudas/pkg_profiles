@@ -17,13 +17,15 @@ class ProfilesHelperRoute extends RouteHelper
 	/**
 	 * Fetches the list route
 	 *
+	 * @param  int $tag_id Tag ID
+	 *
 	 * @return  string
 	 *
 	 * @since 1.0.0
 	 */
-	public static function getListRoute()
+	public static function getListRoute($tag_id = 1)
 	{
-		return 'index.php?option=com_profiles&view=list&key=1';
+		return 'index.php?option=com_profiles&view=list&id=' . $tag_id;
 	}
 
 	/**
@@ -37,7 +39,7 @@ class ProfilesHelperRoute extends RouteHelper
 	 */
 	public static function getProfileRoute($id = null)
 	{
-		return 'index.php?option=com_profiles&view=profile&key=1&id=' . $id;
+		return 'index.php?option=com_profiles&view=profile&tag_id=1&id=' . $id;
 	}
 
 	/**

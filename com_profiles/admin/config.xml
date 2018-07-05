@@ -44,6 +44,12 @@
 			   class="input-xxlarge"
 			   size="40"/>
 	</fieldset>
+	<fieldset name="navigation" label="COM_PROFILES_PARAMS_NAVIGATION">
+		<field name="root_title" label="COM_PROFILES_PARAMS_ROOT_TITLE" default="COM_PROFILES"/>
+		<field name="tags" type="advtags"
+			   label="JTAG"
+			   multiple="true"/>
+	</fieldset>
 	<fieldset name="social_providers" label="COM_PROFILES_SOCIALS">
 		<fields name="social_providers">
 			<field type="note" label="COM_PROFILES_SOCIALS_VK"/>

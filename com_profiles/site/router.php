@@ -16,6 +16,7 @@ use Joomla\CMS\Component\Router\RouterViewConfiguration;
 use Joomla\CMS\Component\Router\Rules\MenuRules;
 use Joomla\CMS\Component\Router\Rules\NomenuRules;
 use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Component\ComponentHelper;
 
 
 class ProfilesRouter extends RouterView
@@ -32,12 +33,12 @@ class ProfilesRouter extends RouterView
 	{
 		// List route
 		$list = new RouterViewConfiguration('list');
-		$list->setKey('key');
+		$list->setKey('id')->setNestable();
 		$this->registerView($list);
 
 		// Profiles route
 		$profile = new RouterViewConfiguration('profile');
-		$profile->setKey('id')->setParent($list, 'key');
+		$profile->setKey('id')->setParent($list, 'tag_id');
 		$this->registerView($profile);
 
 		parent::__construct($app, $menu);
@@ -59,7 +60,24 @@ class ProfilesRouter extends RouterView
 	 */
 	public function getListSegment($id, $query)
 	{
-		return array(1 => 1);
+		$path = array();
+		if ($id > 0)
+		{
+			$db      = Factory::getDbo();
+			$dbquery = $db->getQuery(true)
+				->select(array('id', 'alias', 'parent_id'))
+				->from('#__tags')
+				->where('id =' . $id);
+			$db->setQuery($dbquery);
+			$tag = $db->loadObject();
+			if ($tag)
+			{
+				$path[$tag->id] = $tag->alias;
+			}
+		}
+		$path[1] = 'root';
+
+		return $path;
 	}
 
 	/**
@@ -102,7 +120,28 @@ class ProfilesRouter extends RouterView
 	 */
 	public function getListId($segment, $query)
 	{
-		return 1;
+		if (isset($query['id']))
+		{
+			$tags = ComponentHelper::getParams('com_profiles')->get('tags');
+
+			// Get tags
+			if (!empty($tags) && is_array($tags))
+			{
+				$db      = Factory::getDbo();
+				$dbquery = $db->getQuery(true)
+					->select('t.id')
+					->from($db->quoteName('#__tags', 't'))
+					->where($db->quoteName('t.alias') . ' <>' . $db->quote('root'))
+					->where('t.id IN (' . implode(',', $tags) . ')')
+					->where($db->quoteName('alias') . ' = ' . $db->quote($segment));
+				$db->setQuery($dbquery);
+				$id = $db->loadResult();
+
+				return (!empty($id)) ? $id : false;
+			}
+		}
+
+		return false;
 	}
 
 	/**

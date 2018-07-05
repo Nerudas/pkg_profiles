@@ -8,7 +8,11 @@
 
 	<fields name="request" addfieldpath="/administrator/components/com_profiles/models/fields">
 		<fieldset name="request">
-			<field name="key" type="hidden" default="1"/>
+			<field name="id" type="profilestags"
+				   label="JTAG"
+				   default="1"
+				   required="true">
+			</field>
 		</fieldset>
 	</fields>
 

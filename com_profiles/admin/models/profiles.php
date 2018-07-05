@@ -344,6 +344,8 @@ class ProfilesModelProfiles extends ListModel
 		$items      = parent::getItems();
 		$socials    = $this->getSocials(array_keys($items));
 		$usergroups = $this->getUserGroups(array_keys($items));
+		$mainTags   = ComponentHelper::getParams('com_profiles')->get('tags', array());
+
 		if (!empty($items))
 		{
 			foreach ($items as &$item)
@@ -363,6 +365,14 @@ class ProfilesModelProfiles extends ListModel
 				// Get Tags
 				$item->tags = new TagsHelper;
 				$item->tags->getItemTags('com_profiles.profile', $item->id);
+				if (!empty($item->tags->itemTags))
+				{
+					foreach ($item->tags->itemTags as &$tag)
+					{
+						$tag->main = (in_array($tag->id, $mainTags));
+					}
+					$item->tags->itemTags = ArrayHelper::sortObjects($item->tags->itemTags, 'main', -1);
+				}
 			}
 		}
 
