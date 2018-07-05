@@ -278,13 +278,16 @@ class ProfilesModelProfiles extends ListModel
 			}
 			else
 			{
-				$text_columns = array('p.name', 'p.about', 'p.status', 'p.contacts', 'r.name', 'user.email', 'p.tags_search');
+				$text_columns = array('p.name', 'p.about', 'p.status', 'p.notes', 'p.contacts', 'r.name', 'user.email', 'p.tags_search');
+
 
 				$sql = array();
 				foreach ($text_columns as $column)
 				{
+					$searchText = ($column == 'p.notes') ? str_replace('"', '', json_encode($search)) : $search;
+
 					$sql[] = $db->quoteName($column) . ' LIKE '
-						. $db->quote('%' . str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
+						. $db->quote('%' . str_replace(' ', '%', $db->escape(trim($searchText), true) . '%'));
 				}
 				$number = $userModel->clearPhoneNumber($search);
 				$code   = '+7';
