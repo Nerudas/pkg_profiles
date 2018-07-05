@@ -19,6 +19,7 @@
 		<folder type="module" id="mod_profiles_admin" client="administrator">mod_profiles_admin</folder>
 		<folder type="module" id="mod_profiles_latest" client="site">mod_profiles_latest</folder>
 		<folder type="module" id="mod_profiles_profile" client="site">mod_profiles_profile</folder>
+		<folder type="module" id="mod_profiles_tags" client="site">mod_profiles_tags</folder>
 		<folder type="plugin" id="profiles" group="authentication">plg_authentication_profiles</folder>
 		<folder type="plugin" id="profiles" group="system">plg_system_profiles</folder>
 	</files>
