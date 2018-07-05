@@ -53,6 +53,15 @@ class ProfilesViewProfile extends HtmlView
 	protected $user;
 
 	/**
+	 * Current company comments;
+	 *
+	 * @var    array
+	 *
+	 * @since 1.0.0
+	 */
+	protected $comments;
+
+	/**
 	 * Display the view
 	 *
 	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
@@ -74,6 +83,7 @@ class ProfilesViewProfile extends HtmlView
 		$this->editLink = $this->item->editLink;
 		$this->jobs     = $this->get('Jobs');
 		$this->state    = $this->get('State');
+		$this->comments = $this->get('Comments');
 		$this->user     = $user;
 
 		// Check for errors.

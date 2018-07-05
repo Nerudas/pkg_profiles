@@ -33,6 +33,14 @@ class ProfilesModelProfile extends ItemModel
 	protected $_jobs = null;
 
 	/**
+	 * Comments
+	 *
+	 * @var    object
+	 * @since  1.1.0
+	 */
+	protected $_comments = array();
+
+	/**
 	 * Model context string.
 	 *
 	 * @var        string
@@ -100,6 +108,11 @@ class ProfilesModelProfile extends ItemModel
 				$query->join('LEFT', '#__users AS user ON user.id = p.id')
 					->where('user.block = 0')
 					->where('user.activation IN (' . $db->quote('') . ', ' . $db->quote('0') . ')');
+
+				// Join over the discussions.
+				$query->select('(CASE WHEN dt.id IS NOT NULL THEN dt.id ELSE 0 END) as discussions_topic_id')
+					->join('LEFT', '#__discussions_topics AS dt ON dt.item_id = p.id AND ' .
+						$db->quoteName('dt.context') . ' = ' . $db->quote('com_profiles.profile'));
 
 				// Join over the sessions.
 				$offline      = (int) $component->get('offline_time', 5) * 60;
@@ -257,5 +270,47 @@ class ProfilesModelProfile extends ItemModel
 		}
 
 		return true;
+	}
+
+	/**
+	 * Method to get Related items
+	 *
+	 * @param int $pk Item ID
+	 *
+	 * @return  object
+	 *
+	 * @since 1.0.0
+	 */
+	public function getComments($pk = null)
+	{
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState('item.id');
+		if (!isset($this->_comments[$pk]))
+		{
+			$item = $this->getItem($pk);
+
+			JLoader::register('DiscussionsHelperTopic', JPATH_SITE . '/components/com_discussions/helpers/topic.php');
+			$data             = array();
+			$data['context']  = 'com_profiles.profile';
+			$data['item_id']  = $item->id;
+			$data['topic_id'] = $item->discussions_topic_id;
+
+			$data['create_topic'] = array(
+				'context'    => 'com_profiles.profile',
+				'item_id'    => $item->id,
+				'title'      => $item->name,
+				'text'       => '{profile id="' . $item->id . '" layout="discussions"}',
+				'state'      => 1,
+				'access'     => 1,
+				'created_by' => $item->id,
+				'region'     => $item->region,
+				'tags'       => (!empty($item->tags->itemTags)) ?
+					implode(',', ArrayHelper::getColumn($item->tags->itemTags, 'tag_id')) : ''
+			);
+
+			$comments             = DiscussionsHelperTopic::getIntegration($data);
+			$this->_comments[$pk] = $comments;
+		}
+
+		return $this->_comments[$pk];
 	}
 }

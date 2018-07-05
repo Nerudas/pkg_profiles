@@ -592,6 +592,20 @@ class ProfilesModelProfile extends AdminModel
 				$companyModel->save($company);
 			}
 
+			// Update discussion
+			JLoader::register('DiscussionsHelperTopic', JPATH_SITE . '/components/com_discussions/helpers/topic.php');
+			$topicData               = array();
+			$topicData['context']    = 'com_profiles.profile';
+			$topicData['item_id']    = $id;
+			$topicData['title']      = $data['name'];
+			$topicData['text']       = '{profile id="' . $id . '" layout="discussions"}';
+			$topicData['state']      = ($data['block'] == 0) ? 1 : 0;
+			$topicData['access']     = 1;
+			$topicData['created_by'] = $id;;
+			$topicData['region'] = $data['region'];
+			$topicData['tags']   = $data['tags'];
+			DiscussionsHelperTopic::updateTopic($topicData);
+
 			return true;
 		}
 

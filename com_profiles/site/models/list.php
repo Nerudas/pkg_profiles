@@ -23,6 +23,13 @@ use Joomla\CMS\Form\Form;
 
 class ProfilesModelList extends ListModel
 {
+	/**
+	 * This tag
+	 *
+	 * @var    object
+	 * @since  1.0.0
+	 */
+	protected $_tag = null;
 
 	/**
 	 * Constructor.
@@ -75,6 +82,10 @@ class ProfilesModelList extends ListModel
 	{
 		$app = Factory::getApplication();
 
+		// Set id state
+		$pk = $app->input->getInt('id', 1);
+		$this->setState('tag.id', $pk);
+
 		// Load the parameters. Merge Global and Menu Item params into new object
 		$params     = $app->getParams();
 		$menuParams = new Registry;
@@ -93,9 +104,6 @@ class ProfilesModelList extends ListModel
 
 		$region = $this->getUserStateFromRequest($this->context . '.filter.region', 'filter_region', '');
 		$this->setState('filter.region', $region);
-
-		$tags = $this->getUserStateFromRequest($this->context . '.filter.tags', 'filter_tags', '');
-		$this->setState('filter.tags', $tags);
 
 		// List state information.
 		parent::populateState($ordering, $direction);
@@ -128,7 +136,8 @@ class ProfilesModelList extends ListModel
 	{
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.region');
-		$id .= ':' . serialize($this->getState('filter.tags'));
+		$id .= ':' . serialize($this->getState('filter.item_id'));
+		$id .= ':' . $this->getState('filter.item_id.include');
 
 		return parent::getStoreId($id);
 	}
@@ -156,6 +165,11 @@ class ProfilesModelList extends ListModel
 		$query->join('LEFT', '#__users AS user ON user.id = p.id')
 			->where('user.block = 0')
 			->where('user.activation IN (' . $db->quote('') . ', ' . $db->quote('0') . ')');
+
+		// Join over the discussions.
+		$query->select('(CASE WHEN dt.id IS NOT NULL THEN dt.id ELSE 0 END) as discussions_topic_id')
+			->join('LEFT', '#__discussions_topics AS dt ON dt.item_id = p.id AND ' .
+				$db->quoteName('dt.context') . ' = ' . $db->quote('com_profiles.profile'));
 
 		// Join over the regions.
 		$query->select(array('r.id as region_id', 'r.name AS region_name'))
@@ -187,19 +201,29 @@ class ProfilesModelList extends ListModel
 			$query->where($db->quoteName('p.region') . ' IN (' . implode(',', $regions) . ')');
 		}
 
-		// Filter by a single or group of tags.
-		$tags = $this->getState('filter.tags');
-		if (is_array($tags))
+		// Filter by tag.
+		$tag = (int) $this->getState('tag.id');
+		if ($tag > 1)
 		{
-			$tags = ArrayHelper::toInteger($tags);
-			$tags = implode(',', $tags);
-			if (!empty($tags))
-			{
-				$query->join('LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
-					. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('p.id')
-					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_profiles.profile'))
-					->where($db->quoteName('tagmap.tag_id') . ' IN (' . $tags . ')');
-			}
+			$query->join('LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
+				. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('p.id')
+				. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_profiles.profile'))
+				->where($db->quoteName('tagmap.tag_id') . ' = ' . $tag);
+		}
+
+		// Filter by a single or group of items.
+		$itemId = $this->getState('filter.item_id');
+		if (is_numeric($itemId))
+		{
+			$type = $this->getState('filter.item_id.include', true) ? '= ' : '<> ';
+			$query->where('p.id ' . $type . (int) $itemId);
+		}
+		elseif (is_array($itemId))
+		{
+			$itemId = ArrayHelper::toInteger($itemId);
+			$itemId = implode(',', $itemId);
+			$type   = $this->getState('filter.item_id.include', true) ? 'IN' : 'NOT IN';
+			$query->where('p.id ' . $type . ' (' . $itemId . ')');
 		}
 
 		// Filter by search.
@@ -285,6 +309,10 @@ class ProfilesModelList extends ListModel
 		$items = parent::getItems();
 		if (!empty($items))
 		{
+			JLoader::register('DiscussionsHelperTopic', JPATH_SITE . '/components/com_discussions/helpers/topic.php');
+
+			$mainTags = ComponentHelper::getParams('com_profiles')->get('tags', array());
+
 			foreach ($items as &$item)
 			{
 				$avatar = (!empty($item->avatar) && JFile::exists(JPATH_ROOT . '/' . $item->avatar)) ?
@@ -305,11 +333,22 @@ class ProfilesModelList extends ListModel
 				// Get Tags
 				$item->tags = new TagsHelper;
 				$item->tags->getItemTags('com_profiles.profile', $item->id);
+				if (!empty($item->tags->itemTags))
+				{
+					foreach ($item->tags->itemTags as &$tag)
+					{
+						$tag->main = (in_array($tag->id, $mainTags));
+					}
+					$item->tags->itemTags = ArrayHelper::sortObjects($item->tags->itemTags, 'main', -1);
+				}
 
 				if ($item->job)
 				{
 					$item->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($item->job_id));
 				}
+
+				// Discussions posts count
+				$item->commentsCount = DiscussionsHelperTopic::getPostsTotal($item->discussions_topic_id);
 			}
 		}
 
@@ -328,15 +367,8 @@ class ProfilesModelList extends ListModel
 	 */
 	public function getFilterForm($data = array(), $loadData = true)
 	{
-		$component = ComponentHelper::getParams('com_profiles');
 		if ($form = parent::getFilterForm())
 		{
-			// Set tags Filter
-			if ($component->get('profile_tags', 0))
-			{
-				$form->setFieldAttribute('tags', 'parents', implode(',', $component->get('profile_tags')), 'filter');
-			}
-
 			$params = $this->getState('params');
 			if ($params->get('search_placeholder', ''))
 			{
@@ -377,4 +409,85 @@ class ProfilesModelList extends ListModel
 		return $set_state;
 	}
 
+	/**
+	 * Get the current tag
+	 *
+	 * @param null $pk
+	 *
+	 * @return object|false
+	 *
+	 * @since 1.1.0
+	 */
+	public function getTag($pk = null)
+	{
+		if (!is_object($this->_tag))
+		{
+			$app = Factory::getApplication();
+			$pk  = (!empty($pk)) ? (int) $pk : (int) $this->getState('tag.id', $app->input->get('id', 1));
+			$tag_id = $pk;
+
+			$root            = new stdClass();
+			$root->title     = Text::_('JGLOBAL_ROOT');
+			$root->id        = 1;
+			$root->parent_id = 0;
+			$root->link      = Route::_(ProfilesHelperRoute::getListRoute(1));
+
+			if ($tag_id > 1)
+			{
+				$errorRedirect = Route::_(ProfilesHelperRoute::getListRoute(1));
+				$errorMsg      = Text::_('COM_PROFILES_ERROR_TAG_NOT_FOUND');
+				try
+				{
+					$db    = $this->getDbo();
+					$query = $db->getQuery(true)
+						->select(array('t.id', 't.parent_id', 't.title', 'pt.title as parent_title'))
+						->from('#__tags AS t')
+						->where('t.id = ' . (int) $tag_id)
+						->join('LEFT', '#__tags AS pt ON pt.id = t.parent_id');
+
+					$user = Factory::getUser();
+					if (!$user->authorise('core.admin'))
+					{
+						$query->where('t.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')');
+					}
+					if (!$user->authorise('core.manage', 'com_tags'))
+					{
+						$query->where('t.published =  1');
+					}
+
+					$db->setQuery($query);
+					$data = $db->loadObject();
+
+					if (empty($data))
+					{
+						$app->redirect($url = $errorRedirect, $msg = $errorMsg, $msgType = 'error', $moved = true);
+
+						return false;
+					}
+
+					$data->link = Route::_(ProfilesHelperRoute::getListRoute($data->id));
+
+					$this->_tag = $data;
+				}
+				catch (Exception $e)
+				{
+					if ($e->getCode() == 404)
+					{
+						$app->redirect($url = $errorRedirect, $msg = $errorMsg, $msgType = 'error', $moved = true);
+					}
+					else
+					{
+						$this->setError($e);
+						$this->_tag = false;
+					}
+				}
+			}
+			else
+			{
+				$this->_tag = $root;
+			}
+		}
+
+		return $this->_tag;
+	}
 }
