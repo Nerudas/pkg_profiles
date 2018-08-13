@@ -448,10 +448,6 @@ class ProfilesModelProfile extends AdminModel
 			$isNew = false;
 		}
 
-		if (empty($data['region']))
-		{
-			$data['region'] = $app->input->cookie->get('region', '*');
-		}
 
 		$data['id']    = (!isset($data['id'])) ? 0 : $data['id'];
 		$data['alias'] = (!isset($data['alias'])) ? '' : $data['alias'];
@@ -503,7 +499,22 @@ class ProfilesModelProfile extends AdminModel
 		$data['imagefolder'] = (!empty($data['imagefolder'])) ? $data['imagefolder'] :
 			$this->imageFolderHelper->getItemImageFolder($data['id']);
 
-		$data['tags'] = (!empty($data['tags']) && !is_object($data['tags'])) ? $data['tags'] : array();
+
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_location/models', 'LocationModel');
+		$regionsModel = BaseDatabaseModel::getInstance('Regions', 'LocationModel', array('ignore_request' => false));
+		if (empty($data['region']))
+		{
+			$data['region'] = ($app->isSite()) ? $regionsModel->getVisitorRegion()->id : $regionsModel->getDefaultRegion()->id;
+		}
+		$region = $regionsModel->getRegion($data['region']);
+
+
+		// Get tags search
+		$data['tags'] = (is_array($data['tags'])) ? $data['tags'] : array();
+		if ($region && !empty($region->items_tags))
+		{
+			$data['tags'] = array_unique(array_merge($data['tags'], explode(',', $region->items_tags)));
+		}
 		if (!empty($data['tags']))
 		{
 			$table->newTags = $data['tags'];

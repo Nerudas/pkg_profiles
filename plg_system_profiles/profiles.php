@@ -351,8 +351,10 @@ class plgSystemProfiles extends CMSPlugin
 			return true;
 		}
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models', 'ProfilesModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_location/models', 'LocationModel');
 		$userModel    = BaseDatabaseModel::getInstance('User', 'ProfilesModel', array('ignore_request' => false));
 		$profileModel = BaseDatabaseModel::getInstance('Profile', 'ProfilesModel', array('ignore_request' => false));
+		$regionsModel = BaseDatabaseModel::getInstance('Regions', 'LocationModel', array('ignore_request' => false));
 
 		if (is_object($data))
 		{
@@ -362,8 +364,12 @@ class plgSystemProfiles extends CMSPlugin
 			// Add region on registration
 			if ($context == 'com_users.registration' && (empty($data->params) || empty($data->params['region'])))
 			{
-				$data->params           = (!empty($data->params)) ? $data->params : array();
-				$data->params['region'] = Factory::getApplication()->input->cookie->get('region');
+				$data->params = (!empty($data->params)) ? $data->params : array();
+				if (empty($data->params['region']))
+				{
+					$data->params['region'] = $regionsModel->getVisitorRegion()->id;
+				}
+
 			}
 
 			// Get Phone
@@ -486,7 +492,11 @@ class plgSystemProfiles extends CMSPlugin
 		$data['params'] = (!empty($data['params'])) ? $data['params'] : array();
 		if (empty($data['params']['region']))
 		{
-			$data['params']['region'] = $app->input->cookie->get('region');
+			BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_location/models', 'LocationModel');
+			$regionsModel             = BaseDatabaseModel::getInstance('Regions', 'LocationModel', array('ignore_request' => false));
+
+			$data['params']['region'] = ($app->isSite()) ? $regionsModel->getVisitorRegion()->id :
+				$regionsModel->getDefaultRegion()->id;
 		}
 		$data['region'] = $data['params']['region'];
 
