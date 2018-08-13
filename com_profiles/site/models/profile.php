@@ -121,10 +121,8 @@ class ProfilesModelProfile extends ItemModel
 					->join('LEFT', '#__session AS session ON session.userid = p.id AND session.time > ' . $offline_time);
 
 				// Join over the regions.
-				$query->select(array('r.id as region_id', 'r.name AS region_name', 'r.latitude as region_latitude',
-					'r.longitude as region_longitude', 'r.zoom as region_zoom'))
-					->join('LEFT', '#__regions AS r ON r.id = 
-					(CASE p.region WHEN ' . $db->quote('*') . ' THEN 100 ELSE p.region END)');
+				$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+					->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 				// Join over the companies.
 				$query->select(array('(company.id IS NOT NULL) AS job', 'company.id as job_id', 'company.name as job_name', 'company.logo as job_logo', 'employees.position'))
@@ -177,6 +175,16 @@ class ProfilesModelProfile extends ItemModel
 				// Get Tags
 				$data->tags = new TagsHelper;
 				$data->tags->getItemTags('com_profiles.profile', $data->id);
+
+				// Get region
+				$data->region_icon = (!empty($data->region_icon) && JFile::exists(JPATH_ROOT . '/' . $data->region_icon)) ?
+					Uri::root(true) . $data->region_icon : false;
+				if ($data->region == '*')
+				{
+					$data->region_icon = false;
+					$data->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
+				}
+
 
 				// Convert parameter fields to objects.
 				$registry     = new Registry($data->attribs);
