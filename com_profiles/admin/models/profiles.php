@@ -18,6 +18,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Language\Text;
 
 class ProfilesModelProfiles extends ListModel
 {
@@ -168,9 +169,8 @@ class ProfilesModelProfiles extends ListModel
 			->join('LEFT', '#__user_phones AS phone ON phone.user_id = p.id');
 
 		// Join over the regions.
-		$query->select(array('r.id as region_id', 'r.name AS region_name'))
-			->join('LEFT', '#__regions AS r ON r.id = 
-					(CASE p.region WHEN ' . $db->quote('*') . ' THEN 100 ELSE p.region END)');
+		$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+			->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 		// Join over the sessions.
 		$offline      = (int) $component->get('offline_time', 5) * 60;
@@ -208,17 +208,11 @@ class ProfilesModelProfiles extends ListModel
 			$query->where('p.in_work = 1');
 		}
 
-		// Filter by regions
+		// Filter by region
 		$region = $this->getState('filter.region');
-		if (is_numeric($region))
+		if (!empty($region))
 		{
-			JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_nerudas/models');
-			$regionModel = JModelLegacy::getInstance('regions', 'NerudasModel');
-			$regions     = $regionModel->getRegionsIds($region);
-			$regions[]   = $db->quote('*');
-			$regions[]   = $regionModel->getRegion($region)->parent;
-			$regions     = array_unique($regions);
-			$query->where($db->quoteName('p.region') . ' IN (' . implode(',', $regions) . ')');
+			$query->where($db->quoteName('p.region') . ' = ' . $db->quote($region));
 		}
 
 		// Filter by tags.
@@ -375,6 +369,15 @@ class ProfilesModelProfiles extends ListModel
 						$tag->main = (in_array($tag->id, $mainTags));
 					}
 					$item->tags->itemTags = ArrayHelper::sortObjects($item->tags->itemTags, 'main', -1);
+				}
+
+				// Get region
+				$item->region_icon = (!empty($item->region_icon) && JFile::exists(JPATH_ROOT . '/' . $item->region_icon)) ?
+					Uri::root(true) . $item->region_icon : false;
+				if ($item->region == '*')
+				{
+					$item->region_icon = false;
+					$item->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
 				}
 			}
 		}

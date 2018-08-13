@@ -33,7 +33,9 @@
 			<option value="instagram">COM_PROFILES_SOCIALS_INSTAGRAM</option>
 			<option value="odnoklassniki">COM_PROFILES_SOCIALS_ODNOKLASSNIKI</option>
 		</field>
-		<field name="region" type="regions" show_null="true" onchange="this.form.submit();"/>
+		<field name="region" type="regions" onchange="this.form.submit();">
+			<option value="">JGLOBAL_FIELD_REGIONS_NULL</option>
+		</field>
 		<field name="usergroup"
 			   type="usergrouplist"
 			   label="COM_PROFILES_USERGROUP"
