@@ -103,9 +103,6 @@ class ProfilesModelList extends ListModel
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
-		$region = $this->getUserStateFromRequest($this->context . '.filter.region', 'filter_region', '');
-		$this->setState('filter.region', $region);
-
 		// List state information.
 		parent::populateState($ordering, $direction);
 
@@ -136,7 +133,6 @@ class ProfilesModelList extends ListModel
 	protected function getStoreId($id = '')
 	{
 		$id .= ':' . $this->getState('filter.search');
-		$id .= ':' . $this->getState('filter.region');
 		$id .= ':' . serialize($this->getState('filter.item_id'));
 		$id .= ':' . $this->getState('filter.item_id.include');
 
@@ -173,9 +169,8 @@ class ProfilesModelList extends ListModel
 				$db->quoteName('dt.context') . ' = ' . $db->quote('com_profiles.profile'));
 
 		// Join over the regions.
-		$query->select(array('r.id as region_id', 'r.name AS region_name'))
-			->join('LEFT', '#__regions AS r ON r.id = 
-					(CASE p.region WHEN ' . $db->quote('*') . ' THEN 100 ELSE p.region END)');
+		$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+			->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 		// Join over the sessions.
 		$offline      = (int) $component->get('offline_time', 5) * 60;
@@ -189,18 +184,6 @@ class ProfilesModelList extends ListModel
 				$db->quoteName('employees.key') . ' = ' . $db->quote(''))
 			->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
 
-		// Filter by regions
-		$region = $this->getState('filter.region');
-		if (is_numeric($region))
-		{
-			JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_nerudas/models');
-			$regionModel = JModelLegacy::getInstance('regions', 'NerudasModel');
-			$regions     = $regionModel->getRegionsIds($region);
-			$regions[]   = $db->quote('*');
-			$regions[]   = $regionModel->getRegion($region)->parent;
-			$regions     = array_unique($regions);
-			$query->where($db->quoteName('p.region') . ' IN (' . implode(',', $regions) . ')');
-		}
 
 		// Filter by tag.
 		$tag = (int) $this->getState('tag.id');
@@ -346,6 +329,15 @@ class ProfilesModelList extends ListModel
 				if ($item->job)
 				{
 					$item->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($item->job_id));
+				}
+
+				// Get region
+				$item->region_icon = (!empty($item->region_icon) && JFile::exists(JPATH_ROOT . '/' . $item->region_icon)) ?
+					Uri::root(true) . $item->region_icon : false;
+				if ($item->region == '*')
+				{
+					$item->region_icon = false;
+					$item->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
 				}
 
 				// Discussions posts count
