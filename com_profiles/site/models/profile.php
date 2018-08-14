@@ -233,9 +233,8 @@ class ProfilesModelProfile extends ItemModel
 				->where('user_id = ' . $pk);
 
 			// Join over the regions.
-			$query->select(array('r.id as region_id', 'r.name AS region_name'))
-				->join('LEFT', '#__regions AS r ON r.id = 
-					(CASE c.region WHEN ' . $db->quote('*') . ' THEN 100 ELSE c.region END)');
+			$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+				->join('LEFT', '#__location_regions AS r ON r.id = c.region');
 
 			$db->setQuery($query);
 			$companies = $db->loadObjectList('id');
@@ -244,6 +243,15 @@ class ProfilesModelProfile extends ItemModel
 			{
 				$company->logo = (!empty($company->logo) && JFile::exists(JPATH_ROOT . '/' . $company->logo)) ?
 					Uri::root(true) . '/' . $company->logo : false;
+
+				// Get region
+				$company->region_icon = (!empty($company->region_icon) && JFile::exists(JPATH_ROOT . '/' . $company->region_icon)) ?
+					Uri::root(true) . $company->region_icon : false;
+				if ($company->region == '*')
+				{
+					$company->region_icon = false;
+					$company->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
+				}
 
 				$company->link = Route::_(CompaniesHelperRoute::getCompanyRoute($company->id));
 			}

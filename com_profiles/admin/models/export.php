@@ -114,8 +114,7 @@ class ProfilesModelExport extends BaseDatabaseModel
 
 				// Join over the regions.
 				$query->select(array('r.id as region_id', 'r.name AS region_name'))
-					->join('LEFT', '#__regions AS r ON r.id = 
-					(CASE p.region WHEN ' . $db->quote('*') . ' THEN 100 ELSE p.region END)');
+					->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 				// Join over the users.
 				$query->select(array('user.email AS user_email', 'user.lastvisitDate as last_visit'))
