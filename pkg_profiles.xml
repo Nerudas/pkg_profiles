@@ -8,7 +8,7 @@
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>support@nerudas.ru</authorEmail>
 	<authorUrl>nerudas.ru</authorUrl>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<description>PKG_PROFILES_DESCRIPTION</description>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.pkg_profiles.sys.ini</language>
@@ -23,6 +23,7 @@
 		<folder type="plugin" id="profiles" group="authentication">plg_authentication_profiles</folder>
 		<folder type="plugin" id="profiles" group="system">plg_system_profiles</folder>
 		<folder type="plugin" id="profiles_shortcodes" group="system">plg_system_profiles_shortcodes</folder>
+		<folder type="plugin" id="profiles" group="sitemap">plg_sitemap_profiles</folder>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="Profiles Package">

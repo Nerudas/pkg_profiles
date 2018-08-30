@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>support@nerudas.ru</authorEmail>
 	<authorUrl>nerudas.ru</authorUrl>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<description>PLG_SYSTEM_PROFILES_SHORTCODES_DESCRIPTION</description>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_system_profiles_shortcodes.ini</language>

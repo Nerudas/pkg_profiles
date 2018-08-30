@@ -34,3 +34,6 @@ Module for displaying profiles tags
 
 * **System - Profiles Shortcodes Plugin**  
 Plugin for displaying profiles via shortcodes
+
+* **Sitemap - Profiles Plugin**  
+Plugin for adding the Profiles section to sitemap
