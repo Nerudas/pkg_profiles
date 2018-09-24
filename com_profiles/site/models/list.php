@@ -13,7 +13,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;
-use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -21,6 +20,8 @@ use Joomla\Registry\Registry;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
+
+JLoader::register('FieldTypesFilesHelper', JPATH_PLUGINS . '/fieldtypes/files/helper.php');
 
 class ProfilesModelList extends ListModel
 {
@@ -169,7 +170,7 @@ class ProfilesModelList extends ListModel
 				$db->quoteName('dt.context') . ' = ' . $db->quote('com_profiles.profile'));
 
 		// Join over the regions.
-		$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+		$query->select(array('r.id as region_id', 'r.name as region_name'))
 			->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 		// Join over the sessions.
@@ -251,7 +252,7 @@ class ProfilesModelList extends ListModel
 		$direction = $this->state->get('list.direction', 'desc');
 		if ($ordering == 'avatar')
 		{
-			$query->order($db->escape($ordering) . ' <> ' . $db->quote('') . $db->escape($direction));
+			$query->order($db->escape($ordering) . ' ' . $db->escape($direction));
 			$ordering = 'p.created';
 			$query->order($db->escape($ordering) . ' ' . $db->escape($direction));
 		}
@@ -299,10 +300,9 @@ class ProfilesModelList extends ListModel
 
 			foreach ($items as &$item)
 			{
-				$avatar = (!empty($item->avatar) && JFile::exists(JPATH_ROOT . '/' . $item->avatar)) ?
-					$item->avatar : 'media/com_profiles/images/no-avatar.jpg';
+				$imagesHelper = new FieldTypesFilesHelper();
 
-				$item->avatar = Uri::root(true) . '/' . $avatar;
+				$item->avatar = $imagesHelper->getImage('avatar', 'images/profiles/' . $item->id, 'media/com_profiles/images/no-avatar.jpg', false);
 
 				// Convert the contacts field from json.
 				$item->contacts = new Registry($item->contacts);
@@ -332,13 +332,7 @@ class ProfilesModelList extends ListModel
 				}
 
 				// Get region
-				$item->region_icon = (!empty($item->region_icon) && JFile::exists(JPATH_ROOT . '/' . $item->region_icon)) ?
-					Uri::root(true) . $item->region_icon : false;
-				if ($item->region == '*')
-				{
-					$item->region_icon = false;
-					$item->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
-				}
+				$item->avatar = $imagesHelper->getImage('avatar', 'images/location/regions' . $item->redion->id, false, false);
 
 				// Discussions posts count
 				$item->commentsCount = DiscussionsHelperTopic::getPostsTotal($item->discussions_topic_id);
@@ -417,8 +411,8 @@ class ProfilesModelList extends ListModel
 	{
 		if (!is_object($this->_tag))
 		{
-			$app = Factory::getApplication();
-			$pk  = (!empty($pk)) ? (int) $pk : (int) $this->getState('tag.id', $app->input->get('id', 1));
+			$app    = Factory::getApplication();
+			$pk     = (!empty($pk)) ? (int) $pk : (int) $this->getState('tag.id', $app->input->get('id', 1));
 			$tag_id = $pk;
 
 			$root            = new stdClass();

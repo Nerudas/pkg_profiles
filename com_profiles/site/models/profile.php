@@ -124,7 +124,7 @@ class ProfilesModelProfile extends ItemModel
 					->join('LEFT', '#__session AS session ON session.userid = p.id AND session.time > ' . $offline_time);
 
 				// Join over the regions.
-				$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+				$query->select(array('r.id as region_id', 'r.name as region_name'))
 					->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 				// Join over the companies.
@@ -165,6 +165,7 @@ class ProfilesModelProfile extends ItemModel
 
 				if ($data->job)
 				{
+					$data->job_logo = $imagesHelper->getImage('header', 'images/companies/' . $data->job_id, false, false);
 					$data->job_link = Route::_(CompaniesHelperRoute::getCompanyRoute($data->job_id));
 				}
 
@@ -174,13 +175,6 @@ class ProfilesModelProfile extends ItemModel
 				// Get Tags
 				$data->tags = new TagsHelper;
 				$data->tags->getItemTags('com_profiles.profile', $data->id);
-
-				// Get region
-				if ($data->region == '*')
-				{
-					$data->region_icon = false;
-					$data->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
-				}
 
 
 				// Convert parameter fields to objects.
@@ -230,7 +224,7 @@ class ProfilesModelProfile extends ItemModel
 				->where('user_id = ' . $pk);
 
 			// Join over the regions.
-			$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+			$query->select(array('r.id as region_id', 'r.name as region_name'))
 				->join('LEFT', '#__location_regions AS r ON r.id = c.region');
 
 			$db->setQuery($query);
