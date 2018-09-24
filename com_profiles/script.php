@@ -243,4 +243,43 @@ class com_ProfilesInstallerScript
 			Factory::getDbo()->updateObject('#__extensions', $object, 'extension_id');
 		}
 	}
+
+
+	/**
+	 * Remove categories
+	 *
+	 * @param  \stdClass $parent - Parent object calling object.
+	 *
+	 * @return void
+	 *
+	 * @since  1.2.0
+	 */
+	public function update($parent)
+	{
+		$db    = Factory::getDbo();
+		$table = '#__profiles';
+
+		$query = $db->getQuery(true)
+			->select(array('id', 'avatar'))
+			->from($table);
+		$db->setQuery($query);
+		$profiles = $db->loadObjectList();
+		foreach ($profiles as $profile)
+		{
+			$profile->avatar = (!empty($profile->avatar)) ? 1 : 0;
+			$db->updateObject($table, $profile, array('id'));
+		}
+
+
+		$db->setQuery("ALTER TABLE " . $table . " MODIFY `avatar` tinyint(3) NOT NULL DEFAULT '0';")->query();
+
+		$columns = $db->getTableColumns($table);
+
+		// Remove header
+		if (isset($columns['header']))
+		{
+			$db->setQuery("ALTER TABLE " . $table . " DROP header")->query();
+		}
+
+	}
 }
