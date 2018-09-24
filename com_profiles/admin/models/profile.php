@@ -464,7 +464,7 @@ class ProfilesModelProfile extends AdminModel
 		if (isset($data['notes']) && is_array($data['notes']))
 		{
 			$registry      = new Registry($data['notes']);
-			$data['notes'] = (string) $registry;
+			$data['notes'] = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
 		}
 
 		if (isset($data['metadata']) && isset($data['metadata']['author']))
@@ -487,7 +487,7 @@ class ProfilesModelProfile extends AdminModel
 		if (isset($data['contacts']) && is_array($data['contacts']))
 		{
 			$registry         = new Registry($data['contacts']);
-			$data['contacts'] = (string) $registry;
+			$data['contacts'] = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
 		}
 
 		if (empty($data['created']))
