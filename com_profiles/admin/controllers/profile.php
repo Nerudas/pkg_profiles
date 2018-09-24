@@ -32,31 +32,6 @@ class ProfilesControllerProfile extends UsersControllerUser
 	 *
 	 * @since 1.0.0
 	 */
-	public function updateImages()
-	{
-		$app   = Factory::getApplication();
-		$id    = $app->input->get('id', 0, 'int');
-		$value = $app->input->get('value', '', 'raw');
-		$field = $app->input->get('field', '', 'raw');
-		if (!empty($id) & !empty($field))
-		{
-			JLoader::register('imageFolderHelper', JPATH_PLUGINS . '/fieldtypes/ajaximage/helpers/imagefolder.php');
-			$helper = new imageFolderHelper('images/profiles');
-			$helper->saveImagesValue($id, '#__profiles', $field, $value);
-		}
-
-		$app->close();
-
-		return true;
-	}
-
-	/**
-	 * Method to update profile Images
-	 *
-	 * @return  boolean  True if successful, false otherwise.
-	 *
-	 * @since 1.0.0
-	 */
 	public function checkAlias()
 	{
 		$app   = Factory::getApplication();

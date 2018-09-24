@@ -26,6 +26,8 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 
+JLoader::register('FieldTypesFilesHelper', JPATH_PLUGINS . '/fieldtypes/files/helper.php');
+
 class ProfilesModelProfile extends AdminModel
 {
 	/**
@@ -47,30 +49,13 @@ class ProfilesModelProfile extends AdminModel
 	protected $_information = null;
 
 	/**
-	 * Imagefolder helper
+	 * Images root path
 	 *
-	 * @var    new imageFolderHelper
+	 * @var    string
 	 *
-	 * @since 1.0.0
+	 * @since  1.2.0
 	 */
-	protected $imageFolderHelper = null;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param   array $config An optional associative array of configuration settings.
-	 *
-	 * @see     AdminModel
-	 *
-	 * @since   1.0.0
-	 */
-	public function __construct(array $config = array())
-	{
-		JLoader::register('imageFolderHelper', JPATH_PLUGINS . '/fieldtypes/ajaximage/helpers/imagefolder.php');
-		$this->imageFolderHelper = new imageFolderHelper('images/profiles');
-
-		parent::__construct($config);
-	}
+	protected $images_root = 'images/profiles';
 
 	/**
 	 * Method to get a single record.
@@ -145,8 +130,9 @@ class ProfilesModelProfile extends AdminModel
 				$link                = $siteRouter->build(ProfilesHelperRoute::getProfileRoute($item->id))->toString();
 				$information['link'] = str_replace('administrator/', '', $link);
 
-				$avatar                = (!empty($item->avatar) && JFile::exists(JPATH_ROOT . '/' . $item->avatar)) ?
-					$item->avatar : 'media/com_profiles/images/no-avatar.jpg';
+				$imagesHelper = new FieldTypesFilesHelper();
+				$avatar       = $imagesHelper->getImage('avatar', $this->images_root . '/' . $item->id, 'media/com_profiles/images/no-avatar.jpg', false);
+
 				$information['avatar'] = Uri::root(true) . '/' . $avatar;
 
 				$information['email'] = $userInfo->email;
@@ -432,11 +418,12 @@ class ProfilesModelProfile extends AdminModel
 	 */
 	public function save($data)
 	{
-		$app    = Factory::getApplication();
-		$pk     = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
-		$filter = InputFilter::getInstance();
-		$table  = $this->getTable();
-		$isNew  = true;
+		$app         = Factory::getApplication();
+		$pk          = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
+		$filter      = InputFilter::getInstance();
+		$table       = $this->getTable();
+		$isNew       = true;
+		$filesHelper = new FieldTypesFilesHelper();
 
 		// Include the plugins for the save events.
 		PluginHelper::importPlugin($this->events_map['save']);
@@ -451,6 +438,9 @@ class ProfilesModelProfile extends AdminModel
 
 		$data['id']    = (!isset($data['id'])) ? 0 : $data['id'];
 		$data['alias'] = (!isset($data['alias'])) ? '' : $data['alias'];
+
+		$data['avatar'] = ($filesHelper->getImage('avatar', $data['images_folder'], false, false)) ? 1 : 0;
+
 		// Check alias
 		$alias = $this->checkAlias($data['id'], $data['alias']);
 		if (!empty($alias->msg))
@@ -495,10 +485,6 @@ class ProfilesModelProfile extends AdminModel
 			$data['created'] = (!empty($data['registerDate'])) ? $data['registerDate'] : Factory::getDate()->toSql();
 		}
 		$data['modified'] = Factory::getDate()->toSql();
-
-		$data['imagefolder'] = (!empty($data['imagefolder'])) ? $data['imagefolder'] :
-			$this->imageFolderHelper->getItemImageFolder($data['id']);
-
 
 		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_location/models', 'LocationModel');
 		$regionsModel = BaseDatabaseModel::getInstance('Regions', 'LocationModel', array('ignore_request' => false));
@@ -552,23 +538,9 @@ class ProfilesModelProfile extends AdminModel
 			$id = $data['id'];
 
 			// Save images
-			$data['imagefolder'] = (!empty($data['imagefolder'])) ? $data['imagefolder'] :
-				$this->imageFolderHelper->getItemImageFolder($id);
-
-			if ($isNew)
+			if ($isNew && !empty($data['images_folder']))
 			{
-				$data['avatar'] = (isset($data['avatar'])) ? $data['avatar'] : '';
-				$data['header'] = (isset($data['header'])) ? $data['header'] : '';
-			}
-
-			if (isset($data['avatar']))
-			{
-				$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'avatar', $data['avatar']);
-			}
-
-			if (isset($data['header']))
-			{
-				$this->imageFolderHelper->saveItemImages($id, $data['imagefolder'], '#__profiles', 'header', $data['header']);
+				$filesHelper->moveTemporaryFolder($data['images_folder'], $id, $this->images_root);
 			}
 
 			// Update contacts
@@ -662,10 +634,12 @@ class ProfilesModelProfile extends AdminModel
 	{
 		if (parent::delete($pks))
 		{
+			$filesHelper = new FieldTypesFilesHelper();
+
 			// Delete images
 			foreach ($pks as $pk)
 			{
-				$this->imageFolderHelper->deleteItemImageFolder($pk);
+				$filesHelper->deleteItemFolder($pk, $this->images_root);
 			}
 
 			$db    = Factory::getDbo();

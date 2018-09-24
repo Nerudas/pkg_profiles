@@ -56,14 +56,17 @@
 			   multiple="true"/>
 	</fieldset>
 	<fieldset name="images" label="COM_PROFILES_PROFILE_IMAGES">
-		<field name="imagefolder" type="imagefolder" path="images/profiles"/>
-		<field name="avatar" type="ajaximage"
-			   filename="avatar"
+		<field name="images_folder" type="folder"
+			   label="JGLOBAL_FIELD_IMAGES_FOLDER_LABEL"/>
+		<field name="avatar" type="image"
 			   label="COM_PROFILES_PROFILE_AVATAR"
-			   noimage="media/com_profiles/images/no-avatar.jpg"/>
-		<field name="header" type="ajaximage"
-			   filename="header"
+			   folder_field="images_folder"
+			   filename="avatar"
+			   noimage="media/com_profiles/images/no-avatar.jpg"/>/>
+		<field name="header" type="image"
 			   label="COM_PROFILES_PROFILE_HEADER"
+			   folder_field="images_folder"
+			   filename="header"
 			   noimage="media/com_profiles/images/no-header.jpg"/>
 	</fieldset>
 	<fieldset name="contacts" label="COM_PROFILES_PROFILE_CONTACTS">

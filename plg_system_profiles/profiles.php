@@ -24,6 +24,8 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\Registry\Registry;
 
+JLoader::register('FieldTypesFilesHelper', JPATH_PLUGINS . '/fieldtypes/files/helper.php');
+
 class plgSystemProfiles extends CMSPlugin
 {
 	/**
@@ -33,6 +35,15 @@ class plgSystemProfiles extends CMSPlugin
 	 * @since 1.0.0
 	 */
 	protected $autoloadLanguage = true;
+
+	/**
+	 * Images root path
+	 *
+	 * @var    string
+	 *
+	 * @since  1.2.0
+	 */
+	protected $images_root = 'images/profiles';
 
 	/**
 	 * Listener for the `onAfterInitialise` event
@@ -240,11 +251,8 @@ class plgSystemProfiles extends CMSPlugin
 				$form->setFieldAttribute('alias', 'checkurl',
 					Uri::base(true) . '/index.php?option=com_profiles&task=profile.checkAlias');
 
-				// Set update images links
-				$saveurl = Uri::base(true) . '/index.php?option=com_profiles&task=profile.updateImages&id='
-					. $user_id . '&field=';
-				$form->setFieldAttribute('avatar', 'saveurl', $saveurl . 'avatar');
-				$form->setFieldAttribute('header', 'saveurl', $saveurl . 'header');
+				// Set images folder root
+				$form->setFieldAttribute('images_folder', 'root', $this->images_root);
 
 				// Remove job field
 				if (!empty($jobs))
@@ -311,11 +319,8 @@ class plgSystemProfiles extends CMSPlugin
 				$form->setFieldAttribute('alias', 'checkurl',
 					Uri::base(true) . '/index.php?option=com_profiles&task=profile.checkAlias');
 
-				// Set update images links
-				$saveurl = Uri::base(true) . '/index.php?option=com_profiles&task=profile.updateImages&id='
-					. $user_id . '&field=';
-				$form->setFieldAttribute('avatar', 'saveurl', $saveurl . 'avatar');
-				$form->setFieldAttribute('header', 'saveurl', $saveurl . 'header');
+				// Set images folder root
+				$form->setFieldAttribute('images_folder', 'root', $this->images_root);
 
 				// Set Tags parents
 				if ($config->get('profile_tags'))
@@ -493,7 +498,7 @@ class plgSystemProfiles extends CMSPlugin
 		if (empty($data['params']['region']))
 		{
 			BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_location/models', 'LocationModel');
-			$regionsModel             = BaseDatabaseModel::getInstance('Regions', 'LocationModel', array('ignore_request' => false));
+			$regionsModel = BaseDatabaseModel::getInstance('Regions', 'LocationModel', array('ignore_request' => false));
 
 			$data['params']['region'] = ($app->isSite()) ? $regionsModel->getVisitorRegion()->id :
 				$regionsModel->getDefaultRegion()->id;
@@ -550,6 +555,13 @@ class plgSystemProfiles extends CMSPlugin
 			}
 			// Save profile
 			$profileModel->save($data);
+
+			// Save images
+			if ($isNew && !empty($data['images_folder']))
+			{
+				$filesHelper = new FieldTypesFilesHelper();
+				$filesHelper->moveTemporaryFolder($data['images_folder'], $data['id'], $this->images_root);
+			}
 
 			// Login after registration
 			$app  = Factory::getApplication();

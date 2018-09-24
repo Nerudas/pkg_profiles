@@ -18,7 +18,6 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Registry\Registry;
-use Joomla\CMS\Language\Text;
 
 class ProfilesModelProfiles extends ListModel
 {
@@ -169,7 +168,7 @@ class ProfilesModelProfiles extends ListModel
 			->join('LEFT', '#__user_phones AS phone ON phone.user_id = p.id');
 
 		// Join over the regions.
-		$query->select(array('r.id as region_id', 'r.name as region_name', 'r.icon as region_icon'))
+		$query->select(array('r.id as region_id', 'r.name as region_name'))
 			->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 		// Join over the sessions.
@@ -234,8 +233,7 @@ class ProfilesModelProfiles extends ListModel
 		$avatar = $this->getState('filter.avatar');
 		if (is_numeric($avatar))
 		{
-			$operator = ($avatar == 0) ? ' = ' : ' <>';
-			$query->where($db->quoteName('p.avatar') . $operator . $db->quote(''));
+			$query->where($db->quoteName('p.avatar') . ' = ' . $avatar);
 		}
 
 		// Filter by online
@@ -274,15 +272,13 @@ class ProfilesModelProfiles extends ListModel
 			{
 				$text_columns = array('p.name', 'p.about', 'p.status', 'p.notes', 'p.contacts', 'r.name', 'user.email', 'p.tags_search');
 
-
 				$sql = array();
 				foreach ($text_columns as $column)
 				{
-					$searchText = ($column == 'p.notes') ? str_replace('"', '', json_encode($search)) : $search;
-
 					$sql[] = $db->quoteName($column) . ' LIKE '
-						. $db->quote('%' . str_replace(' ', '%', $db->escape(trim($searchText), true) . '%'));
+						. $db->quote('%' . str_replace(' ', '%', $db->escape(trim($search), true) . '%'));
 				}
+
 				$number = $userModel->clearPhoneNumber($search);
 				$code   = '+7';
 				if (!empty($number))
@@ -347,9 +343,9 @@ class ProfilesModelProfiles extends ListModel
 		{
 			foreach ($items as &$item)
 			{
-				$avatar = (!empty($item->avatar) && JFile::exists(JPATH_ROOT . '/' . $item->avatar)) ?
-					$item->avatar : 'media/com_profiles/images/no-avatar.jpg';
+				$imagesHelper = new FieldTypesFilesHelper();
 
+				$avatar       = $imagesHelper->getImage('avatar', 'images/profiles/' . $item->id, 'media/com_profiles/images/no-avatar.jpg', false);
 				$item->avatar = Uri::root(true) . '/' . $avatar;
 
 				$item->user_socials = (isset($socials[$item->id])) ? $socials[$item->id] : array();
@@ -369,15 +365,6 @@ class ProfilesModelProfiles extends ListModel
 						$tag->main = (in_array($tag->id, $mainTags));
 					}
 					$item->tags->itemTags = ArrayHelper::sortObjects($item->tags->itemTags, 'main', -1);
-				}
-
-				// Get region
-				$item->region_icon = (!empty($item->region_icon) && JFile::exists(JPATH_ROOT . '/' . $item->region_icon)) ?
-					Uri::root(true) . $item->region_icon : false;
-				if ($item->region == '*')
-				{
-					$item->region_icon = false;
-					$item->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
 				}
 			}
 		}
