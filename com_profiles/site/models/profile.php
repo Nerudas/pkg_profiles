@@ -21,6 +21,9 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Uri\Uri;
 
+JLoader::register('FieldTypesFilesHelper', JPATH_PLUGINS . '/fieldtypes/files/helper.php');
+
+
 class ProfilesModelProfile extends ItemModel
 {
 	/**
@@ -125,7 +128,7 @@ class ProfilesModelProfile extends ItemModel
 					->join('LEFT', '#__location_regions AS r ON r.id = p.region');
 
 				// Join over the companies.
-				$query->select(array('(company.id IS NOT NULL) AS job', 'company.id as job_id', 'company.name as job_name', 'company.logo as job_logo', 'employees.position'))
+				$query->select(array('(company.id IS NOT NULL) AS job', 'company.id as job_id', 'company.name as job_name', 'employees.position'))
 					->join('LEFT', '#__companies_employees AS employees ON employees.user_id = p.id AND ' .
 						$db->quoteName('employees.key') . ' = ' . $db->quote(''))
 					->join('LEFT', '#__companies AS company ON company.id = employees.company_id AND company.state = 1');
@@ -154,15 +157,11 @@ class ProfilesModelProfile extends ItemModel
 					$data->contacts->set('phones', $phones);
 				}
 
-				$avatar = (!empty($data->avatar) && JFile::exists(JPATH_ROOT . '/' . $data->avatar)) ?
-					$data->avatar : 'media/com_profiles/images/no-avatar.jpg';
+				$imagesHelper = new FieldTypesFilesHelper();
+				$imagesFolder = 'images/profiles/' . $data->id;
 
-				$data->avatar = Uri::root(true) . '/' . $avatar;
-
-				$header = (!empty($data->header) && JFile::exists(JPATH_ROOT . '/' . $data->header)) ?
-					$data->header : 'media/com_profiles/images/no-header.jpg';
-
-				$data->header = Uri::root(true) . '/' . $header;
+				$data->avatar = $imagesHelper->getImage('avatar', $imagesFolder, 'media/com_profiles/images/no-avatar.jpg', false);
+				$data->header = $imagesHelper->getImage('header', $imagesFolder, 'media/com_profiles/images/no-header.jpg', false);
 
 				if ($data->job)
 				{
@@ -177,8 +176,6 @@ class ProfilesModelProfile extends ItemModel
 				$data->tags->getItemTags('com_profiles.profile', $data->id);
 
 				// Get region
-				$data->region_icon = (!empty($data->region_icon) && JFile::exists(JPATH_ROOT . '/' . $data->region_icon)) ?
-					Uri::root(true) . $data->region_icon : false;
 				if ($data->region == '*')
 				{
 					$data->region_icon = false;

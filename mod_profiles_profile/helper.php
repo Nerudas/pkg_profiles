@@ -14,11 +14,12 @@ use Joomla\Registry\Registry;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Router\Route;
 
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
+
+JLoader::register('FieldTypesFilesHelper', JPATH_PLUGINS . '/fieldtypes/files/helper.php');
 
 class modProfilesProfileHelper
 {
@@ -57,20 +58,19 @@ class modProfilesProfileHelper
 		$pk      = (!empty($pk)) ? $pk : $this->params->get('profile_id', '');
 		$user    = (!empty($pk)) ? Factory::getUser($pk) : Factory::getUser();
 		$profile = (!empty($user->id)) ? $this->getUserProfile($user->id) : $this->getGuestProfile();
-		$avatar  = (!empty($profile->avatar) && JFile::exists(JPATH_ROOT . '/' . $profile->avatar)) ?
-			$profile->avatar : 'media/com_profiles/images/no-avatar.jpg';
-		$header  = (!empty($profile->header) && JFile::exists(JPATH_ROOT . '/' . $profile->header)) ?
-			$profile->header : 'media/com_profiles/images/no-header.jpg';
 
-		$profile->avatar   = Uri::root(true) . '/' . $avatar;
-		$profile->header   = Uri::root(true) . '/' . $header;
+		$imagesHelper = new FieldTypesFilesHelper();
+		$imagesFolder = 'images/profiles/' . $profile->id;
+
+		$profile->avatar = $imagesHelper->getImage('avatar', $imagesFolder, 'media/com_profiles/images/no-avatar.jpg', false);
+		$profile->header = $imagesHelper->getImage('header', $imagesFolder, 'media/com_profiles/images/no-header.jpg', false);
+
 		$profile->link     = Route::_(ProfilesHelperRoute::getProfileRoute($profile->id));
 		$profile->editLink = (!$user->guest && $user->id == $profile->id) ?
 			Route::_('index.php?option=com_users&view=profile&layout=edit') : '';
 		$profile->job_link = ($profile->job) ? Route::_(CompaniesHelperRoute::getCompanyRoute($profile->job_id)) : false;
 
-		$profile->job_logo = (!empty($profile->job_logo) && JFile::exists(JPATH_ROOT . '/' . $profile->job_logo)) ?
-			Uri::root(true) . '/' . $profile->job_logo : false;
+		$profile->job_logo = $imagesHelper->getImage('logo', 'images/companies/' . $profile->job_id, 'media/com_profiles/images/no-header.jpg', false);
 
 		return new Registry($profile);
 	}
@@ -88,7 +88,7 @@ class modProfilesProfileHelper
 	{
 		$db    = Factory::getDbo();
 		$query = $db->getQuery(true)
-			->select(array('p.id', 'p.name', 'p.avatar', 'p.header', 'p.status'))
+			->select(array('p.id', 'p.name', 'p.status'))
 			->from($db->quoteName('#__profiles', 'p'))
 			->where('p.id = ' . $pk);
 
