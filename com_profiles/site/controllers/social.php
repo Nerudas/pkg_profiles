@@ -260,9 +260,9 @@ class ProfilesControllerSocial extends BaseController
 		if (!empty($avatar))
 		{
 
-			JLoader::register('imageFolderHelper', JPATH_PLUGINS . '/fieldtypes/ajaximage/helpers/imagefolder.php');
-			$helper      = new imageFolderHelper('images/profiles');
-			$imagefolder = $helper->createTemporaryFolder();
+			JLoader::register('FieldTypesFilesHelper', JPATH_PLUGINS . '/fieldtypes/files/helper.php');
+			$helper      = new FieldTypesFilesHelper;
+			$imagefolder = $helper->createTemporaryFolder('images/profiles');
 
 			$avatarExt = preg_replace('/\?(.?)*/', '', JFile::getExt($avatar));
 			$avatarExt = str_replace('me/image', '', $avatarExt);
