@@ -483,7 +483,7 @@ class ProfilesControllerSocial extends BaseController
 		// Get code
 		if (!$code = $app->input->get('code', 0, 'raw'))
 		{
-			$app->redirect('https://www.facebook.com/v2.12/dialog/oauth?' . http_build_query($params) . '&response_type=code');
+			$app->redirect('https://www.facebook.com/v3.1/dialog/oauth?' . http_build_query($params) . '&response_type=code');
 
 			return false;
 		}
