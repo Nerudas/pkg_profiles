@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\Registry\Registry;
 
 class com_ProfilesInstallerScript
 {
@@ -260,12 +261,18 @@ class com_ProfilesInstallerScript
 		$table = '#__profiles';
 
 		$query = $db->getQuery(true)
-			->select(array('id', 'avatar'))
+			->select(array('id', 'avatar', 'notes', 'contacts'))
 			->from($table);
 		$db->setQuery($query);
 		$profiles = $db->loadObjectList();
 		foreach ($profiles as $profile)
 		{
+			$registry       = new Registry($profile->notes);
+			$profile->notes = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
+
+			$registry          = new Registry($profile->contacts);
+			$profile->contacts = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
+
 			$profile->avatar = (!empty($profile->avatar)) ? 1 : 0;
 			$db->updateObject($table, $profile, array('id'));
 		}
