@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Utilities\ArrayHelper;
 
 class ProfilesViewProfile extends HtmlView
 {
@@ -185,7 +186,7 @@ class ProfilesViewProfile extends HtmlView
 		$app      = Factory::getApplication();
 		$pathway  = $app->getPathway();
 		$item     = $this->item;
-		$url      = rtrim(URI::root(), '/') . $item->link;
+		$canonical      = rtrim(URI::root(), '/') . $item->link;
 		$sitename = $app->get('sitename');
 		$menu     = $app->getMenu()->getActive();
 		$id       = (int) @$menu->query['id'];
@@ -236,6 +237,14 @@ class ProfilesViewProfile extends HtmlView
 		{
 			$this->document->setDescription($this->params->get('menu-meta_description'));
 		}
+		elseif (!empty($item->about))
+		{
+			$this->document->setDescription(JHtmlString::truncate($item->about, 150, false, false));
+		}
+		elseif (!empty($item->status))
+		{
+			$this->document->setDescription(JHtmlString::truncate($item->status, 150, false, false));
+		}
 
 		// Set Meta Keywords
 		if (!empty($item->metakey))
@@ -245,6 +254,11 @@ class ProfilesViewProfile extends HtmlView
 		elseif ($this->params->get('menu-meta_keywords'))
 		{
 			$this->document->setMetadata('keywords', $this->params->get('menu-meta_keywords'));
+		}
+		elseif (!empty(($item->tags->itemTags)))
+		{
+			$this->document->setMetadata('keywords', implode(', ',
+				ArrayHelper::getColumn($this->item->tags->itemTags, 'title')));
 		}
 
 		// Set Meta Robots
@@ -278,6 +292,10 @@ class ProfilesViewProfile extends HtmlView
 		{
 			$this->document->setMetaData('image', Uri::base() . $this->params->get('menu-meta_image'));
 		}
+		elseif ($item->avatar)
+		{
+			$this->document->setMetaData('image', Uri::root() . $item->avatar);
+		}
 
 		// Set Meta twitter
 		$this->document->setMetaData('twitter:card', 'summary_large_image');
@@ -292,7 +310,7 @@ class ProfilesViewProfile extends HtmlView
 		{
 			$this->document->setMetaData('twitter:image', $this->document->getMetaData('image'));
 		}
-		$this->document->setMetaData('twitter:url', $url);
+		$this->document->setMetaData('twitter:url', $canonical);
 
 		// Set Meta Open Graph
 		$this->document->setMetadata('og:type', 'website', 'property');
@@ -306,7 +324,41 @@ class ProfilesViewProfile extends HtmlView
 		{
 			$this->document->setMetaData('og:image', $this->document->getMetaData('image'), 'property');
 		}
-		$this->document->setMetaData('og:url', $url, 'property');
+		$this->document->setMetaData('og:url', $canonical, 'property');
 
+		// No doubles
+		$uri = Uri::getInstance();
+		$url = urldecode($uri->toString());
+		if ($url !== $canonical)
+		{
+			$this->document->addHeadLink($canonical, 'canonical');
+
+			$link       = $canonical;
+			$linkParams = array();
+			$hash       = '';
+
+			if (!empty($uri->getVar('start')))
+			{
+				$linkParams['start'] = $uri->getVar('start');
+			}
+
+			if (!empty($uri->getVar('post_id')) || $uri->getVar('post_id', 'none') !== 'none')
+			{
+				$hash = '#comments';
+
+				$linkParams['post_id'] = $uri->getVar('post_id');
+			}
+
+			if (!empty($linkParams))
+			{
+				$link = $link . '?' . urldecode(http_build_query($linkParams));
+			}
+
+			if ($url != $link)
+			{
+				$link .= $hash;
+				$app->redirect($link, true);
+			}
+		}
 	}
 }

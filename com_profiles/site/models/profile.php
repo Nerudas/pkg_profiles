@@ -171,11 +171,11 @@ class ProfilesModelProfile extends ItemModel
 
 				// Convert the metadata field
 				$data->metadata = new Registry($data->metadata);
+				$data->metadata->set('image', $imagesHelper->getImage('meta', $imagesFolder, false, false));
 
 				// Get Tags
 				$data->tags = new TagsHelper;
 				$data->tags->getItemTags('com_profiles.profile', $data->id);
-
 
 				// Convert parameter fields to objects.
 				$registry     = new Registry($data->attribs);
