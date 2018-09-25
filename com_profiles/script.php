@@ -50,6 +50,13 @@ class com_ProfilesInstallerScript
 			JFolder::create($folder);
 			JFile::write($folder . '/index.html', '<!DOCTYPE html><title></title>');
 		}
+
+		$folder = JPATH_ROOT . '/images/profiles/tags';
+		if (!JFolder::exists($folder))
+		{
+			JFolder::create($folder);
+			JFile::write($folder . '/index.html', '<!DOCTYPE html><title></title>');
+		}
 	}
 
 	/**

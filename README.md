@@ -37,3 +37,6 @@ Plugin for displaying profiles via shortcodes
 
 * **Sitemap - Profiles Plugin**  
 Plugin for adding the Profiles section to sitemap
+
+**Content - Tags Profiles Metadata Plugin**  
+Plugin for adding metadata fields in com_tags

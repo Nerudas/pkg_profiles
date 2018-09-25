@@ -332,7 +332,7 @@ class ProfilesModelList extends ListModel
 				}
 
 				// Get region
-				$item->avatar = $imagesHelper->getImage('avatar', 'images/location/regions' . $item->redion->id, false, false);
+				$item->region_icon = $imagesHelper->getImage('icon', 'images/location/regions/' . $item->region_id, false, false);
 
 				// Discussions posts count
 				$item->commentsCount = DiscussionsHelperTopic::getPostsTotal($item->discussions_topic_id);
@@ -429,10 +429,12 @@ class ProfilesModelList extends ListModel
 				{
 					$db    = $this->getDbo();
 					$query = $db->getQuery(true)
-						->select(array('t.id', 't.parent_id', 't.title', 'pt.title as parent_title'))
+						->select(array('t.id', 't.parent_id', 't.title', 'pt.title as parent_title',
+							'mt.metakey', 'mt.metadesc', 'mt.metadata'))
 						->from('#__tags AS t')
 						->where('t.id = ' . (int) $tag_id)
-						->join('LEFT', '#__tags AS pt ON pt.id = t.parent_id');
+						->join('LEFT', '#__tags AS pt ON pt.id = t.parent_id')
+						->join('LEFT', '#__profiles_tags AS mt ON mt.id = t.id');
 
 					$user = Factory::getUser();
 					if (!$user->authorise('core.admin'))
@@ -455,6 +457,13 @@ class ProfilesModelList extends ListModel
 					}
 
 					$data->link = Route::_(ProfilesHelperRoute::getListRoute($data->id));
+
+					$imagesHelper = new FieldTypesFilesHelper();
+					$imageFolder  = 'images/profiles/tags/' . $data->id;
+
+					// Convert the metadata field
+					$data->metadata = new Registry($data->metadata);
+					$data->metadata->set('image', $imagesHelper->getImage('meta', $imageFolder, false, false));
 
 					$this->_tag = $data;
 				}

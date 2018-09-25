@@ -24,6 +24,7 @@
 		<folder type="plugin" id="profiles" group="system">plg_system_profiles</folder>
 		<folder type="plugin" id="profiles_shortcodes" group="system">plg_system_profiles_shortcodes</folder>
 		<folder type="plugin" id="profiles" group="sitemap">plg_sitemap_profiles</folder>
+		<folder type="plugin" id="tags_profiles_meta" group="content">plg_content_tags_profiles_meta</folder>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="Profiles Package">
