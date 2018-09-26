@@ -420,6 +420,7 @@ class ProfilesModelList extends ListModel
 			$root->id        = 1;
 			$root->parent_id = 0;
 			$root->link      = Route::_(ProfilesHelperRoute::getListRoute(1));
+			$root->metadata = new Registry();
 
 			if ($tag_id > 1)
 			{

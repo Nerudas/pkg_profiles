@@ -19,7 +19,6 @@ use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Uri\Uri;
 
 JLoader::register('FieldTypesFilesHelper', JPATH_PLUGINS . '/fieldtypes/files/helper.php');
 
@@ -218,7 +217,7 @@ class ProfilesModelProfile extends ItemModel
 
 			$db    = Factory::getDbo();
 			$query = $db->getQuery(true)
-				->select(array('ce.company_id as id', 'ce.position', 'c.name', 'c.logo', 'c.about', 'c.hits', 'c.region'))
+				->select(array('ce.company_id as id', 'ce.position', 'c.name', 'c.about', 'c.hits', 'c.region'))
 				->from($db->quoteName('#__companies_employees', 'ce'))
 				->join('LEFT', '#__companies AS c ON c.id = ce.company_id')
 				->where('user_id = ' . $pk);
@@ -230,20 +229,10 @@ class ProfilesModelProfile extends ItemModel
 			$db->setQuery($query);
 			$companies = $db->loadObjectList('id');
 
+			$imagesHelper = new FieldTypesFilesHelper();
 			foreach ($companies as &$company)
 			{
-				$company->logo = (!empty($company->logo) && JFile::exists(JPATH_ROOT . '/' . $company->logo)) ?
-					Uri::root(true) . '/' . $company->logo : false;
-
-				// Get region
-				$company->region_icon = (!empty($company->region_icon) && JFile::exists(JPATH_ROOT . '/' . $company->region_icon)) ?
-					Uri::root(true) . $company->region_icon : false;
-				if ($company->region == '*')
-				{
-					$company->region_icon = false;
-					$company->region_name = Text::_('JGLOBAL_FIELD_REGIONS_ALL');
-				}
-
+				$company->logo = $imagesHelper->getImage('logo', 'images/companies/' . $company->id, false, false);
 				$company->link = Route::_(CompaniesHelperRoute::getCompanyRoute($company->id));
 			}
 

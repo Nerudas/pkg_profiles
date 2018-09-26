@@ -183,7 +183,7 @@ class ProfilesModelProfile extends AdminModel
 
 				// Get Job
 				$query = $db->getQuery(true)
-					->select(array('company.id as id', 'company.name', 'company.logo', 'employees.position'))
+					->select(array('company.id as id', 'company.name', 'employees.position'))
 					->from($db->quoteName('#__companies_employees', 'employees'))
 					->join('LEFT', '#__companies AS company ON company.id = employees.company_id')
 					->where('employees.user_id = ' . $item->id)
@@ -270,7 +270,7 @@ class ProfilesModelProfile extends AdminModel
 
 			$db    = Factory::getDbo();
 			$query = $db->getQuery(true)
-				->select(array('ce.company_id as id', 'ce.position', 'c.name', 'c.logo', 'ce.key', 'ce.as_company'))
+				->select(array('ce.company_id as id', 'ce.position', 'c.name', 'ce.key', 'ce.as_company'))
 				->from($db->quoteName('#__companies_employees', 'ce'))
 				->join('LEFT', '#__companies AS c ON c.id = ce.company_id')
 				->where('user_id = ' . $pk);
@@ -279,11 +279,16 @@ class ProfilesModelProfile extends AdminModel
 
 			JLoader::register('CompaniesHelperEmployees', JPATH_SITE . '/components/com_companies/helpers/employees.php');
 			JLoader::register('CompaniesHelperRoute', JPATH_SITE . '/components/com_companies/helpers/route.php');
+
+			$imagesHelper = new FieldTypesFilesHelper();
 			foreach ($companies as &$company)
 			{
-				$company->logo = (!empty($company->logo) && JFile::exists(JPATH_ROOT . '/' . $company->logo)) ?
-					Uri::root(true) . '/' . $company->logo : false;
+				$company->logo = $imagesHelper->getImage('logo', 'images/companies/' . $company->id, false, false);
 
+				if ($company->logo)
+				{
+					$company->logo = trim(Uri::root(true), '/') . '/' . $company->logo;
+				}
 				$company->confirm = CompaniesHelperEmployees::keyCheck($company->key, $company->id, $pk);
 				unset($company->key);
 
