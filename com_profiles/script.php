@@ -13,7 +13,6 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\Registry\Registry;
 
 class com_ProfilesInstallerScript
 {
@@ -250,50 +249,5 @@ class com_ProfilesInstallerScript
 			$object->params       = (string) $params;
 			Factory::getDbo()->updateObject('#__extensions', $object, 'extension_id');
 		}
-	}
-
-
-	/**
-	 * Remove categories
-	 *
-	 * @param  \stdClass $parent - Parent object calling object.
-	 *
-	 * @return void
-	 *
-	 * @since  1.2.0
-	 */
-	public function update($parent)
-	{
-		$db    = Factory::getDbo();
-		$table = '#__profiles';
-
-		$query = $db->getQuery(true)
-			->select(array('id', 'avatar', 'notes', 'contacts'))
-			->from($table);
-		$db->setQuery($query);
-		$profiles = $db->loadObjectList();
-		foreach ($profiles as $profile)
-		{
-			$registry       = new Registry($profile->notes);
-			$profile->notes = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
-
-			$registry          = new Registry($profile->contacts);
-			$profile->contacts = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
-
-			$profile->avatar = (!empty($profile->avatar)) ? 1 : 0;
-			$db->updateObject($table, $profile, array('id'));
-		}
-
-
-		$db->setQuery("ALTER TABLE " . $table . " MODIFY `avatar` tinyint(3) NOT NULL DEFAULT '0';")->query();
-
-		$columns = $db->getTableColumns($table);
-
-		// Remove header
-		if (isset($columns['header']))
-		{
-			$db->setQuery("ALTER TABLE " . $table . " DROP header")->query();
-		}
-
 	}
 }
