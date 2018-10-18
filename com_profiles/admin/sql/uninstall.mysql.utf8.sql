@@ -1,0 +1,1 @@
+DROP TABLE `#__profiles_sections`;

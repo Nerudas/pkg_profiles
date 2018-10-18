@@ -13,3 +13,5 @@ This project is an internal project of [our site](https://nerudas.ru).
 We put it in open access, because we hope it will be useful. However, we will not accept any support requests. Letters, Issues and Pull Requests will be deleted / closed without replying.
 
 ## Package Contents
+### Profiles
+Profiles management **component**
