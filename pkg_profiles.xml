@@ -16,6 +16,7 @@
 	</languages>
 	<files>
 		<folder type="component" id="com_profiles">com_profiles</folder>
+		<folder type="plugin" id="profiles" group="system">plg_system_profiles</folder>
 	</files>
 	<updateservers>
 		<server type="extension" priority="1" name="Profiles Package">

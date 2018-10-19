@@ -15,3 +15,6 @@ We put it in open access, because we hope it will be useful. However, we will no
 ## Package Contents
 ### Profiles
 Profiles management **component**
+
+### System - Profiles
+**Plugin** which performs profile component work
