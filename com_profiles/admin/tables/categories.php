@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Table\Nested;
 
-class ProfilesTableSections extends Nested
+class ProfilesTableCategories extends Nested
 {
 	/**
 	 * Cache for the root ID
@@ -32,7 +32,7 @@ class ProfilesTableSections extends Nested
 	 */
 	function __construct(&$db)
 	{
-		parent::__construct('#__profiles_sections', 'id', $db);
+		parent::__construct('#__profiles_categories', 'id', $db);
 
 		// Set the alias since the column is called state
 		$this->setColumnAlias('published', 'state');

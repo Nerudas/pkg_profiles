@@ -1,1 +1,1 @@
-DROP TABLE `#__profiles_sections`;
+DROP TABLE `#__profiles_categories`;

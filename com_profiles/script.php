@@ -33,8 +33,8 @@ class com_profilesInstallerScript
 		// Check database tables
 		$this->checkTables();
 
-		// Check base sections
-		$this->checkSections();
+		// Check base categories
+		$this->checkCategories();
 
 		// Move layouts
 		$this->moveLayouts();
@@ -52,10 +52,10 @@ class com_profilesInstallerScript
 		$folders = array(
 			JPATH_ROOT . '/images',
 			JPATH_ROOT . '/images/profiles',
-			JPATH_ROOT . '/images/profiles/sections',
-			JPATH_ROOT . '/images/profiles/sections/1',
-			JPATH_ROOT . '/images/profiles/sections/2',
-			JPATH_ROOT . '/images/profiles/sections/3',
+			JPATH_ROOT . '/images/profiles/categories',
+			JPATH_ROOT . '/images/profiles/categories/1',
+			JPATH_ROOT . '/images/profiles/categories/2',
+			JPATH_ROOT . '/images/profiles/categories/3',
 		);
 
 		foreach ($folders as $folder)
@@ -99,17 +99,17 @@ class com_profilesInstallerScript
 	}
 
 	/**
-	 * Method to create base sections in not exist
+	 * Method to create base categories in not exist
 	 *
 	 * @since 1.5.0
 	 */
-	protected function checkSections()
+	protected function checkCategories()
 	{
 		$db      = Factory::getDbo();
-		$table   = '#__profiles_sections';
+		$table   = '#__profiles_categories';
 		$rebuild = false;
 
-		// Get base sections
+		// Get base categories
 		$query = $db->getQuery(true)
 			->select('id')
 			->from($table)
@@ -117,56 +117,56 @@ class com_profilesInstallerScript
 		$db->setQuery($query);
 		$exist = $db->loadColumn();
 
-		// Check all section
+		// Check all category
 		if (!in_array(1, $exist))
 		{
-			$section            = new stdClass();
-			$section->id        = 1;
-			$section->title     = Text::_('COM_PROFILES_SECTIONS_ALL');
-			$section->parent_id = 0;
-			$section->alias     = 'all';
-			$section->state     = 1;
-			$section->access    = 1;
+			$category            = new stdClass();
+			$category->id        = 1;
+			$category->title     = Text::_('COM_PROFILES_CATEGORIES_ALL');
+			$category->parent_id = 0;
+			$category->alias     = 'all';
+			$category->state     = 1;
+			$category->access    = 1;
 
 			$rebuild = true;
-			$db->insertObject($table, $section);
+			$db->insertObject($table, $category);
 		}
 
-		// Check natural section
+		// Check natural category
 		if (!in_array(2, $exist))
 		{
-			$section            = new stdClass();
-			$section->id        = 2;
-			$section->title     = Text::_('COM_PROFILES_SECTIONS_NATURAL');
-			$section->parent_id = 1;
-			$section->alias     = 'natural';
-			$section->state     = 1;
-			$section->access    = 1;
+			$category            = new stdClass();
+			$category->id        = 2;
+			$category->title     = Text::_('COM_PROFILES_CATEGORIES_NATURAL');
+			$category->parent_id = 1;
+			$category->alias     = 'natural';
+			$category->state     = 1;
+			$category->access    = 1;
 
 			$rebuild = true;
-			$db->insertObject($table, $section);
+			$db->insertObject($table, $category);
 		}
 
-		// Check legal section
+		// Check legal category
 		if (!in_array(3, $exist))
 		{
-			$section            = new stdClass();
-			$section->id        = 3;
-			$section->title     = Text::_('COM_PROFILES_SECTIONS_LEGAL');
-			$section->parent_id = 1;
-			$section->alias     = 'legal';
-			$section->state     = 1;
-			$section->access    = 1;
+			$category            = new stdClass();
+			$category->id        = 3;
+			$category->title     = Text::_('COM_PROFILES_CATEGORIES_LEGAL');
+			$category->parent_id = 1;
+			$category->alias     = 'legal';
+			$category->state     = 1;
+			$category->access    = 1;
 
 			$rebuild = true;
-			$db->insertObject($table, $section);
+			$db->insertObject($table, $category);
 		}
 
-		// Rebuild sections
+		// Rebuild categories
 		if ($rebuild)
 		{
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models');
-			$model = BaseDatabaseModel::getInstance('Section', 'ProfilesModel', array('ignore_request' => true));
+			$model = BaseDatabaseModel::getInstance('Category', 'ProfilesModel', array('ignore_request' => true));
 			$model->rebuild();
 		}
 	}

@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
 
-class ProfilesModelSection extends AdminModel
+class ProfilesModelCategory extends AdminModel
 {
 	/**
 	 * Returns a Table object, always creating it.
@@ -26,7 +26,7 @@ class ProfilesModelSection extends AdminModel
 	 *
 	 * @since 1.5.0
 	 */
-	public function getTable($type = 'Sections', $prefix = 'ProfilesTable', $config = array())
+	public function getTable($type = 'Categories', $prefix = 'ProfilesTable', $config = array())
 	{
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/tables');
 
@@ -45,7 +45,7 @@ class ProfilesModelSection extends AdminModel
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
-		$form = $this->loadForm('com_profiles.section', 'section', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_profiles.category', 'category', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form))
 		{
 			return false;
