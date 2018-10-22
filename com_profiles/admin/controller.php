@@ -10,3 +10,16 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\MVC\Controller\BaseController;
+
+class ProfilesController extends BaseController
+{
+	/**
+	 * The default view.
+	 *
+	 * @var    string
+	 *
+	 * @since 1.5.0
+	 */
+	protected $default_view = 'categories';
+}
