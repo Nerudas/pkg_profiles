@@ -17,7 +17,7 @@ class ProfilesController extends BaseController
 	/**
 	 * The default view.
 	 *
-	 * @var    string
+	 * @var string
 	 *
 	 * @since 1.5.0
 	 */
