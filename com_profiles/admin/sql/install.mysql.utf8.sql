@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `#__profiles_categories` (
 	`access`      INT(10)      NOT NULL DEFAULT '0',
 	`params`      TEXT         NOT NULL DEFAULT '',
 	`metadata`    MEDIUMTEXT   NOT NULL DEFAULT '',
-	`items_tags`  MEDIUMTEXT   NOT NULL DEFAULT '',
+	`items_tags`  TEXT         NOT NULL DEFAULT '',
 	UNIQUE KEY `id` (`id`)
 )
 	ENGINE = MyISAM

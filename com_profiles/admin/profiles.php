@@ -16,12 +16,12 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\HTML\HTMLHelper;
 
-JLoader::register('ProfilesHelper', __DIR__ . '/helpers/centers.php');
+JLoader::register('ProfilesHelper', __DIR__ . '/helpers/profiles.php');
 
 HTMLHelper::_('behavior.tabstate');
 HTMLHelper::_('stylesheet', 'media/com_profiles/css/admin-general.min.css', array('version' => 'auto'));
 
-if (!Factory::getUser()->authorise('core.manage', 'com_centers'))
+if (!Factory::getUser()->authorise('core.manage', 'com_profiles'))
 {
 	throw new NotAllowed(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 }

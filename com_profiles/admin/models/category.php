@@ -12,6 +12,8 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class ProfilesModelCategory extends AdminModel
 {
@@ -75,5 +77,64 @@ class ProfilesModelCategory extends AdminModel
 		$this->cleanCache();
 
 		return true;
+	}
+
+	/**
+	 * Method to change the published state of one or more records.
+	 *
+	 * @param   array   &$pks  A list of the primary keys to change.
+	 * @param   integer $value The value of the published state.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since 1.5.0
+	 */
+	public function publish(&$pks, $value = 1)
+	{
+		// Check base categories
+		$showWarning = false;
+		foreach ($pks as $key => $pk)
+		{
+			if (in_array($pk, array(1, 2, 3)))
+			{
+				$showWarning = true;
+				unset($pks[$key]);
+			}
+		}
+		if ($showWarning)
+		{
+			Factory::getApplication()->enqueueMessage(Text::_('COM_PROFILES_ERROR_BASE_CATEGORIES_STATE'), 'warning');
+		}
+
+		return parent::publish($pks, $value);
+	}
+
+	/**
+	 * Method to delete one or more records.
+	 *
+	 * @param   array &$pks An array of record primary keys.
+	 *
+	 * @return  boolean  True if successful, false if an error occurs.
+	 *
+	 * @since 1.5.0
+	 */
+	public function delete(&$pks)
+	{
+		// Check base categories
+		$showWarning = false;
+		foreach ($pks as $key => $pk)
+		{
+			if (in_array($pk, array(1, 2, 3)))
+			{
+				$showWarning = true;
+				unset($pks[$key]);
+			}
+		}
+		if ($showWarning)
+		{
+			Factory::getApplication()->enqueueMessage(Text::_('COM_PROFILES_ERROR_BASE_CATEGORIES_STATE'), 'warning');
+		}
+
+		return parent::delete($pks);
 	}
 }

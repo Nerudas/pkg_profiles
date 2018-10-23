@@ -17,7 +17,7 @@ class ProfilesTableCategories extends Nested
 	/**
 	 * Cache for the root ID
 	 *
-	 * @var    integer
+	 * @var integer
 	 *
 	 * @since 1.5.0
 	 */

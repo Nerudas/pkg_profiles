@@ -10,3 +10,16 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\MVC\Controller\FormController;
+
+class CentersControllerDistrict extends FormController
+{
+	/**
+	 * The prefix to use with controller messages.
+	 *
+	 * @var    string
+	 *
+	 * @since 1.5.0
+	 */
+	protected $text_prefix = 'COM_PROFILES_CATEGORY';
+}
