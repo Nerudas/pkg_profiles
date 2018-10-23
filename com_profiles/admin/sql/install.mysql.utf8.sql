@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `#__profiles_categories` (
 	`description` MEDIUMTEXT   NOT NULL DEFAULT '',
 	`state`       TINYINT(3)   NOT NULL DEFAULT '0',
 	`access`      INT(10)      NOT NULL DEFAULT '0',
+	`params`      TEXT         NOT NULL DEFAULT '',
 	`metadata`    MEDIUMTEXT   NOT NULL DEFAULT '',
 	`items_tags`  MEDIUMTEXT   NOT NULL DEFAULT '',
 	UNIQUE KEY `id` (`id`)
