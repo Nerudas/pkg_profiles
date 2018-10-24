@@ -33,10 +33,10 @@
 			   size="10"
 			   default="0"
 			   readonly="true"/>
-		<field name="parent_id" type="districts"
+		<field name="parent_id" type="categories"
 			   label="COM_PROFILES_CATEGORY_PARENT"
-			   default="1">
-			<option value="1">JGLOBAL_ROOT_PARENT</option>
+			   required="true">
+			<option value="">COM_PROFILES_CATEGORY_SELECT</option>
 		</field>
 		<field name="images_folder" type="folder"
 			   label="JGLOBAL_FIELD_IMAGES_FOLDER_LABEL"

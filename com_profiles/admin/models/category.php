@@ -24,7 +24,7 @@ class ProfilesModelCategory extends AdminModel
 	/**
 	 * Base categories ids
 	 *
-	 * @var    array
+	 * @var array
 	 *
 	 * @since 1.5.0
 	 */
@@ -46,6 +46,10 @@ class ProfilesModelCategory extends AdminModel
 			// Convert the params field value to array.
 			$registry     = new Registry($item->params);
 			$item->params = $registry->toArray();
+
+			// Convert the metadata field value to array.
+			$registry       = new Registry($item->metadata);
+			$item->metadata = $registry->toArray();
 		}
 
 		return $item;
@@ -91,25 +95,18 @@ class ProfilesModelCategory extends AdminModel
 		$id = (int) $this->getState('category.id', Factory::getApplication()->input->get('id', 0));
 
 		// Modify the form based on Edit State access controls.
-		if ($id != 0 && !Factory::getUser()->authorise('core.edit.state', 'com_profiles.employee.' . $id))
+		if ($id != 0 && !Factory::getUser()->authorise('core.edit.state', 'com_profiles.category.' . $id))
 		{
-			// Disable fields for display.
 			$form->setFieldAttribute('state', 'disabled', 'true');
-
-			// Disable fields while saving.
 			$form->setFieldAttribute('state', 'filter', 'unset');
 		}
 
 		/// Modify the form based on base categories
 		if (in_array($id, $this->baseCategories))
 		{
-			// Disable fields for display.
-			$form->setFieldAttribute('state', 'disabled', 'true');
-			$form->setFieldAttribute('parent_id', 'disabled', 'true');
-
-			// Disable fields while saving.
-			$form->setFieldAttribute('state', 'filter', 'unset');
-			$form->setFieldAttribute('parent_id', 'filter', 'unset');
+			// Set readonly
+			$form->setFieldAttribute('state', 'readonly', 'true');
+			$form->setFieldAttribute('parent_id', 'readonly', 'true');
 		}
 
 		return $form;
@@ -187,6 +184,13 @@ class ProfilesModelCategory extends AdminModel
 		{
 			$registry       = new Registry($data['params']);
 			$data['params'] = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
+		}
+
+		// Prepare metadata field data.
+		if (isset($data['metadata']))
+		{
+			$registry         = new Registry($data['metadata']);
+			$data['metadata'] = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
 		}
 
 		// Set new parent id if parent id not matched OR while New.

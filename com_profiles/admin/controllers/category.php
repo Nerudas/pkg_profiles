@@ -17,7 +17,7 @@ class ProfilesControllerCategory extends FormController
 	/**
 	 * The prefix to use with controller messages.
 	 *
-	 * @var    string
+	 * @var string
 	 *
 	 * @since 1.5.0
 	 */
