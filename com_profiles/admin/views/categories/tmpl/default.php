@@ -82,11 +82,10 @@ $columns = 6;
 					$orderkey = array_search($item->id, $this->ordering[$item->parent_id]);
 					$canEdit = $user->authorise('core.edit', '#__profiles_categories.' . $item->id);
 					$canChange = $user->authorise('core.edit.state', '#__profiles_categories.' . $item->id);
-					$editLink = Route::_('index.php?option=com_profiles&task=category.edit&id=' . $item->id);
 					$baseCategory = (in_array($item->id, array(1, 2, 3)));
 
 					// Get the parents of item for sorting
-					if ($item->level > 1)
+					if ($item->level > 0)
 					{
 						$parentsStr       = '';
 						$_currentParentId = $item->parent_id;
@@ -142,19 +141,19 @@ $columns = 6;
 							<div class="btn-group">
 								<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'categories.',
 									($canChange && !$baseCategory), 'cb'); ?>
-								<?php
-								if ($canChange && !$baseCategory)
-								{
-									HTMLHelper::_('actionsdropdown.' . ((int) $item->state === -2 ? 'un' : '') . 'trash', 'cb' . $i, 'categories');
-									echo HTMLHelper::_('actionsdropdown.render', $this->escape($item->title));
-								} ?>
+								<?php if ($item->state != -2): ?>
+									<?php echo HTMLHelper::_('jgrid.action', $i, 'categories.trash', array(
+										'tip'          => Text::_('JTOOLBAR_TRASH'),
+										'active_class' => 'trash', 'inactive_class' => 'trash',
+										'enabled'      => ($canChange && !$baseCategory))); ?>
+								<?php endif; ?>
 							</div>
 						</td>
 						<td>
 							<?php echo LayoutHelper::render('joomla.html.treeprefix', array('level' => ($item->level + 1))); ?>
 							<?php if ($canEdit) : ?>
 								<a class="hasTooltip" title="<?php echo Text::_('JACTION_EDIT'); ?>"
-								   href="<?php echo $editLink; ?>">
+								   href="<?php echo Route::_('index.php?option=com_profiles&task=category.edit&id=' . $item->id); ?>">
 									<?php echo $this->escape($item->title); ?>
 								</a>
 							<?php else : ?>

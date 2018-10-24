@@ -37,4 +37,19 @@ class ProfilesTableCategories extends Nested
 		// Set the alias since the column is called state
 		$this->setColumnAlias('published', 'state');
 	}
+
+	/**
+	 * Checks that the object is valid and able to be stored.
+	 *
+	 * This method checks that the parent_id is non-zero and exists in the database.
+	 * Note that the root node (parent_id = 0) cannot be manipulated with this class.
+	 *
+	 * @return  boolean  True if all checks pass.
+	 *
+	 * @since 1.5.0
+	 */
+	public function check()
+	{
+		return ($this->id == 1 && $this->parent_id == 0) ? true : parent::check();
+	}
 }
