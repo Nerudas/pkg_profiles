@@ -19,6 +19,8 @@ use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 
+JLoader::register('FieldTypesHelperFolder', JPATH_PLUGINS . '/system/fieldtypes/helpers/folder.php');
+
 class ProfilesModelCategory extends AdminModel
 {
 	/**
@@ -29,6 +31,15 @@ class ProfilesModelCategory extends AdminModel
 	 * @since 1.5.0
 	 */
 	protected $baseCategories = array(1, 2, 3);
+
+	/**
+	 * Images root path
+	 *
+	 * @var string
+	 *
+	 * @since 1.5.0
+	 */
+	protected $images_root = 'images/profiles/categories';
 
 	/**
 	 * Method to get a single record.
@@ -108,6 +119,9 @@ class ProfilesModelCategory extends AdminModel
 			$form->setFieldAttribute('state', 'readonly', 'true');
 			$form->setFieldAttribute('parent_id', 'readonly', 'true');
 		}
+
+		// Set images_folder field root attribute
+		$form->setFieldAttribute('images_folder', 'root', $this->images_root);
 
 		return $form;
 	}
@@ -258,6 +272,13 @@ class ProfilesModelCategory extends AdminModel
 		// Clear cache
 		$this->cleanCache();
 
+		// Move images folder if new item
+		if ($isNew && !empty($data['images_folder']))
+		{
+			$folderHelper = new FieldTypesHelperFolder();
+			$folderHelper->moveTemporaryFolder($data['images_folder'], $id, $this->images_root);
+		}
+
 		return $id;
 	}
 
@@ -385,6 +406,13 @@ class ProfilesModelCategory extends AdminModel
 		if ($showWarning)
 		{
 			Factory::getApplication()->enqueueMessage(Text::_('COM_PROFILES_ERROR_BASE_CATEGORIES_STATE'), 'warning');
+		}
+
+		// Delete images
+		$folderHelper = new FieldTypesHelperFolder();
+		foreach ($pks as $pk)
+		{
+			$folderHelper->deleteItemFolder($pk, $this->images_root);
 		}
 
 		return parent::delete($pks);
