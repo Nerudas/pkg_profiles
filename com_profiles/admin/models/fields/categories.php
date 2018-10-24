@@ -12,6 +12,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 FormHelper::loadFieldClass('list');
 
@@ -56,6 +57,16 @@ class JFormFieldCategories extends JFormFieldList
 		{
 			unset($categories[1]);
 		}
+		if ($category_view && $id == 1)
+		{
+			$root            = new stdClass();
+			$root->id        = 0;
+			$root->title     = Text::_('JGLOBAL_ROOT');
+			$root->parent_id = 0;
+			$root->level     = 0;
+
+			$categories[0] = $root;
+		}
 
 		// Prepare options
 		$options = parent::getOptions();
@@ -70,7 +81,7 @@ class JFormFieldCategories extends JFormFieldList
 				$option->text = str_repeat('- ', ($category->level - 1)) . $option->text;
 			}
 
-			if (($category_view && $id !== 0 && ($category->id == $id || $category->parent_id == $id)))
+			if ($category_view && $id !== 0 && ($category->id == $id || $category->parent_id == $id))
 			{
 				$option->disable = true;
 			}
