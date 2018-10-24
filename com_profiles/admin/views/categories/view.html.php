@@ -176,7 +176,7 @@ class ProfilesViewCategories extends HtmlView
 			ToolbarHelper::custom('categories.rebuild', 'refresh.png', 'refresh_f2.png', 'JTOOLBAR_REBUILD', false);
 		}
 
-		// Add preferences button
+		// Add preferences buttons
 		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))
 		{
 			$return = urlencode(base64_encode(Uri::getInstance()->toString()));

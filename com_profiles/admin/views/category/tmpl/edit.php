@@ -30,7 +30,7 @@ Factory::getDocument()->addScriptDeclaration('
 ');
 ?>
 <form action="<?php echo Route::_('index.php?option=com_profiles&view=category&id=' . $this->item->id); ?>"
-      method="post" name="adminForm" id="item-form" class="form-validate" enctype="multipart/form-data">
+	  method="post" name="adminForm" id="item-form" class="form-validate" enctype="multipart/form-data">
 	<div class="form-inline form-inline-header">
 		<?php echo $this->form->renderFieldset('header'); ?>
 	</div>
