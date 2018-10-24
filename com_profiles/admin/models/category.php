@@ -11,12 +11,46 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\Model\AdminModel;
-use Joomla\CMS\Table\Table;
 use Joomla\CMS\Factory;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Table\Table;
+use Joomla\String\StringHelper;
+use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
 
 class ProfilesModelCategory extends AdminModel
 {
+	/**
+	 * Base categories ids
+	 *
+	 * @var    array
+	 *
+	 * @since 1.5.0
+	 */
+	protected $baseCategories = array(1, 2, 3);
+
+	/**
+	 * Method to get a single record.
+	 *
+	 * @param   integer $pk The id of the primary key.
+	 *
+	 * @return  mixed  Object on success, false on failure.
+	 *
+	 * @since 1.5.0
+	 */
+	public function getItem($pk = null)
+	{
+		if ($item = parent::getItem($pk))
+		{
+			// Convert the params field value to array.
+			$registry     = new Registry($item->params);
+			$item->params = $registry->toArray();
+		}
+
+		return $item;
+	}
+
 	/**
 	 * Returns a Table object, always creating it.
 	 *
@@ -53,9 +87,223 @@ class ProfilesModelCategory extends AdminModel
 			return false;
 		}
 
+		// Get item id
+		$id = (int) $this->getState('category.id', Factory::getApplication()->input->get('id', 0));
+
+		// Modify the form based on Edit State access controls.
+		if ($id != 0 && !Factory::getUser()->authorise('core.edit.state', 'com_profiles.employee.' . $id))
+		{
+			// Disable fields for display.
+			$form->setFieldAttribute('state', 'disabled', 'true');
+
+			// Disable fields while saving.
+			$form->setFieldAttribute('state', 'filter', 'unset');
+		}
+
+		/// Modify the form based on base categories
+		if (in_array($id, $this->baseCategories))
+		{
+			// Disable fields for display.
+			$form->setFieldAttribute('state', 'disabled', 'true');
+			$form->setFieldAttribute('parent_id', 'disabled', 'true');
+
+			// Disable fields while saving.
+			$form->setFieldAttribute('state', 'filter', 'unset');
+			$form->setFieldAttribute('parent_id', 'filter', 'unset');
+		}
+
 		return $form;
 	}
 
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return  mixed  The data for the form.
+	 *
+	 * @since 1.5.0
+	 */
+	protected function loadFormData()
+	{
+		$data = Factory::getApplication()->getUserState('com_profiles.edit.category.data', array());
+		if (empty($data))
+		{
+			$data = $this->getItem();
+		}
+		$this->preprocessData('com_profiles.category', $data);
+
+		return $data;
+	}
+
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param   array $data The form data.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since 1.5.0
+	 */
+	public function save($data)
+	{
+		$pk         = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
+		$table      = $this->getTable();
+		$isNew      = true;
+		$context    = $this->option . '.' . $this->name;
+		$dispatcher = JEventDispatcher::getInstance();
+
+		// Include plugins for save events.
+		PluginHelper::importPlugin($this->events_map['save']);
+
+		// Load the row if saving an existing item.
+		if ($pk > 0)
+		{
+			$table->load($pk);
+			$isNew = false;
+		}
+
+		// Prepare alias field data.
+		$alias = (!empty($data['alias'])) ? $data['alias'] : $data['title'];
+		if (Factory::getConfig()->get('unicodeslugs') == 1)
+		{
+			$alias = OutputFilter::stringURLUnicodeSlug($alias);
+		}
+		else
+		{
+			$alias = OutputFilter::stringURLSafe($alias);
+		}
+
+		// Check alias is already exist
+		$checkAlias = $this->getTable();
+		$checkAlias->load(array('alias' => $alias));
+		if (!empty($checkAlias->id) && ($checkAlias->id != $pk || $isNew))
+		{
+			$alias = $this->generateNewAlias($alias);
+			Factory::getApplication()->enqueueMessage(Text::_('COM_PROFILES_ERROR_ALIAS_EXIST'), 'warning');
+		}
+		$data['alias'] = $alias;
+
+		// Prepare params field data.
+		if (isset($data['params']))
+		{
+			$registry       = new Registry($data['params']);
+			$data['params'] = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
+		}
+
+		// Set new parent id if parent id not matched OR while New.
+		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
+		{
+			$table->setLocation($data['parent_id'], 'last-child');
+		}
+
+		// Bind data.
+		if (!$table->bind($data))
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		// Check data.
+		if (!$table->check())
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		// Trigger before save event.
+		$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, $isNew, $data));
+		if (in_array(false, $result, true))
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		// Store data.
+		if (!$table->store())
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		// Trigger after save event.
+		$dispatcher->trigger($this->event_after_save, array($context, &$table, $isNew, $data));
+
+		// Rebuild path.
+		if (!$table->rebuildPath($table->id))
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		// Rebuild children paths.
+		if (!$table->rebuild($table->id, $table->lft, $table->level, $table->path))
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		// Set id state
+		$id = $table->id;
+		$this->setState($this->getName() . '.id', $id);
+
+		// Clear cache
+		$this->cleanCache();
+
+		return $id;
+	}
+
+
+	/**
+	 * Method to generate new alias if alias already exist
+	 *
+	 * @param   string $alias The alias.
+	 *
+	 * @return  string  Contains the modified title and alias.
+	 *
+	 * @since 1.5.0
+	 */
+	protected function generateNewAlias($alias)
+	{
+		$table = $this->getTable();
+		while ($table->load(array('alias' => $alias)))
+		{
+			$alias = StringHelper::increment($alias, 'dash');
+		}
+
+		return $alias;
+	}
+
+	/**
+	 * Method to save the reordered nested set tree.
+	 * First we save the new order values in the lft values of the changed ids.
+	 * Then we invoke the table rebuild to implement the new ordering.
+	 *
+	 * @param   array   $idArray   An array of primary key ids.
+	 * @param   integer $lft_array The lft value
+	 *
+	 * @return  boolean  False on failure or error, True otherwise
+	 *
+	 * @since 1.5.0
+	 */
+	public function saveorder($idArray = null, $lft_array = null)
+	{
+		$table = $this->getTable();
+		if (!$table->saveorder($idArray, $lft_array))
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		$this->cleanCache();
+
+		return true;
+	}
 
 	/**
 	 * Method rebuild the entire nested set tree.
@@ -95,7 +343,7 @@ class ProfilesModelCategory extends AdminModel
 		$showWarning = false;
 		foreach ($pks as $key => $pk)
 		{
-			if (in_array($pk, array(1, 2, 3)))
+			if (in_array($pk, $this->baseCategories))
 			{
 				$showWarning = true;
 				unset($pks[$key]);
@@ -124,7 +372,7 @@ class ProfilesModelCategory extends AdminModel
 		$showWarning = false;
 		foreach ($pks as $key => $pk)
 		{
-			if (in_array($pk, array(1, 2, 3)))
+			if (in_array($pk, $this->baseCategories))
 			{
 				$showWarning = true;
 				unset($pks[$key]);
