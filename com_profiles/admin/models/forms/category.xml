@@ -69,17 +69,17 @@
 		</fields>
 		<fields name="metadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
 			<field type="note" label="JGLOBAL_FIELDSET_METADATA_OPTIONS"/>
-			<field name="metakey" type="textarea"
+			<field name="keywords" type="textarea"
 				   label="JFIELD_META_KEYWORDS_LABEL"
 				   description="JFIELD_META_KEYWORDS_DESC"
 				   rows="3"
 				   cols="30"/>
-			<field name="metadesc" type="textarea"
+			<field name="description" type="textarea"
 				   label="JFIELD_META_DESCRIPTION_LABEL"
 				   description="JFIELD_META_DESCRIPTION_DESC"
 				   rows="3"
 				   cols="30"/>
-			<field name="metaimage" type="image"
+			<field name="image" type="image"
 				   label="JGLOBAL_FIELD_METAIMAGE"
 				   folder_field="images_folder"
 				   filename="meta"
