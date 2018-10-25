@@ -16,6 +16,8 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Plugin\PluginHelper;
 
 class plgSystemProfiles extends CMSPlugin
 {
@@ -165,6 +167,57 @@ class plgSystemProfiles extends CMSPlugin
 
 			$body = str_replace(JHtmlSidebar::render(), ProfilesHelper::renderSideBar($view), JResponse::getBody());
 			JResponse::setBody($body);
+		}
+	}
+
+	/**
+	 * Change forms
+	 *
+	 * @param  \Joomla\CMS\Form\Form $form The form to be altered.
+	 * @param  mixed                 $data The associated data for the form.
+	 *
+	 * @return  void
+	 *
+	 * @since 1.5.0
+	 */
+	function onContentPrepareForm($form, $data)
+	{
+		$formName = $form->getName();
+		$formData = new Registry($data);
+
+		// Add readonly attribute to plugin enabled field
+		if ($formName == 'com_plugins.plugin' && $formData->get('element', '') == 'profiles'
+			&& $formData->get('folder', '') == 'system')
+		{
+			$form->setFieldAttribute('enabled', 'readonly', 'true');
+			$form->setValue('enabled', '', 1);
+		}
+	}
+
+	/**
+	 * Disable change enabled for plugin
+	 *
+	 * @param   string  $context The context for the content passed to the plugin.
+	 * @param   array   $pks     A list of primary key ids of the content that has changed state.
+	 * @param   integer $value   The value of the state that the content has been changed to.
+	 *
+	 * @return  void
+	 *
+	 * @since 1.5.0
+	 */
+	public function onContentChangeState($context, $pks, $value)
+	{
+		if ($context == 'com_plugins.plugin')
+		{
+			$plugin = PluginHelper::getPlugin('system', 'profiles');
+			$id     = $plugin->id;
+			if (in_array($id, $pks) && $value == 0)
+			{
+				$update               = new stdClass();
+				$update->extension_id = $id;
+				$update->enabled      = 1;
+				Factory::getDbo()->updateObject('#__extensions', $update, array('extension_id'));
+			}
 		}
 	}
 }
