@@ -61,6 +61,9 @@ class ProfilesModelCategory extends AdminModel
 			// Convert the metadata field value to array.
 			$registry       = new Registry($item->metadata);
 			$item->metadata = $registry->toArray();
+
+			// Convert the items_tags field value to array.
+			$item->items_tags = explode(',', $item->items_tags);
 		}
 
 		return $item;
@@ -205,6 +208,12 @@ class ProfilesModelCategory extends AdminModel
 		{
 			$registry         = new Registry($data['metadata']);
 			$data['metadata'] = $registry->toString('json', array('bitmask' => JSON_UNESCAPED_UNICODE));
+		}
+
+		// Prepare items_tags field data.
+		if (isset($data['items_tags']))
+		{
+			$data['items_tags'] = implode(',', $data['items_tags']);
 		}
 
 		// Set new parent id if parent id not matched OR while New.

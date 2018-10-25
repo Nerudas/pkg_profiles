@@ -11,6 +11,11 @@
 			   folder_field="images_folder"
 			   filename="image"
 			   class="span12"/>
+		<field name="items_tags" type="tags"
+			   label="COM_PROFILES_CATEGORY_ITEMS_TAGS"
+			   description="COM_PROFILES_CATEGORY_ITEMS_TAGS_DESCRIPTION"
+			   class="span12"
+			   sublayout="checkboxes"/>
 	</fieldset>
 	<fieldset name="header">
 		<field name="title" type="text"

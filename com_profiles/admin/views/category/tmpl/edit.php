@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 HTMLHelper::_('jquery.framework');
 HTMLHelper::_('behavior.formvalidator');
@@ -34,6 +35,8 @@ Factory::getDocument()->addScriptDeclaration('
 	<div class="form-inline form-inline-header">
 		<?php echo $this->form->renderFieldset('header'); ?>
 	</div>
+	<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
+	<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('JGLOBAL_FIELDSET_CONTENT')); ?>
 	<div class="row-fluid">
 		<div class="span9">
 			<fieldset class="form-horizontal">
@@ -51,6 +54,19 @@ Factory::getDocument()->addScriptDeclaration('
 			</div>
 		</div>
 	</div>
+	<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
+
+	<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'tags', Text::_('COM_PROFILES_CATEGORY_ITEMS_TAGS')); ?>
+	<div class="alert alert-info">
+		<?php echo Text::_('COM_PROFILES_CATEGORY_ITEMS_TAGS_DESCRIPTION'); ?>
+	</div>
+	<div>
+		<?php echo $this->form->getInput('items_tags'); ?>
+	</div>
+
+	<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
+
+	<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 	<input type="hidden" name="task" value=""/>
 	<input type="hidden" name="return" value="<?php echo Factory::getApplication()->input->getCmd('return'); ?>"/>
 	<?php echo HTMLHelper::_('form.token'); ?>
