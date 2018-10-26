@@ -11,9 +11,21 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 
 class ProfilesModelCategories extends ListModel
 {
+	/**
+	 * Categories tags array
+	 *
+	 * @var array
+	 *
+	 * @since 1.5.0
+	 */
+	protected $_tags = null;
+
 	/**
 	 * Constructor.
 	 *
@@ -161,5 +173,86 @@ class ProfilesModelCategories extends ListModel
 		$query->order($db->escape($ordering) . ' ' . $db->escape($direction));
 
 		return $query;
+	}
+
+	/**
+	 * Method to get an array of data items.
+	 *
+	 * @return  mixed  An array of data items on success, false on failure.
+	 *
+	 * @since 1.5.0
+	 */
+	public function getItems()
+	{
+		if (!empty($items = parent::getItems()))
+		{
+			// Get items tags
+			$pks  = ArrayHelper::getColumn($items, 'items_tags');
+			$pks  = implode(',', $pks);
+			$pks  = explode(',', $pks);
+			$pks  = array_unique($pks);
+			$pks  = array_filter($pks);
+			$tags = $this->getTags($pks);
+
+			foreach ($items as &$item)
+			{
+				// Set tags
+				$item->tags = array();
+				if (!empty($item->items_tags))
+				{
+					foreach (array_filter(explode(',', $item->items_tags)) as $tagID)
+					{
+						if (!empty($tags[$tagID]))
+						{
+							$item->tags[] = $tags[$tagID];
+						}
+					}
+				}
+			}
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Method to get an array of data tags.
+	 *
+	 * @param  array $pks Tags ids array.
+	 *
+	 * @return  array Tags data array
+	 *
+	 * @since 1.5.0
+	 */
+	public function getTags($pks = null)
+	{
+		if (!is_array($this->_tags))
+		{
+			try
+			{
+				$tags = array();
+				if (!empty($pks))
+				{
+					$pks   = ArrayHelper::toInteger($pks);
+					$db    = Factory::getDbo();
+					$query = $db->getQuery(true)
+						->select(array('id', 'title', 'lft'))
+						->from('#__tags')
+						->where('id IN (' . implode(',', $pks) . ')')
+						->where('(published = 0 OR published = 1)')
+						->order($db->escape('lft') . ' ' . $db->escape('asc'));
+					$db->setQuery($query);
+
+					$tags = $db->loadObjectList('id');
+				}
+
+				$this->_tags = $tags;
+			}
+			catch (Exception $e)
+			{
+				throw new Exception(Text::_($e->getMessage()), $e->getCode());
+			}
+		}
+
+		return $this->_tags;
 	}
 }

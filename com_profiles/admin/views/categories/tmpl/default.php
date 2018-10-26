@@ -31,7 +31,7 @@ if ($saveOrder)
 	HTMLHelper::_('sortablelist.sortable', 'categoryList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false, true);
 }
 
-$columns = 6;
+$columns = 7;
 ?>
 
 <form action="<?php echo Route::_('index.php?option=com_profiles&view=categories'); ?>" method="post" name="adminForm"
@@ -61,6 +61,9 @@ $columns = 6;
 					</th>
 					<th style="min-width:100px" class="nowrap">
 						<?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_TITLE', 'c.title', $listDirn, $listOrder); ?>
+					</th>
+					<th style="min-width:100px" class="nowrap hidden-phone">
+						<?php echo Text::_('JGLOBAL_FIELD_TAGS_LABEL'); ?>
 					</th>
 					<th width="10%" class="nowrap hidden-phone">
 						<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ACCESS', 'access_level', $listDirn, $listOrder); ?>
@@ -159,6 +162,15 @@ $columns = 6;
 							<?php else : ?>
 								<?php echo $this->escape($item->title); ?>
 							<?php endif; ?>
+						</td>
+						<td class="hidden-phone">
+							<?php foreach ($item->tags as $t => $tag): ?>
+								<?php if ($t == 10): ?>
+									<strong>...</strong>
+									<?php break; ?>
+								<?php endif; ?>
+								<span class="label label-inverse"><?php echo $tag->title; ?></span>
+							<?php endforeach; ?>
 						</td>
 						<td class="small hidden-phone">
 							<?php echo $this->escape($item->access_level); ?>
