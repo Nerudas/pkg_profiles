@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class ProfilesViewCategory extends HtmlView
 {
@@ -89,22 +90,22 @@ class ProfilesViewCategory extends HtmlView
 
 		// Set page title
 		$title = ($isNew) ? Text::_('COM_PROFILES_CATEGORY_ADD') : Text::_('COM_PROFILES_CATEGORY_EDIT');
-		JToolBarHelper::title(Text::_('COM_PROFILES') . ': ' . $title, 'location');
+		ToolbarHelper::title(Text::_('COM_PROFILES') . ': ' . $title, 'location');
 
 		// Add apply & save buttons
 		if ($canDo->get('core.edit'))
 		{
-			JToolbarHelper::apply('category.apply');
-			JToolbarHelper::save('category.save');
+			ToolbarHelper::apply('category.apply');
+			ToolbarHelper::save('category.save');
 		}
 
 		// Add save and new button
 		if ($canDo->get('core.create'))
 		{
-			JToolbarHelper::save2new('category.save2new');
+			ToolbarHelper::save2new('category.save2new');
 		}
 
 		// Add cancel button
-		JToolbarHelper::cancel('category.cancel', 'JTOOLBAR_CLOSE');
+		ToolbarHelper::cancel('category.cancel', 'JTOOLBAR_CLOSE');
 	}
 }
