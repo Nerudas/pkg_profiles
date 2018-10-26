@@ -31,7 +31,7 @@ if ($saveOrder)
 	HTMLHelper::_('sortablelist.sortable', 'categoryList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false, true);
 }
 
-$columns = 7;
+$columns = 6;
 ?>
 
 <form action="<?php echo Route::_('index.php?option=com_profiles&view=categories'); ?>" method="post" name="adminForm"
@@ -59,10 +59,10 @@ $columns = 7;
 					<th width="2%" style="min-width:100px" class="center">
 						<?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'c.state', $listDirn, $listOrder); ?>
 					</th>
-					<th style="min-width:100px" class="nowrap">
+					<th class="nowrap">
 						<?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_TITLE', 'c.title', $listDirn, $listOrder); ?>
 					</th>
-					<th style="min-width:100px" class="nowrap hidden-phone">
+					<th class="nowrap hidden-phone">
 						<?php echo Text::_('JGLOBAL_FIELD_TAGS_LABEL'); ?>
 					</th>
 					<th width="10%" class="nowrap hidden-phone">
@@ -140,7 +140,7 @@ $columns = 7;
 						<td class="center">
 							<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 						</td>
-						<td class="center">
+						<td class="center nowrap">
 							<div class="btn-group">
 								<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'categories.',
 									($canChange && !$baseCategory), 'cb'); ?>
@@ -152,7 +152,7 @@ $columns = 7;
 								<?php endif; ?>
 							</div>
 						</td>
-						<td>
+						<td class="nowrap">
 							<?php echo LayoutHelper::render('joomla.html.treeprefix', array('level' => ($item->level + 1))); ?>
 							<?php if ($canEdit) : ?>
 								<a class="hasTooltip" title="<?php echo Text::_('JACTION_EDIT'); ?>"
@@ -163,13 +163,9 @@ $columns = 7;
 								<?php echo $this->escape($item->title); ?>
 							<?php endif; ?>
 						</td>
-						<td class="hidden-phone">
+						<td class="hidden-phone table-tags">
 							<?php foreach ($item->tags as $t => $tag): ?>
-								<?php if ($t == 10): ?>
-									<strong>...</strong>
-									<?php break; ?>
-								<?php endif; ?>
-								<span class="label label-inverse"><?php echo $tag->title; ?></span>
+								<span class="tag"><?php echo $tag->title; ?></span>
 							<?php endforeach; ?>
 						</td>
 						<td class="small hidden-phone">
