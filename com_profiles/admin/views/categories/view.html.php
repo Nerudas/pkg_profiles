@@ -13,8 +13,10 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Layout\LayoutHelper;
 
 class ProfilesViewCategories extends HtmlView
 {
@@ -168,6 +170,15 @@ class ProfilesViewCategories extends HtmlView
 		elseif ($canDo->get('core.edit.state'))
 		{
 			ToolbarHelper::trash('categories.trash');
+		}
+
+		// Add batch tagging button
+		if ($user->authorise('core.edit', 'com_profiles'))
+		{
+			$button = LayoutHelper::render('plugins.system.fieldtypes.tags.batch.toolbar');
+
+			$toolbar = Toolbar::getInstance('toolbar');
+			$toolbar->appendButton('Custom', $button, 'batch-tagging');
 		}
 
 		// Add rebuild button

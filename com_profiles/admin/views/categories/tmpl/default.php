@@ -178,6 +178,8 @@ $columns = 6;
 				<?php endforeach; ?>
 				</tbody>
 			</table>
+			<?php echo LayoutHelper::render('plugins.system.fieldtypes.tags.batch.modal',
+				array('task' => 'category.batch')); ?>
 		<?php endif; ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="boxchecked" value="0"/>

@@ -22,4 +22,26 @@ class ProfilesControllerCategory extends FormController
 	 * @since 1.5.0
 	 */
 	protected $text_prefix = 'COM_PROFILES_CATEGORY';
+
+	/**
+	 * Method to run batch operations.
+	 *
+	 * @param   \Joomla\CMS\MVC\Model\BaseDatabaseModel $model The model.
+	 *
+	 * @return  boolean  True if successful, false otherwise and internal error is set.
+	 *
+	 * @since 1.5.0
+	 */
+	public function batch($model = null)
+	{
+		$this->checkToken();
+
+		// Set the model
+		$model = $this->getModel('Category');
+
+		// Preset the redirect
+		$this->setRedirect('index.php?option=com_profiles&view=categories');
+
+		return parent::batch($model);
+	}
 }

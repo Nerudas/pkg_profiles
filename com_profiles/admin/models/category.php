@@ -18,6 +18,7 @@ use Joomla\String\StringHelper;
 use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Utilities\ArrayHelper;
 
 JLoader::register('FieldTypesHelperFolder', JPATH_PLUGINS . '/system/fieldtypes/helpers/folder.php');
 
@@ -425,5 +426,68 @@ class ProfilesModelCategory extends AdminModel
 		}
 
 		return parent::delete($pks);
+	}
+
+	/**
+	 * Batch tag a list of item.
+	 *
+	 * @param   integer $value    The value of the new tag.
+	 * @param   array   $pks      An array of row IDs.
+	 * @param   array   $contexts An array of item contexts.
+	 *
+	 * @return  boolean  True if successful, false otherwise and internal error is set.
+	 *
+	 * @since 1.5.0
+	 */
+	protected function batchTag($value, $pks, $contexts)
+	{
+		// Initialize re-usable member properties, and re-usable local variables
+		$this->initBatch();
+
+		// Check can.edit authorise
+		$user = Factory::getUser();
+		foreach ($pks as $pk)
+		{
+			if (!$user->authorise('core.edit', $contexts[$pk]))
+			{
+				$this->setError(Text::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+
+				return false;
+			}
+		}
+
+		// Update categories tags
+		try
+		{
+			// Get categories
+			$pks = ArrayHelper::toInteger($pks);
+
+			$db    = Factory::getDbo();
+			$query = $db->getQuery(true)
+				->select(array('id', 'items_tags'))
+				->from('#__profiles_categories')
+				->where('id IN (' . implode(',', $pks) . ')');
+			$db->setQuery($query);
+
+			$categories = $db->loadObjectList();
+			foreach ($categories as $category)
+			{
+				$items_tags = explode(',', $category->items_tags);
+				$items_tags = array_merge($items_tags, $value);
+				$items_tags = array_unique($items_tags);
+
+				$category->items_tags = implode(',', $items_tags);
+
+				$db->updateObject('#__profiles_categories', $category, array('id'));
+			}
+		}
+		catch (Exception $e)
+		{
+			$this->setError(Text::_($e->getMessage()));
+
+			return false;
+		}
+
+		return true;
 	}
 }

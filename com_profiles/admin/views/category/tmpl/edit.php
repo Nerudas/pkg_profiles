@@ -63,7 +63,6 @@ Factory::getDocument()->addScriptDeclaration('
 	<div>
 		<?php echo $this->form->getInput('items_tags'); ?>
 	</div>
-
 	<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
 
 	<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
