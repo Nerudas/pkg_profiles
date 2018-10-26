@@ -68,8 +68,8 @@
 				   label="JFIELD_ALT_LAYOUT_LABEL"
 				   description="JFIELD_ALT_COMPONENT_LAYOUT_DESC"
 				   useglobal="true"
-				   extension="com_centers"
-				   view="list"
+				   extension="com_profiles"
+				   view="profiles"
 				   class="span12"/>
 		</fields>
 		<fields name="metadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
