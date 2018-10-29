@@ -160,11 +160,14 @@ class ProfilesModelCategory extends AdminModel
 	 */
 	public function save($data)
 	{
-		$pk         = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
-		$table      = $this->getTable();
-		$isNew      = true;
-		$context    = $this->option . '.' . $this->name;
-		$dispatcher = JEventDispatcher::getInstance();
+		$app          = Factory::getApplication();
+		$pk           = (!empty($data['id'])) ? $data['id'] : (int) $this->getState($this->getName() . '.id');
+		$table        = $this->getTable();
+		$isNew        = true;
+		$context      = $this->option . '.' . $this->name;
+		$dispatcher   = JEventDispatcher::getInstance();
+		$currentID    = $app->input->getInt('id');
+		$folderHelper = new FieldTypesHelperFolder();
 
 		// Include plugins for save events.
 		PluginHelper::importPlugin($this->events_map['save']);
@@ -174,6 +177,40 @@ class ProfilesModelCategory extends AdminModel
 		{
 			$table->load($pk);
 			$isNew = false;
+		}
+
+		// Set new parent id if parent id not matched OR while New.
+		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
+		{
+			$table->setLocation($data['parent_id'], 'last-child');
+		}
+
+		// Prepare copy data
+		if ($app->input->get('task') == 'save2copy')
+		{
+			$originTable = clone $this->getTable();
+			$originTable->load($currentID);
+
+			// Set table and alias
+			if ($data['title'] == $originTable->title)
+			{
+				list($title, $alias) = $this->generateCopyTitle($data['alias'], $data['title']);
+				$data['title'] = $title;
+				$data['alias'] = $alias;
+			}
+			else
+			{
+				if ($data['alias'] == $originTable->alias)
+				{
+					$data['alias'] = '';
+				}
+			}
+
+			// Set state
+			$data['state'] = 0;
+
+			// Set images folder
+			$data['images_folder'] = $folderHelper->copyItemFolder($currentID, $this->images_root);
 		}
 
 		// Prepare alias field data.
@@ -215,12 +252,6 @@ class ProfilesModelCategory extends AdminModel
 		if (isset($data['items_tags']))
 		{
 			$data['items_tags'] = implode(',', $data['items_tags']);
-		}
-
-		// Set new parent id if parent id not matched OR while New.
-		if ($table->parent_id != $data['parent_id'] || $data['id'] == 0)
-		{
-			$table->setLocation($data['parent_id'], 'last-child');
 		}
 
 		// Bind data.
@@ -285,20 +316,41 @@ class ProfilesModelCategory extends AdminModel
 		// Move images folder if new item
 		if ($isNew && !empty($data['images_folder']))
 		{
-			$folderHelper = new FieldTypesHelperFolder();
 			$folderHelper->moveTemporaryFolder($data['images_folder'], $id, $this->images_root);
 		}
 
 		return $id;
 	}
 
+	/**
+	 * Method to generate new title & alias if copy item
+	 *
+	 * @param   string $alias The alias.
+	 * @param   string $title The title.
+	 *
+	 * @return  array    Contains the modified title and alias.
+	 *
+	 * @since   1.7
+	 */
+	protected function generateCopyTitle($alias, $title)
+	{
+		$table = $this->getTable();
+
+		while ($table->load(array('alias' => $alias)))
+		{
+			$title = StringHelper::increment($title);
+			$alias = StringHelper::increment($alias, 'dash');
+		}
+
+		return array($title, $alias);
+	}
 
 	/**
 	 * Method to generate new alias if alias already exist
 	 *
 	 * @param   string $alias The alias.
 	 *
-	 * @return  string  Contains the modified title and alias.
+	 * @return  string  Contains the modified alias.
 	 *
 	 * @since 1.5.0
 	 */
