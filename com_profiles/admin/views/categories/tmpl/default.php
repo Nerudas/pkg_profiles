@@ -144,6 +144,10 @@ $columns = 6;
 							<div class="btn-group">
 								<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'categories.',
 									($canChange && !$baseCategory), 'cb'); ?>
+								<?php echo HTMLHelper::_('jgrid.action', $i, 'categories.duplicate', array(
+									'tip'          => Text::_('JTOOLBAR_DUPLICATE'),
+									'active_class' => 'copy', 'inactive_class' => 'copy',
+									'enabled'      => ($canChange && !$baseCategory))); ?>
 								<?php if ($item->state != -2): ?>
 									<?php echo HTMLHelper::_('jgrid.action', $i, 'categories.trash', array(
 										'tip'          => Text::_('JTOOLBAR_TRASH'),

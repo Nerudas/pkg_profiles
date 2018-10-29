@@ -155,6 +155,12 @@ class ProfilesViewCategories extends HtmlView
 			ToolbarHelper::editList('category.edit');
 		}
 
+		// Add duplicate button
+		if ($canDo->get('core.create'))
+		{
+			ToolbarHelper::custom('categories.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true);
+		}
+
 		// Add publish & unpublish buttons
 		if ($canDo->get('core.edit.state'))
 		{

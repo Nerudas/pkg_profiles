@@ -14,6 +14,7 @@ use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Language\Text;
+use Joomla\Utilities\ArrayHelper;
 
 class ProfilesControllerCategories extends AdminController
 {
@@ -51,6 +52,42 @@ class ProfilesControllerCategories extends AdminController
 		$this->setMessage(Text::_('COM_PROFILES_CATEGORIES_REBUILD_FAILURE'));
 
 		return false;
+	}
+
+	/**
+	 * Method to clone an existing item.
+	 *
+	 * @return  boolean  False on failure or error, true on success.
+	 *
+	 * @since 1.5.0
+	 */
+	public function duplicate()
+	{
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		$this->setRedirect(Route::_('index.php?option=com_profiles&view=categories', false));
+
+		try
+		{
+			$pks = $this->input->post->get('cid', array(), 'array');
+			$pks = ArrayHelper::toInteger($pks);
+
+			if (empty($pks))
+			{
+				throw new Exception(Text::_('COM_PROFILES_ERROR_NO_CATEGORIES_SELECTED'));
+			}
+
+			$model = $this->getModel();
+			$model->duplicate($pks);
+
+			$this->setMessage(Text::plural('COM_PROFILES_CATEGORIES_N_ITEMS_DUPLICATED', count($pks)));
+
+			return true;
+		}
+		catch (Exception $e)
+		{
+			throw new Exception($e->getMessage(), 500);
+		}
 	}
 
 	/**

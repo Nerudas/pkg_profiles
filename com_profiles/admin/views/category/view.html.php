@@ -99,10 +99,15 @@ class ProfilesViewCategory extends HtmlView
 			ToolbarHelper::save('category.save');
 		}
 
-		// Add save2new and save2copy new buttons
+		// Add save new button
 		if ($canDo->get('core.create'))
 		{
 			ToolbarHelper::save2new('category.save2new');
+		}
+
+		// Add save and copy button
+		if ($canDo->get('core.create') && !in_array($this->item->id, $this->getModel()->baseCategories))
+		{
 			ToolbarHelper::save2copy('category.save2copy');
 		}
 

@@ -31,7 +31,7 @@ class ProfilesModelCategory extends AdminModel
 	 *
 	 * @since 1.5.0
 	 */
-	protected $baseCategories = array(1, 2, 3);
+	public $baseCategories = array(1, 2, 3);
 
 	/**
 	 * Images root path
@@ -188,6 +188,14 @@ class ProfilesModelCategory extends AdminModel
 		// Prepare copy data
 		if ($app->input->get('task') == 'save2copy')
 		{
+			// Set error if base category
+			if (in_array($currentID, $this->baseCategories))
+			{
+				$this->setError(Text::_('COM_PROFILES_ERROR_BASE_CATEGORIES_STATE'));
+
+				return false;
+			}
+
 			$originTable = clone $this->getTable();
 			$originTable->load($currentID);
 
@@ -330,7 +338,7 @@ class ProfilesModelCategory extends AdminModel
 	 *
 	 * @return  array    Contains the modified title and alias.
 	 *
-	 * @since   1.7
+	 * @since 1.5.0
 	 */
 	protected function generateCopyTitle($alias, $title)
 	{
@@ -478,6 +486,83 @@ class ProfilesModelCategory extends AdminModel
 		}
 
 		return parent::delete($pks);
+	}
+
+	/**
+	 * Method to duplicate one or more records.
+	 *
+	 * @param   array &$pks An array of primary key IDs.
+	 *
+	 * @return  array|JException  New ids array on success, JException instance on error
+	 *
+	 * @since 1.5.0
+	 *
+	 * @throws  Exception
+	 */
+	public function duplicate(&$pks)
+	{
+		// Access checks.
+		if (!Factory::getUser()->authorise('core.create', 'com_profiles'))
+		{
+			throw new Exception(Text::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
+		}
+
+		// Copy categories
+		try
+		{
+			// Check base categories
+			$showWarning = false;
+			foreach ($pks as $key => $pk)
+			{
+				if (in_array($pk, $this->baseCategories))
+				{
+					$showWarning = true;
+					unset($pks[$key]);
+				}
+			}
+			if ($showWarning)
+			{
+				Factory::getApplication()->enqueueMessage(Text::_('COM_PROFILES_ERROR_BASE_CATEGORIES_STATE'), 'warning');
+			}
+
+			$newIDs       = array();
+			$folderHelper = new FieldTypesHelperFolder();
+
+			foreach ($pks as $pk)
+			{
+				if ($item = $this->getItem($pk))
+				{
+					// Set id
+					$item->id = 0;
+
+					// Set title and alias
+					list($title, $alias) = $this->generateCopyTitle($item->alias, $item->title);
+					$item->title = $title;
+					$item->alias = $alias;
+
+					// Set images folder
+					$item->images_folder = $folderHelper->copyItemFolder($pk, $this->images_root);
+
+					// Set state
+					$item->state = 0;
+
+					// Save copy
+					if ($newID = $this->save(ArrayHelper::fromObject($item)))
+					{
+						$newIDs[] = $newID;
+					}
+				}
+			}
+
+			// Clear cache
+			$this->cleanCache();
+
+			return $newIDs;
+		}
+		catch (Exception $e)
+		{
+			throw new Exception(Text::_($e->getMessage()));
+		}
 	}
 
 	/**
