@@ -36,6 +36,9 @@ class com_profilesInstallerScript
 		// Check base categories
 		$this->checkCategories();
 
+		// Check profiles
+		$this->checkProfiles();
+
 		// Move layouts
 		$this->moveLayouts();
 
@@ -169,6 +172,18 @@ class com_profilesInstallerScript
 			$model = BaseDatabaseModel::getInstance('Category', 'ProfilesModel', array('ignore_request' => true));
 			$model->rebuild();
 		}
+	}
+
+	/**
+	 * Method to create profiles in not exist
+	 *
+	 * @since 1.5.0
+	 */
+	protected function checkProfiles()
+	{
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/models');
+		$model = BaseDatabaseModel::getInstance('Profile', 'ProfilesModel', array('ignore_request' => true));
+		$model->synchronize();
 	}
 
 	/**

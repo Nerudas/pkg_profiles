@@ -10,3 +10,120 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+
+JLoader::register('FieldTypesHelperFolder', JPATH_PLUGINS . '/system/fieldtypes/helpers/folder.php');
+
+class ProfilesModelProfile extends AdminModel
+{
+	/**
+	 * Images root path
+	 *
+	 * @var string
+	 *
+	 * @since 1.5.0
+	 */
+	protected $images_root = 'images/profiles';
+
+	/**
+	 * Abstract method for getting the form from the model.
+	 *
+	 * @param   array   $data     Data for the form.
+	 * @param   boolean $loadData True if the form is to load its own data (default case), false if not.
+	 *
+	 * @return Joomla\CMS\Form\Form|boolean  A Form object on success, false on failure
+	 *
+	 * @since 1.5.0
+	 */
+	public function getForm($data = array(), $loadData = true)
+	{
+		$form = $this->loadForm('com_profiles.profile', 'profile', array('control' => 'jform', 'load_data' => $loadData));
+		if (empty($form))
+		{
+			return false;
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Method to synchronize users and profiles
+	 *
+	 * @return  array|JException  Profiles ids array on success, JException instance on error
+	 *
+	 * @since 1.5.0
+	 */
+	public function synchronize()
+	{
+		// Access checks.
+		if (!Factory::getUser()->authorise('core.create', 'com_profiles'))
+		{
+			throw new Exception(Text::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
+		}
+
+		// Synchronize profiles
+		try
+		{
+			$db = Factory::getDbo();
+
+			// Get users
+			$query = $db->getQuery(true)
+				->select('*')
+				->from('#__users');
+			$db->setQuery($query);
+			$users = $db->loadObjectList('id');
+
+			// Get profiles ids
+			$query = $db->getQuery(true)
+				->select('id')
+				->from('#__profiles');
+			$db->setQuery($query);
+			$profiles = $db->loadColumn();
+
+			// Synchronize
+			$newIDs       = array();
+			$folderHelper = new FieldTypesHelperFolder();
+			foreach ($users as $id => $user)
+			{
+				if (!in_array($id, $profiles))
+				{
+					// Prepare profile object
+					$profile           = new stdClass();
+					$profile->id       = $user->id;
+					$profile->name     = $user->name;
+					$profile->alias    = 'id' . $user->id;
+					$profile->state    = ($user->block == 1) ? -2 : 1;
+					$profile->in_work  = 0;
+					$profile->type     = 'natural';
+					$profile->created  = $user->registerDate;
+					$profile->modified = Factory::getDate()->toSql();
+					$profile->avatar   = 0;
+					$profile->access   = 1;
+					$profile->hits     = 0;
+					$profile->region   = '*';
+
+					// Insert profile
+					if ($db->insertObject('#__profiles', $profile))
+					{
+						// Create images folder
+						$folderHelper->getItemFolder($id, $this->images_root);
+
+						$newIDs[] = $id;
+					}
+				}
+			}
+
+			// Clear cache
+			$this->cleanCache();
+
+			return $newIDs;
+		}
+		catch (Exception $e)
+		{
+			throw new Exception(Text::_($e->getMessage()));
+		}
+	}
+
+}
