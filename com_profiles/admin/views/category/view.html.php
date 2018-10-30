@@ -13,7 +13,9 @@ defined('_JEXEC') or die;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Application\SiteApplication;
 
 class ProfilesViewCategory extends HtmlView
 {
@@ -113,5 +115,23 @@ class ProfilesViewCategory extends HtmlView
 
 		// Add cancel button
 		ToolbarHelper::cancel('category.cancel', 'JTOOLBAR_CLOSE');
+
+		// Add preview button
+		if (!$isNew)
+		{
+			JLoader::register('ProfilesHelperRoute', JPATH_SITE . '/components/com_profiles/helpers/route.php');
+			$siteRouter = SiteApplication::getRouter();
+
+			$link = ProfilesHelperRoute::getProfilesRoute($this->item->id);
+			$link = $siteRouter->build($link)->toString();
+			$link = str_replace('administrator/', '', $link);
+
+			$button = '<a href="' . $link . '" class="btn btn-small" target="_blank">'
+				. '<span class="icon-eye" aria-hidden="true"></span>'
+				. Text::_('JGLOBAL_PREVIEW') . '</a>';
+
+			$toolbar = ToolBar::getInstance('toolbar');
+			$toolbar->appendButton('Custom', $button, 'preview');
+		}
 	}
 }

@@ -8,7 +8,8 @@
  */
 
 #toolbar #toolbar-options-profiles,
-#toolbar #toolbar-options-users {
+#toolbar #toolbar-options-users,
+#toolbar #toolbar-preview {
 	float: right;
 }
 

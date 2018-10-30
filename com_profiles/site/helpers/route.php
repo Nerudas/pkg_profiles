@@ -10,3 +10,21 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Helper\RouteHelper;
+
+class ProfilesHelperRoute extends RouteHelper
+{
+	/**
+	 * Fetches profiles view route
+	 *
+	 * @param  int $id Category ID
+	 *
+	 * @return  string
+	 *
+	 * @since 1.5.0
+	 */
+	public static function getProfilesRoute($id = 1)
+	{
+		return 'index.php?option=com_profiles&view=profiles&id=' . $id;
+	}
+}
