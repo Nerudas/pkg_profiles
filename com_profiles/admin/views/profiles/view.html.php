@@ -10,3 +10,209 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Layout\LayoutHelper;
+
+class ProfilesViewProfiles extends HtmlView
+{
+	/**
+	 * The model state
+	 *
+	 * @var  Joomla\CMS\Object\CMSObject
+	 *
+	 * @since 1.5.0
+	 */
+	protected $state;
+
+	/**
+	 * Items array
+	 *
+	 * @var  array
+	 *
+	 * @since 1.5.0
+	 */
+	protected $items;
+
+	/**
+	 * Profiles includes tags ids
+	 *
+	 * @var  array
+	 *
+	 * @since 1.5.0
+	 */
+	protected $includesTags;
+
+	/**
+	 * The pagination object
+	 *
+	 * @var  \Joomla\CMS\Pagination\Pagination
+	 *
+	 * @since 1.5.0
+	 */
+	protected $pagination;
+
+	/**
+	 * Form object for search filters
+	 *
+	 * @var  \Joomla\CMS\Form\Form
+	 *
+	 * @since 1.5.0
+	 */
+	public $filterForm;
+
+	/**
+	 * The active search filters
+	 *
+	 * @var  array
+	 *
+	 * @since 1.5.0
+	 */
+	public $activeFilters;
+
+	/**
+	 * View sidebar
+	 *
+	 * @var  string
+	 *
+	 * @since 1.5.0
+	 */
+	public $sidebar;
+
+	/**
+	 * Ordering divisions
+	 *
+	 * @var  array
+	 *
+	 * @since 1.5.0
+	 */
+	public $ordering;
+
+	/**
+	 * Display the view
+	 *
+	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
+	 *
+	 * @return mixed A string if successful, otherwise an Error object.
+	 *
+	 * @throws Exception
+	 *
+	 * @since 1.5.0
+	 */
+	public function display($tpl = null)
+	{
+		$this->state         = $this->get('State');
+		$this->items         = $this->get('Items');
+		$this->includesTags  = $this->get('IncludesTags');
+		$this->pagination    = $this->get('Pagination');
+		$this->filterForm    = $this->get('FilterForm');
+		$this->activeFilters = $this->get('ActiveFilters');
+
+		// Add title and toolbar
+		$this->addToolbar();
+
+		// Prepare sidebar
+		ProfilesHelper::addSubmenu('profiles');
+		$this->sidebar = JHtmlSidebar::render();
+
+		// Check for errors.
+		if (count($errors = $this->get('Errors')))
+		{
+			throw new Exception(implode('\n', $errors), 500);
+		}
+
+		return parent::display($tpl);
+	}
+
+	/**
+	 * Add title and toolbar.
+	 *
+	 * @return  void
+	 *
+	 * @since 1.5.0
+	 */
+	protected function addToolbar()
+	{
+		$user  = Factory::getUser();
+		$canDo = ProfilesHelper::getActions('com_profiles', 'profiles');
+
+		// Set page title
+		ToolbarHelper::title(Text::_('COM_PROFILES'), 'users');
+
+		// Add create button
+		if ($canDo->get('core.create'))
+		{
+			ToolbarHelper::addNew('profile.add');
+		}
+
+		// Add edit button
+		if ($canDo->get('core.edit'))
+		{
+			ToolbarHelper::editList('profile.edit');
+		}
+
+		// Add publish & unpublish buttons
+		if ($canDo->get('core.edit.state'))
+		{
+			ToolbarHelper::publish('profiles.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('profiles.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+		}
+
+		// Add delete/trash buttons
+		if ($this->state->get('filter.published') == -2 && $canDo->get('core.delete'))
+		{
+			ToolbarHelper::deleteList('JGLOBAL_CONFIRM_DELETE', 'profiles.delete', 'JTOOLBAR_EMPTY_TRASH');
+		}
+		elseif ($canDo->get('core.edit.state'))
+		{
+			ToolbarHelper::trash('profiles.trash');
+		}
+
+		// Add batch tagging button
+		if ($user->authorise('core.edit', 'com_profiles'))
+		{
+			$button = LayoutHelper::render('plugins.system.fieldtypes.tags.batch.toolbar');
+
+			$toolbar = Toolbar::getInstance('toolbar');
+			$toolbar->appendButton('Custom', $button, 'batch-tagging');
+		}
+
+		// Add synchronize buttons
+		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))
+		{
+			ToolbarHelper::custom('profiles.synchronize', 'loop', 'loop', 'COM_PROFILES_SYNCHRONIZE_TOOLBAR', false);
+		}
+		// Add preferences buttons
+		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))
+		{
+			$return = urlencode(base64_encode(Uri::getInstance()->toString()));
+			$link   = 'index.php?option=com_config&view=component&return=' . $return . '&component=';
+
+			ToolbarHelper::link($link . 'com_profiles', Text::_('COM_PROFILES_CONFIG_PROFILES'), 'options-profiles');
+			ToolbarHelper::link($link . 'com_users', Text::_('COM_PROFILES_CONFIG_USERS'), 'options-users');
+		}
+	}
+
+	/**
+	 * Returns an array of fields the table can be sorted by
+	 *
+	 * @return  array  Array containing the field name to sort by as the key and display text as value
+	 *
+	 * @since 1.5.0
+	 */
+	protected function getSortFields()
+	{
+		return [
+			'p.state'      => Text::_('JSTATUS'),
+			'p.id'         => Text::_('JGRID_HEADING_ID'),
+			'p.name'       => Text::_('JGLOBAL_TITLE'),
+			'access_level' => Text::_('JGRID_HEADING_ACCESS'),
+			'last_visit'   => Text::_('COM_PROFILES_PROFILE_LAST_VISIT'),
+			'p.created'    => Text::_('COM_PROFILES_PROFILE_REGISTRATION'),
+		];
+	}
+}

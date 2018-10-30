@@ -44,7 +44,6 @@ class ProfilesModelCategories extends ListModel
 				'published', 'state', 'c.state',
 				'access_level', 'ag.title',
 				'access', 'c.access',
-				'ordering', 'c.ordering'
 			);
 		}
 		parent::__construct($config);
@@ -151,10 +150,10 @@ class ProfilesModelCategories extends ListModel
 			}
 			else
 			{
-				$text_columns = array('c.title', 'c.description', 'c.metadata');
+				$columns = array('c.title', 'c.description', 'c.metadata');
 
 				$sql = array();
-				foreach ($text_columns as $column)
+				foreach ($columns as $column)
 				{
 					$sql[] = $db->quoteName($column) . ' LIKE '
 						. $db->quote('%' . str_replace(' ', '%', $db->escape(trim($search), true) . '%'));

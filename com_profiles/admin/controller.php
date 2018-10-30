@@ -21,5 +21,5 @@ class ProfilesController extends BaseController
 	 *
 	 * @since 1.5.0
 	 */
-	protected $default_view = 'categories';
+	protected $default_view = 'profiles';
 }
