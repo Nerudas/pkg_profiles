@@ -49,6 +49,26 @@ class plgSystemProfiles extends CMSPlugin
 				if ($view == 'users')
 				{
 					$redirect = 'index.php?option=com_profiles&view=profiles';
+					if (!empty($app->input->get('layout')))
+					{
+						$redirect .= '&layout=' . $app->input->get('layout');
+					}
+					if (!empty($app->input->get('tmpl')))
+					{
+						$redirect .= '&tmpl=' . $app->input->get('tmpl');
+					}
+					if (!empty($app->input->get('required')))
+					{
+						$redirect .= '&required=' . $app->input->get('required');
+					}
+					if (!empty($app->input->get('field')))
+					{
+						$redirect .= '&field=' . $app->input->get('field');
+					}
+					if (!empty($app->input->get('ismoo')))
+					{
+						$redirect .= '&ismoo=' . $app->input->get('ismoo');
+					}
 				}
 
 				// User redirect
