@@ -34,11 +34,11 @@
 }
 
 @media (min-width: 1650px) {
-	#general .tab-adaptive .span4 {
+	.row-fluid.tab-adaptive .span4 {
 		width: 22.9281768%;
 	}
 
-	#general .row-fluid.row-adaptive .span8 {
+	.row-fluid.tab-adaptive .span8 {
 		width: 74.30939227%;
 	}
 }
