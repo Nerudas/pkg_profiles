@@ -42,8 +42,8 @@ class ProfilesModelCategories extends ListModel
 				'id', 'c.id',
 				'title', 'c.title',
 				'published', 'state', 'c.state',
-				'access_level', 'ag.title',
-				'access', 'c.access',
+				'access_level', 'ag.title', 'access', 'c.access',
+				'parent_id', 'c.parent_id', 'parent'
 			);
 		}
 		parent::__construct($config);
@@ -75,6 +75,10 @@ class ProfilesModelCategories extends ListModel
 		$access = $this->getUserStateFromRequest($this->context . '.filter.access', 'filter_access');
 		$this->setState('filter.access', $access);
 
+		// Set parent filter state
+		$parent = $this->getUserStateFromRequest($this->context . '.filter.parent', 'filter_parent', '');
+		$this->setState('filter.parent', $parent);
+
 		// List state information.
 		$ordering  = empty($ordering) ? 'c.lft' : $ordering;
 		$direction = empty($direction) ? 'asc' : $direction;
@@ -100,6 +104,7 @@ class ProfilesModelCategories extends ListModel
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.access');
 		$id .= ':' . $this->getState('filter.published');
+		$id .= ':' . $this->getState('filter.parent');
 
 		return parent::getStoreId($id);
 	}
@@ -138,6 +143,22 @@ class ProfilesModelCategories extends ListModel
 		elseif ($published === '')
 		{
 			$query->where('(c.state = 0 OR c.state = 1)');
+		}
+
+		// Filter by parent state
+		$parent = $this->getState('filter.parent');
+		if (is_numeric($parent))
+		{
+			// Create a subquery for the sub-items list
+			$subQuery = $db->getQuery(true)
+				->select('sub.id')
+				->from('#__profiles_categories as sub')
+				->join('INNER', '#__profiles_categories as this ON sub.lft > this.lft AND sub.rgt < this.rgt')
+				->where('this.id = ' . (int) $parent);
+
+			// Add the subquery to the main query
+			$query->where('(c.parent_id = ' . (int) $parent . ' OR ' . 'c.id =' . (int) $parent .
+				' OR c.parent_id IN (' . (string) $subQuery . '))');
 		}
 
 		// Filter by search.

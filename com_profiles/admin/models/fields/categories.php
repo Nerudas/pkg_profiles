@@ -53,7 +53,7 @@ class JFormFieldCategories extends JFormFieldList
 		$category_view = ($app->isAdmin() && $component == 'com_profiles' && $view == 'category');
 
 		// Unset root category
-		if ($category_view && ($id == 0 || $id > 3))
+		if (($category_view && ($id == 0 || $id > 3)) || !$category_view)
 		{
 			unset($categories[1]);
 		}

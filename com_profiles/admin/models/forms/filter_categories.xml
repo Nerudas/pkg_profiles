@@ -8,6 +8,9 @@
 			<option value="0">JUNPUBLISHED</option>
 			<option value="-2">JTRASHED</option>
 		</field>
+		<field name="parent" type="categories" onchange="this.form.submit();">
+			<option value="">COM_PROFILES_CATEGORY_PARENT_SELECT</option>
+		</field>
 		<field name="access" type="accesslevel" onchange="this.form.submit();">
 			<option value="">JOPTION_SELECT_ACCESS</option>
 		</field>
