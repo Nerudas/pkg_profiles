@@ -37,13 +37,13 @@ Factory::getDocument()->addScriptDeclaration('
 	</div>
 	<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
 	<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('JGLOBAL_FIELDSET_CONTENT')); ?>
-	<div class="row-fluid">
-		<div class="span9">
+	<div class="row-fluid row-adaptive">
+		<div class="span8">
 			<fieldset class="form-horizontal">
 				<?php echo $this->form->getInput('description'); ?>
 			</fieldset>
 		</div>
-		<div class="span3">
+		<div class="span4">
 			<div class="well">
 				<fieldset class="form-horizontal form-horizontal-desktop">
 					<div class="control-group">
