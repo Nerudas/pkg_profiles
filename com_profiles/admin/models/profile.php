@@ -13,6 +13,8 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
 
 JLoader::register('FieldTypesHelperFolder', JPATH_PLUGINS . '/system/fieldtypes/helpers/folder.php');
 
@@ -26,6 +28,48 @@ class ProfilesModelProfile extends AdminModel
 	 * @since 1.5.0
 	 */
 	protected $images_root = 'images/profiles';
+
+	/**
+	 * Method to get a single record.
+	 *
+	 * @param   integer $pk The id of the primary key.
+	 *
+	 * @return  mixed  Object on success, false on failure.
+	 *
+	 * @since 1.5.0
+	 */
+	public function getItem($pk = null)
+	{
+		if ($item = parent::getItem($pk))
+		{
+			// Convert the params field value to array.
+			$registry     = new Registry($item->params);
+			$item->params = $registry->toArray();
+
+			// Convert the item_tags field value to array.
+			$item->item_tags = explode(',', $item->item_tags);
+		}
+
+		return $item;
+	}
+
+	/**
+	 * Returns a Table object, always creating it.
+	 *
+	 * @param   string $type   The table type to instantiate
+	 * @param   string $prefix A prefix for the table class name. Optional.
+	 * @param   array  $config Configuration array for model. Optional.
+	 *
+	 * @return  Table    A database object
+	 *
+	 * @since 1.5.0
+	 */
+	public function getTable($type = 'Profiles', $prefix = 'ProfilesTable', $config = array())
+	{
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_profiles/tables');
+
+		return Table::getInstance($type, $prefix, $config);
+	}
 
 	/**
 	 * Abstract method for getting the form from the model.

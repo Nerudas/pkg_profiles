@@ -92,7 +92,7 @@ class ProfilesViewCategory extends HtmlView
 
 		// Set page title
 		$title = ($isNew) ? Text::_('COM_PROFILES_CATEGORY_ADD') : Text::_('COM_PROFILES_CATEGORY_EDIT');
-		ToolbarHelper::title(Text::_('COM_PROFILES') . ': ' . $title, 'location');
+		ToolbarHelper::title(Text::_('COM_PROFILES') . ': ' . $title, 'users');
 
 		// Add apply & save buttons
 		if ($canDo->get('core.edit'))
