@@ -10,12 +10,12 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
-use Joomla\CMS\Application\SiteApplication;
 
 class ProfilesViewCategory extends HtmlView
 {

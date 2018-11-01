@@ -10,10 +10,10 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 
 class ProfilesHelper extends ContentHelper
 {
