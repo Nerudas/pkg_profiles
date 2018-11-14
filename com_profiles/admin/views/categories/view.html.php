@@ -10,7 +10,6 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\MVC\View\HtmlView;
@@ -136,7 +135,6 @@ class ProfilesViewCategories extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$user  = Factory::getUser();
 		$canDo = ProfilesHelper::getActions('com_profiles', 'categories');
 
 		// Set page title
@@ -179,7 +177,7 @@ class ProfilesViewCategories extends HtmlView
 		}
 
 		// Add batch tagging button
-		if ($user->authorise('core.edit', 'com_profiles'))
+		if ($canDo->get('core.edit'))
 		{
 			$button = LayoutHelper::render('plugins.system.fieldtypes.tags.batch.toolbar');
 
@@ -194,7 +192,7 @@ class ProfilesViewCategories extends HtmlView
 		}
 
 		// Add preferences buttons
-		if ($user->authorise('core.admin', 'com_profiles') || $user->authorise('core.options', 'com_profiles'))
+		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{
 			$return = urlencode(base64_encode(Uri::getInstance()->toString()));
 			$link   = 'index.php?option=com_config&view=component&return=' . $return . '&component=';
