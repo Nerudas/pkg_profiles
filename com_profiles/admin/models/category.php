@@ -478,14 +478,17 @@ class ProfilesModelCategory extends AdminModel
 			Factory::getApplication()->enqueueMessage(Text::_('COM_PROFILES_ERROR_BASE_CATEGORIES_STATE'), 'warning');
 		}
 
-		// Delete images
-		$folderHelper = new FieldTypesHelperFolder();
-		foreach ($pks as $pk)
+		if ($result = parent::delete($pks))
 		{
-			$folderHelper->deleteItemFolder($pk, $this->images_root);
+			// Delete images
+			$folderHelper = new FieldTypesHelperFolder();
+			foreach ($pks as $pk)
+			{
+				$folderHelper->deleteItemFolder($pk, $this->images_root);
+			}
 		}
 
-		return parent::delete($pks);
+		return $result;
 	}
 
 	/**
